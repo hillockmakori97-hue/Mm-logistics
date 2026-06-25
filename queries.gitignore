@@ -1,0 +1,205 @@
+driver expenses
+SELECT 
+    d.driver_id,
+    d.driver_name,
+    COUNT(DISTINCT tr.trip_id) AS total_trips_tracked,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Toll' THEN i.total_amount END), 0.00) AS total_toll_expenses,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00) AS total_fine_accumulated
+FROM drivers d
+LEFT JOIN trips tr ON d.driver_id = tr.driver_id
+LEFT JOIN invoices i ON tr.trip_id = i.trip_id
+GROUP BY d.driver_id, d.driver_name
+ORDER BY total_fine_accumulated DESC;
+
+
+invoices
+
+SELECT 
+    COUNT(invoice_id) AS total_invoices_issued,
+    COALESCE(SUM(CASE WHEN invoice_type = 'Standard' THEN total_amount END), 0.00) AS gross_commercial_revenue,
+    COALESCE(SUM(CASE WHEN invoice_type = 'Toll' THEN total_amount END), 0.00) AS absolute_toll_fees,
+    COALESCE(SUM(CASE WHEN invoice_type = 'Fine' THEN total_amount END), 0.00) AS absolute_fine_losses
+FROM invoices;
+
+
+profit analysis
+
+SELECT 
+    tr.trip_id,
+    d.driver_name,
+    t.plate AS truck_plate,
+    -- Revenue from shipments on this trip
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Standard' THEN i.total_amount END), 0.00) AS trip_revenue,
+    -- Deductions
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Toll' THEN i.total_amount END), 0.00) AS trip_tolls,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00) AS trip_fines,
+    -- Net Calculation
+    (COALESCE(SUM(CASE WHEN i.invoice_type = 'Standard' THEN i.total_amount END), 0.00) - 
+     COALESCE(SUM(CASE WHEN i.invoice_type = 'Toll' THEN i.total_amount END), 0.00) - 
+     COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00)) AS net_trip_profit
+FROM trips tr
+JOIN drivers d ON tr.driver_id = d.driver_id
+JOIN trucks t ON tr.truck_id = t.truck_id
+LEFT JOIN shipments s ON tr.trip_id = s.trip_id
+LEFT JOIN invoices i ON (s.shipment_id = i.shipment_id OR tr.trip_id = i.trip_id)
+GROUP BY tr.trip_id, d.driver_name, t.plate
+ORDER BY net_trip_profit DESC;
+
+
+
+
+unpaid and pending payments
+
+
+SELECT 
+    i.invoice_id,
+    c.company_name AS debtor_client,
+    i.invoice_type,
+    i.total_amount,
+    i.status AS billing_status,
+    i.due_date
+FROM invoices i
+JOIN shipments s ON i.shipment_id = s.shipment_id
+JOIN customers c ON s.customer_id = c.customer_id
+WHERE i.status IN ('unpaid', 'pending')
+ORDER BY i.due_date ASC;
+
+
+
+
+
+
+
+all payments 
+
+
+SELECT 
+    i.invoice_id,
+    i.invoice_type,
+    i.total_amount,
+    i.status AS payment_status,
+    i.issue_date,
+    i.due_date,
+    c.company_name AS client_name,
+    d.driver_name,
+    t.plate AS truck_plate,
+    tr.trip_id
+FROM invoices i
+LEFT JOIN shipments s ON i.shipment_id = s.shipment_id
+LEFT JOIN customers c ON s.customer_id = c.customer_id
+LEFT JOIN trips tr ON (i.trip_id = tr.trip_id OR s.trip_id = tr.trip_id)
+LEFT JOIN drivers d ON tr.driver_id = d.driver_id
+LEFT JOIN trucks t ON tr.truck_id = t.truck_id
+ORDER BY i.status ASC, i.due_date ASC;
+
+
+raise for driver based on fines
+SELECT 
+    d.driver_id,
+    d.driver_name,
+    COUNT(DISTINCT tr.trip_id) AS total_completed_trips,
+    COUNT(CASE WHEN i.invoice_type = 'Fine' THEN 1 END) AS traffic_fines_count,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00) AS total_fine_cost,
+    CASE 
+        WHEN COUNT(DISTINCT tr.trip_id) = 0 THEN 'No Trips Conducted Yet'
+        WHEN COUNT(CASE WHEN i.invoice_type = 'Fine' THEN 1 END) = 0 THEN 'ELIGIBLE FOR MAXIMUM RAISE (Clean Record)'
+        WHEN COUNT(CASE WHEN i.invoice_type = 'Fine' THEN 1 END) <= 2 THEN 'ELIGIBLE FOR MODERATE RAISE (Low Infractions)'
+        ELSE 'INELIGIBLE FOR RAISE (High Infraction Frequency)'
+    END AS raise_evaluation_status
+FROM drivers d
+LEFT JOIN trips tr ON d.driver_id = tr.driver_id
+LEFT JOIN invoices i ON tr.trip_id = i.trip_id
+GROUP BY d.driver_id, d.driver_name
+ORDER BY traffic_fines_count ASC, total_completed_trips DESC;
+
+raise  for clean safety record
+UPDATE drivers 
+SET base_salary = base_salary * 1.10 
+WHERE driver_id = :driver_id;
+
+
+raise for low infraction Frequency
+
+UPDATE drivers 
+SET base_salary = base_salary * 1.05 
+WHERE driver_id = :driver_id;
+
+raise for premium raise 
+
+UPDATE drivers 
+SET base_salary = base_salary * 1.05 
+WHERE driver_id = :driver_id;
+
+
+
+profit per month 
+
+SELECT 
+    TO_CHAR(i.issue_date, 'YYYY-MM') AS financial_month,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Standard' THEN i.total_amount END), 0.00) AS gross_revenue,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Toll' THEN i.total_amount END), 0.00) AS total_toll_expenses,
+    COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00) AS total_fine_expenses,
+    (
+        COALESCE(SUM(CASE WHEN i.invoice_type = 'Standard' THEN i.total_amount END), 0.00) - 
+        COALESCE(SUM(CASE WHEN i.invoice_type = 'Toll' THEN i.total_amount END), 0.00) - 
+        COALESCE(SUM(CASE WHEN i.invoice_type = 'Fine' THEN i.total_amount END), 0.00)
+    ) AS net_profit
+FROM invoices i
+GROUP BY TO_CHAR(i.issue_date, 'YYYY-MM')
+ORDER BY financial_month DESC;
+
+
+
+tol fees per month 
+
+SELECT 
+    TO_CHAR(issue_date, 'YYYY-MM') AS financial_month,
+    COUNT(invoice_id) AS total_toll_gates_passed,
+    SUM(total_amount) AS total_toll_fees_paid
+FROM invoices
+WHERE invoice_type = 'Toll'
+GROUP BY TO_CHAR(issue_date, 'YYYY-MM')
+ORDER BY financial_month DESC;
+
+
+
+tol fees per year
+
+SELECT 
+    TO_CHAR(issue_date, 'YYYY') AS financial_year,
+    COUNT(invoice_id) AS total_toll_gates_passed,
+    SUM(total_amount) AS total_toll_fees_paid
+FROM invoices
+WHERE invoice_type = 'Toll'
+GROUP BY TO_CHAR(issue_date, 'YYYY')
+ORDER BY financial_year DESC;
+
+fuel expences per year 
+
+SELECT 
+    TO_CHAR(issue_date, 'YYYY') AS financial_year,
+    COUNT(invoice_id) AS total_refuels,
+    SUM(total_amount) AS total_fuel_spent
+FROM invoices
+WHERE invoice_type = 'Fuel'
+GROUP BY TO_CHAR(issue_date, 'YYYY')
+ORDER BY financial_year DESC;
+
+
+fuel expense per year
+SELECT 
+    TO_CHAR(fuel_logs.logged_at, 'YYYY') AS financial_year,
+    COUNT(fuel_logs.log_id) AS total_refuels,
+    SUM(fuel_logs.litres_fueled * fuel_logs.cost_per_litre) AS total_fuel_spent
+FROM fuel_logs
+GROUP BY TO_CHAR(fuel_logs.logged_at, 'YYYY')
+ORDER BY financial_year DESC;
+
+fuel expense per month
+
+select to_char(f.logged_at, 'Month') as month, count(f.log_id) as refuels, sum(f.litres_fueled * f.cost_per_litre) as spent from fuel_logs f join trips t on t.trip_id = f.trip_id join trucks tr on tr.truck_id = t.truck_id group by to_char(f.logged_at, 'Month') order by month desc;
+
+
+
+
+
