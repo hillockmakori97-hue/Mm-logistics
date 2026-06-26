@@ -103,4 +103,5 @@ def all_fuel_logs():
 
 # print(all_fuel_logs())
 
-#                       joins and getting specific records from my tables
+#                       inseting data into my tables 
+
