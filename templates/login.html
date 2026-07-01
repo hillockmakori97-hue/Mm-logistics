@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1></h1>
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100"
+    style="background-image: url('{{ url_for('static', filename='pexels-justyna-sieczka-2161487384-38008106 copy.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <div class="login-card">
+        <div class="z-3 p-5 rounded-3 bg-dark text-light" style="width: 28rem;">
+            <div class="card text-white bg-dark border-0">
+                <div class="card-body p-0">
+                    <h5 class="card-title mb-4">Login </h5>
+
+                    <form>
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1">
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
