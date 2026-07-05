@@ -1,5 +1,257 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Customers Dashboard</h1>
-    {% endblock %}
+<!-- Include UI Layout, DataTables, & Font Icon Style Layers -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container-fluid bg-dark text-white min-vh-100 p-0" style="background-color: #0b0c10 !important; font-family: system-ui, -apple-system, sans-serif;">
+    <div class="row g-0">
+        
+        <!-- LEFT SIDEBAR PANEL (Scoped strictly to Account Profile permissions) -->
+        <div class="col-xl-2 col-lg-3 d-flex flex-column justify-content-between p-4" style="background-color: #13151a; min-height: 100vh; border-right: 1px solid #1f232b;">
+            <div>
+                <!-- Brand Frame Logo -->
+                <div class="d-flex align-items-center gap-2 mb-4 px-2">
+                    <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <span class="fw-black text-white fs-5 tracking-tight">Logi<span class="text-primary">Client</span></span>
+                </div>
+                
+                <!-- Navigation Sections -->
+                <span class="text-secondary font-monospace d-block mb-3 px-2 text-uppercase fw-bold opacity-50" style="font-size: 10px; letter-spacing: 1px;">My Account</span>
+                
+                <div class="nav flex-column gap-1">
+                    <a href="/portal/overview" class="nav-link text-secondary hover-bg-dark rounded-3 fw-medium py-2 px-2.5 d-flex align-items-center gap-2">
+                        <i class="bi bi-speedometer2"></i> Dashboard Hub
+                    </a>
+                    <a href="/portal/my-consignments" class="nav-link text-secondary hover-bg-dark rounded-3 fw-medium py-2 px-2.5 d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-lock"></i> Secured Shipments
+                    </a>
+                    <a href="/portal/analytics" class="nav-link active bg-primary bg-opacity-10 text-primary rounded-3 fw-semibold py-2 px-2.5 d-flex align-items-center gap-2">
+                        <i class="bi bi-pie-chart"></i> My Spend Profiles
+                    </a>
+                </div>
+
+                <span class="text-secondary font-monospace d-block mt-4 mb-3 px-2 text-uppercase fw-bold opacity-50" style="font-size: 10px; letter-spacing: 1px;">Solutions Marketplace</span>
+                <div class="nav flex-column gap-1">
+                    <a href="/portal/services" class="nav-link text-secondary hover-bg-dark rounded-3 fw-medium py-2 px-2.5 d-flex align-items-center gap-2 text-warning">
+                        <i class="bi bi-lightning-charge"></i> Upgrade Shipping Tiers
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Frame Footer Signout -->
+            <div class="pt-4 border-top border-secondary border-opacity-25">
+                <a href="/logout" class="nav-link text-secondary hover-bg-dark rounded-3 py-2 px-2.5 d-flex align-items-center gap-2 font-monospace" style="font-size: 12px;">
+                    <i class="bi bi-box-arrow-left"></i> Secure Signout
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT MAIN VIEWPORT PANEL -->
+        <div class="col-xl-10 col-lg-9 p-4 p-md-5 overflow-y-auto" style="height: 100vh;">
+            
+            <!-- Welcome Header Status Band -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                    <h3 class="fw-bold text-white mb-1">Personal Logistics Intelligence</h3>
+                    <p class="text-secondary small mb-0">Isolated view metrics associated exclusively with your user profile credentials.</p>
+                </div>
+            </div>
+
+            <!-- PROMOTIONAL ADVOCACY & INFRASTRUCTURE ADVERTISEMENT BANNER -->
+            <div class="p-4 rounded-4 mb-5 shadow-sm d-flex flex-wrap justify-content-between align-items-center gap-4 animate-fade-in" style="background: linear-gradient(135deg, #13151a 0%, #1f232b 100%); border-left: 4px solid #0d6efd; border-top: 1px solid #2d323f; border-right: 1px solid #1f232b; border-bottom: 1px solid #1f232b;">
+                <div style="max-width: 650px;">
+                    <span class="badge bg-primary bg-opacity-20 text-primary text-uppercase font-monospace mb-2" style="font-size: 10px; letter-spacing: 1px;">Network Capability Advertisement</span>
+                    <h5 class="fw-bold text-white mb-2">Unlock Our High-Capacity Fleet Corridors</h5>
+                    <p class="text-secondary small mb-0">Running specialized bulk shipping pipelines across the entire East African network including Mombasa Port, Nairobi, Nakuru, Kisumu, and Malaba Border lanes. Get tailored freight quotes with real-time multi-database tracking nodes instantly.</p>
+                </div>
+                <div>
+                    <a href="/portal/quote-calculator" class="btn btn-primary fw-medium px-4 py-2 rounded-3 text-nowrap shadow-sm" style="font-size: 14px;">
+                        <i class="bi bi-calculator me-1"></i> Instantly Request Freight Quote
+                    </a>
+                </div>
+            </div>
+
+            <!-- CUSTOMER KEY PERFORMANCE METRICS (Strict User Boundary) -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="p-4 rounded-4" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <span class="text-secondary d-block small mb-1" style="font-size: 11px; text-uppercase: uppercase; letter-spacing: 0.5px;">Your Total Orders</span>
+                        <h3 class="fw-bold font-monospace text-white mb-0">{{ personalized_order_count }}</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4 rounded-4" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <span class="text-secondary d-block small mb-1" style="font-size: 11px; text-uppercase: uppercase; letter-spacing: 0.5px;">Active Consignments</span>
+                        <h3 class="fw-bold font-monospace text-primary mb-0">{{ active_user_consignments }}</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4 rounded-4" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <span class="text-secondary d-block small mb-1" style="font-size: 11px; text-uppercase: uppercase; letter-spacing: 0.5px;">Your Net Capital Allocated</span>
+                        <h3 class="fw-bold font-monospace text-success mb-0">$ {{ account_total_spend }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DYNAMIC GRAPH CANVAS PLATFORM CONTAINER -->
+            <div class="row g-4 mb-5">
+                <!-- Line Chart Component Box Frame -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 shadow-sm" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <canvas id="line-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Bar Chart Component Box Frame -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 shadow-sm" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <canvas id="bar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REGISTRY DATATABLES CONTENT MATRIX -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="p-4 rounded-4 custom-table-dark shadow-sm" style="background-color: #13151a; border: 1px solid #1f232b;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-white mb-0">My Secured Freight Registry</h5>
+                            <span class="text-secondary small font-monospace" style="font-size: 11px;"><i class="bi bi-lock-fill text-success"></i> Session-Scoped Isolation Active</span>
+                        </div>
+                        
+                        <table id="logisticsTable" class="table table-dark table-hover align-middle mb-0" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Tracking ID</th>
+                                    <th>Cargo Overview</th>
+                                    <th>Transit Pipeline Corridor</th>
+                                    <th>Live Status Status</th>
+                                    <th class="text-end">Billing Apportionment ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic Context Layer Execution: Displays strictly authenticated user rows -->
+                                {% for item in user_private_records %}
+                                <tr>
+                                    <td class="font-monospace text-primary fw-medium">{{ item.tracking_number }}</td>
+                                    <td>{{ item.cargo_profile }}</td>
+                                    <td>{{ item.route_corridor }}</td>
+                                    <td>
+                                        {% if item.status == 'Delivered' %}
+                                            <span class="badge bg-success bg-opacity-10 text-success px-2.5 py-1.5 rounded-2">Delivered</span>
+                                        {% elif item.status == 'In Transit' %}
+                                            <span class="badge bg-warning bg-opacity-10 text-warning px-2.5 py-1.5 rounded-2">In Transit</span>
+                                        {% else %}
+                                            <span class="badge bg-info bg-opacity-10 text-info px-2.5 py-1.5 rounded-2">Processing</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="font-monospace text-end text-white">{{ item.cost }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts Inject Node Matrix Block -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    // 1. Initialize Isolated User Registry DataTables instance
+    $(document).ready(function() {
+        $('#logisticsTable').DataTable({
+            dom: '<"d-flex justify-content-between align-items-center mb-3"fl>t<"d-flex justify-content-between align-items-center mt-3"ip>',
+            pageLength: 5,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Filter my shipments..."
+            }
+        });
+    });
+
+    // 2. Line Chart: Tracking User-Specific Invoicing History
+    new Chart(document.getElementById("line-chart"), {
+        type: 'line',
+        data: {
+            labels: {{ user_dates | safe }},
+            datasets: [{
+                data: {{ user_periodic_spend | safe }},
+                label: "My Billing Volume ($)",
+                borderColor: "#0d6efd",
+                backgroundColor: "#0d6efd",
+                tension: 0.15,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#a0aec0' } },
+                title: { display: true, text: 'Personal Billing Profile History Analytics', color: '#ffffff' }
+            },
+            scales: {
+                x: { grid: { color: '#1f232b' }, ticks: { color: '#a0aec0' } },
+                y: { grid: { color: '#1f232b' }, ticks: { color: '#a0aec0' } }
+            }
+        }
+    });
+
+    // 3. Bar Chart Setup: Dynamic Lane Allocation Breakdown
+    new Chart(document.getElementById("bar-chart"), {
+        type: 'bar',
+        data: {
+            labels: {{ user_active_corridors | safe }},
+            datasets: [
+                {
+                    label: "My Asset Allocation Incurred ($)",
+                    backgroundColor: "#3e95cd",
+                    data: {{ user_corridor_spend_distribution | safe }}
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#a0aec0' } },
+                title: { display: true, text: 'Consignment Volume Concentration per Active Lane', color: '#ffffff' }
+            },
+            scales: {
+                x: { grid: { color: '#1f232b' }, ticks: { color: '#a0aec0' } },
+                y: { grid: { color: '#1f232b' }, ticks: { color: '#a0aec0' } }
+            }
+        }
+    });
+</script>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .tracking-tight { letter-spacing: -0.03em; }
+    .hover-bg-dark:hover { background-color: #1c1f26; color: #fff !important; }
+    
+    .custom-table-dark .dataTables_filter input, 
+    .custom-table-dark .dataTables_length select {
+        background-color: #1c1f26 !important;
+        border: 1px solid #1f232b !important;
+        color: #fff !important;
+        border-radius: 6px;
+        padding: 5px 10px;
+    }
+    .custom-table-dark .table {
+        border-color: #1f232b !important;
+    }
+    .page-link { background-color: #1c1f26 !important; border-color: #1f232b !important; color: #a0aec0 !important; }
+    .active > .page-link { background-color: #0d6efd !important; border-color: #0d6efd !important; color: #fff !important; }
+</style>
+{% endblock %}

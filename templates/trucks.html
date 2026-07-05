@@ -1,5 +1,280 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Customers Dashboard</h1>
-    {% endblock %}
+<div class="container-fluid px-0 min-vh-100 bg-light overflow-hidden">
+    <!-- Main Two-Column Viewport Wrapper matching image_ad31c8.jpg -->
+    <div class="row g-0">
+        
+        <!-- LEFT COLUMN: Scrollable Tracking & Filter Directory Panel (5/12 Width) -->
+        <div id="fleetSidebar" class="col-lg-5 border-end bg-white" style="height: calc(100vh - 56px); overflow-y: auto;">
+            <div class="p-4">
+                
+                <!-- Header Control Section -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold text-dark mb-0">Tracking</h3>
+                    <button class="btn btn-light bg-white border rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                        <i class="bi bi-search text-secondary"></i>
+                    </button>
+                </div>
+                
+                <!-- Filter Partners Layer exact representation from image_ad31c8.jpg -->
+                <div class="mb-3">
+                    <span class="text-muted small d-block mb-2 text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.5px;">Filter by Partners</span>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-2 btn btn-sm small shadow-sm">Shiphike - For Packages <span class="bg-danger text-white rounded-circle ms-1 px-1" style="font-size: 9px;">09</span></span>
+                        <span class="badge bg-light text-secondary border rounded-pill px-2 py-2 btn btn-sm small">Roambee <span class="bg-secondary text-white rounded-circle ms-1 px-1" style="font-size: 9px;">13</span></span>
+                        <span class="badge bg-light text-secondary border rounded-pill px-2 py-2 btn btn-sm small">Post Hawk <span class="bg-secondary text-white rounded-circle ms-1 px-1" style="font-size: 9px;">22</span></span>
+                    </div>
+                </div>
+
+                <!-- Show Filters Layer -->
+                <div class="mb-4">
+                    <span class="text-muted small d-block mb-2 text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 0.5px;">Show</span>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1 btn btn-sm small">Active <span class="text-muted ms-1" style="font-size: 10px;">45</span></span>
+                        <span class="badge bg-light text-secondary border rounded-pill px-3 py-1 btn btn-sm small">Inactive <span class="text-muted ms-1" style="font-size: 10px;">28</span></span>
+                        <span class="badge bg-danger text-white rounded-pill px-3 py-1 btn btn-sm small shadow-sm">All <span class="ms-1" style="font-size: 10px;">73</span></span>
+                    </div>
+                </div>
+
+                <!-- Scrollable Index Directory List Grid of Trucks -->
+                <div class="d-flex flex-column gap-3">
+                    {% for truck in trucks %}
+                    <!-- Individual Truck Container Card -->
+                    <a href="?truck_id={{ truck[0] }}" class="text-decoration-none card p-3 rounded-4 shadow-sm text-start transition-all {% if active_truck and active_truck[0] == truck[0] %}border-danger border-2{% else %}border-light{% endif %} bg-white">
+                        
+                        <!-- Top State Information Strip -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <!-- Index 1: Plate registration identification -->
+                            <span class="fw-bold text-dark font-monospace fs-6">{{ truck[1] }}</span>
+                            <!-- Index 3: Operational Status -->
+                            <span class="badge rounded-pill px-2 py-1 {% if truck[3] == 'On Route' or truck[3] == 'Active' or truck[3] == 'Available' %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %} d-flex align-items-center gap-1" style="font-size: 10px;">
+                                <i class="bi bi-circle-fill" style="font-size: 5px;"></i> {{ truck[3] }}
+                            </span>
+                        </div>
+
+                        <!-- Data & Visual Graphic Layout Grid -->
+                        <div class="row align-items-center g-0">
+                            <div class="col-6">
+                                <div class="bg-light p-2 rounded-3 mb-2" style="font-size: 11px;">
+                                    <span class="text-muted d-block" style="font-size: 9px;">ODOMETER</span>
+                                    <!-- Index 2: Current Mileage Metric -->
+                                    <strong class="text-dark font-monospace">{{ "{:,.0f}".format(truck[2]) }} KM</strong>
+                                </div>
+                                <div style="font-size: 10px;" class="text-muted text-truncate">
+                                    <!-- Index 4: Insurance Deadline Marker -->
+                                    <i class="bi bi-calendar-check me-1"></i>Due: {{ truck[4] }}
+                                </div>
+                            </div>
+                            
+                            <!-- Vector Rig Thumbnail Container simulating profile images -->
+                            <div class="col-6 text-end">
+                                <div class="d-inline-flex bg-light rounded-3 align-items-center justify-content-center border border-light-subtle" style="width: 110px; height: 65px;">
+                                    {% if loop.index % 3 == 1 %}
+                                        <i class="bi bi-truck text-secondary opacity-50 fs-2"></i>
+                                    {% elif loop.index % 3 == 2 %}
+                                        <i class="bi bi-truck-front text-secondary opacity-50 fs-2"></i>
+                                    {% else %}
+                                        <i class="bi bi-bus-front text-secondary opacity-50 fs-2"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-truck-flatbed display-4 d-block mb-2 opacity-50"></i>
+                        No fleet vehicle profiles matched the database query matrices.
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Interactive Active Focus Control Canvas Panel (7/12 Width) -->
+        <div id="fleetDetailCanvas" class="col-lg-7 bg-white d-flex flex-column" style="height: calc(100vh - 56px); overflow-y: auto;">
+            {% if active_truck %}
+            
+            <!-- Structural Configuration Command Header -->
+            <div class="p-4 border-bottom">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- Index 1: Active Plate Identifier -->
+                        <h3 class="fw-bold mb-0 text-dark font-monospace">{{ active_truck[1] }}</h3>
+                        <!-- Index 3: Active Status Gauge -->
+                        <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1 small">
+                            <i class="bi bi-circle-fill me-1" style="font-size: 6px; vertical-align: middle;"></i> {{ active_truck[3] }}
+                        </span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="tel:#" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-semibold shadow-sm"><i class="bi bi-telephone me-1"></i> Call Driver</a>
+                        <a href="#" class="btn btn-danger btn-sm rounded-pill px-3 fw-semibold shadow-sm"><i class="bi bi-chat-left-text me-1"></i> Chat with Driver</a>
+                    </div>
+                </div>
+
+                <!-- Sub-Navigation Dashboard tabs exactly mirroring image_ad31c8.jpg -->
+                <div class="d-flex gap-4 mt-4 pb-2 text-nowrap overflow-x-auto" style="scrollbar-width: none;">
+                    <a href="#" class="text-danger fw-bold text-decoration-none small border-bottom border-danger border-2 pb-2">Shipping Info</a>
+                    <a href="#" class="text-secondary text-decoration-none small fw-medium pb-2 transition-all">Vehicle Info</a>
+                    <a href="#" class="text-secondary text-decoration-none small fw-medium pb-2 transition-all">Documents</a>
+                    <a href="#" class="text-secondary text-decoration-none small fw-medium pb-2 transition-all">Company</a>
+                    <a href="#" class="text-secondary text-decoration-none small fw-medium pb-2 transition-all">Billing</a>
+                </div>
+            </div>
+
+            <!-- Operational Canvas Viewport Background Grid Container -->
+            <div class="p-4 bg-light flex-grow-1 d-flex flex-column gap-4">
+                
+                <!-- COMPONENT 1: Current Truck Capacity Interactive Volumetric Card -->
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+                    <span class="text-muted small d-block text-uppercase fw-bold mb-3" style="font-size: 11px; letter-spacing: 0.5px;">Current Truck Capacity</span>
+                    
+                    <div class="row align-items-center">
+                        <div class="col-xl-9 position-relative mb-3 mb-xl-0">
+                            <!-- Visual Rig Payload Capacity Container Frame -->
+                            <div class="bg-light border border-light-subtle rounded-4 p-2 position-relative d-flex align-items-center justify-content-start overflow-hidden shadow-inner" style="height: 100px;">
+                                <!-- Dynamic Progress fill simulation -->
+                                <div class="bg-danger bg-gradient rounded-3 h-100 d-flex align-items-center justify-content-center text-white fw-bold display-6 shadow" style="width: 82%; min-width: 80px; z-index: 2;">
+                                    82%
+                                </div>
+                                <!-- Silhouette truck shape structural backplate layout asset overlay -->
+                                <div class="position-absolute end-0 top-50 translate-middle-y me-4 opacity-25 text-dark" style="z-index: 1;">
+                                    <i class="bi bi-truck-front" style="font-size: 65px;"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Metadata Information Block Matrix -->
+                        <div class="col-xl-3 border-start-xl ps-xl-4">
+                            <div class="mb-2">
+                                <span class="text-muted d-block small mb-0" style="font-size: 11px;">Current Odo</span>
+                                <!-- Index 2: Odometer -->
+                                <strong class="text-dark font-monospace">{{ "{:,.0f}".format(active_truck[2]) }} KM</strong>
+                            </div>
+                            <div>
+                                <span class="text-muted d-block small mb-0" style="font-size: 11px;">Insurance Expiry</span>
+                                <!-- Index 4: Insurance Deadline -->
+                                <span class="badge bg-danger-subtle text-danger font-monospace px-2 py-1 mt-1 rounded-pill" style="font-size: 11px;">{{ active_truck[4] }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPONENT 2: Route Mapping Vector Tracking Timeline Section -->
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">Route Roadmap Logs</span>
+                        <div class="d-flex align-items-center gap-2 small text-muted">
+                            <span class="font-monospace fw-bold text-dark">01:38:47</span>
+                            <span class="badge bg-light text-secondary border border-light-subtle rounded-pill">57 min. left</span>
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-2 py-0 fw-medium text-dark bg-white shadow-sm" style="font-size: 11px;"><i class="bi bi-pencil-square"></i> Change Route</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Roadmap Graphic Path Representation -->
+                    <div class="bg-light rounded-4 p-4 border border-light-subtle text-center my-1 position-relative shadow-inner">
+                        <div class="d-flex justify-content-around align-items-center position-relative my-3">
+                            <div class="position-absolute bg-secondary opacity-25 start-0 end-0 mx-auto w-75" style="height: 3px; top: 50%; z-index: 1;"></div>
+                            <div class="bg-white border border-danger border-3 rounded-circle text-danger p-2 position-relative shadow d-flex align-items-center justify-content-center" style="z-index: 2; width: 44px; height: 44px;"><i class="bi bi-geo-alt-fill"></i></div>
+                            <div class="bg-danger text-white rounded-circle p-2 position-relative shadow d-flex align-items-center justify-content-center" style="z-index: 2; width: 44px; height: 44px;"><i class="bi bi-truck"></i></div>
+                            <div class="bg-white border border-secondary border-2 rounded-circle text-muted p-2 position-relative shadow d-flex align-items-center justify-content-center" style="z-index: 2; width: 44px; height: 44px;"><i class="bi bi-flag-fill"></i></div>
+                        </div>
+                        <span class="text-muted small d-block mt-3" style="font-size: 11px;">Active routing nodes match automated GPS status arrays on system channels.</span>
+                    </div>
+                </div>
+
+                <!-- COMPONENT 3: Cargo Photo Reports Gallery Lower Deck Frame -->
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-2">
+                    <span class="text-muted small d-block text-uppercase fw-bold mb-3" style="font-size: 11px; letter-spacing: 0.5px;">Cargo Photo Reports</span>
+                    <div class="row g-3">
+                        <div class="col-4 col-md-3">
+                            <div class="bg-light border border-light-subtle rounded-3 p-3 text-center text-muted shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-box-seam text-secondary fs-3 mb-1 opacity-75"></i>
+                                <span class="d-block text-truncate fw-medium mt-1" style="font-size: 10px;">Point #1 Cargo</span>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <div class="bg-light border border-light-subtle rounded-3 p-3 text-center text-muted shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-images text-secondary fs-3 mb-1 opacity-75"></i>
+                                <span class="d-block text-truncate fw-medium mt-1" style="font-size: 10px;">Point #2 Cargo</span>
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-3">
+                            <div class="bg-light border border-light-subtle rounded-3 p-3 text-center text-muted shadow-sm h-100 d-flex flex-column justify-content-center align-items-center">
+                                <i class="bi bi-clipboard-check text-secondary fs-3 mb-1 opacity-75"></i>
+                                <span class="d-block text-truncate fw-medium mt-1" style="font-size: 10px;">Point #3 Cargo</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <!-- Add Photo Control Grid element styled exactly per the dashboard blueprint blueprint design wire -->
+                            <button class="btn btn-light bg-white border-dashed border-secondary w-100 h-100 py-3 rounded-3 d-flex flex-column align-items-center justify-content-center text-danger opacity-75 shadow-sm" style="border-style: dashed !important;">
+                                <i class="bi bi-camera fs-4 mb-1"></i>
+                                <span class="fw-bold text-uppercase" style="font-size: 9px; letter-spacing: 0.3px;">Add Photo</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            {% else %}
+            <!-- Default Initialization View Panel -->
+            <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted py-5 my-auto bg-light">
+                <i class="bi bi-truck display-1 opacity-25 mb-3"></i>
+                <h5 class="fw-bold">No Fleet Unit Selected</h5>
+                <p class="small text-center px-4" style="max-width: 340px;">Select a specific vehicle registration identifier token from the list directory sidebar matrix to load capacity models.</p>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<!-- Responsive Column Screen Adaptation Engine Script Block using pure JS -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleResponsiveLayout = () => {
+            const sidebar = document.getElementById('fleetSidebar');
+            const detailCanvas = document.getElementById('fleetDetailCanvas');
+            
+            if (!sidebar || !detailCanvas) return;
+
+            // Target viewpoint validation monitoring lower grid breaking states (Bootstrap lg tier)
+            if (window.innerWidth < 992) {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('truck_id')) {
+                    sidebar.classList.add('d-none');
+                    detailCanvas.classList.remove('d-none');
+                    
+                    // Add structured navigation back return node hook for mobile layout if missing
+                    if (!document.getElementById('mobileBackBtn')) {
+                        const header = detailCanvas.querySelector('.p-4');
+                        const backBtn = document.createElement('button');
+                        backBtn.id = 'mobileBackBtn';
+                        backBtn.className = 'btn btn-sm btn-dark rounded-pill px-3 mb-3 d-inline-flex align-items-center gap-1 shadow-sm';
+                        backBtn.innerHTML = '<i class="bi bi-arrow-left"></i> Back to Fleet Index';
+                        backBtn.onclick = () => {
+                            window.location.href = window.location.pathname;
+                        };
+                        header.insertBefore(backBtn, header.firstChild);
+                    }
+                } else {
+                    sidebar.classList.remove('d-none');
+                    detailCanvas.classList.add('d-none');
+                }
+            } else {
+                // Return safely to side-by-side desktop dual grid
+                sidebar.classList.remove('d-none');
+                detailCanvas.classList.remove('d-none');
+                const backBtn = document.getElementById('mobileBackBtn');
+                if (backBtn) backBtn.remove();
+            }
+        };
+
+        window.addEventListener('resize', toggleResponsiveLayout);
+        toggleResponsiveLayout();
+    });
+</script>
+{% endblock %}

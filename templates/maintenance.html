@@ -1,5 +1,136 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Customers Dashboard</h1>
-    {% endblock %}
+<div class="container-fluid px-4 py-3">
+    
+    <!-- Header Section inspired by image_3ce31d.jpg -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 fw-bold text-dark">Fleet Maintenance Hub</h1>
+            <p class="text-muted small mb-0">Log service activities and auto-generate maintenance invoices</p>
+        </div>
+        <div>
+            <span class="badge bg-dark rounded-pill px-3 py-2 font-monospace">System Live</span>
+        </div>
+    </div>
+
+    <!-- Main Content Grid Layout -->
+    <div class="row g-4">
+        
+        <!-- Left Side: Interactive Log Entry Form (7/12 width) -->
+        <div class="col-lg-7">
+            <div class="card border-0 rounded-4 shadow-sm p-4 bg-white">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <div class="bg-danger-subtle p-2 rounded-3 text-danger">
+                        <i class="bi bi-wrench-adjustable fs-5"></i>
+                    </div>
+                    <h5 class="fw-bold mb-0 text-dark">Record New Service Entry</h5>
+                </div>
+
+                <!-- POST Form target pointing to your Flask Route execution -->
+                <form action="{{ url_for('maintenance') }}" method="POST">
+                    
+                    <!-- Section 1: Maintenance Details Tuple Data -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <span class="text-muted small fw-semibold text-uppercase d-block mb-2">1. Maintenance Log Details</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small">Target Truck ID</label>
+                            <input type="number" name="truck_id" class="form-control rounded-3" placeholder="e.g., 3" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small">Odometer At Service (km)</label>
+                            <input type="number" name="odometer" class="form-control rounded-3" placeholder="e.g., 142050" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small">Service Date</label>
+                            <input type="date" name="service_date" class="form-control rounded-3" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-secondary small">Service Description</label>
+                            <textarea name="description" class="form-control rounded-3" rows="3" placeholder="Provide clear descriptions regarding engine overhaul, mechanical flushes, etc..." required></textarea>
+                        </div>
+                    </div>
+
+                    <hr class="text-muted opacity-25 my-4">
+
+                    <!-- Section 2: Invoice Details Tuple Data -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <span class="text-muted small fw-semibold text-uppercase d-block mb-2">2. Financial Invoice Generation</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small">Subtotal Amount (KES)</label>
+                            <input type="number" step="0.01" name="subtotal" class="form-control rounded-3" placeholder="45000.00" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small">Tax Amount (KES)</label>
+                            <input type="number" step="0.01" name="tax" class="form-control rounded-3" placeholder="7200.00" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small">Total Amount (KES)</label>
+                            <input type="number" step="0.01" name="total" class="form-control rounded-3" placeholder="52200.00" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small">Invoice Issue Date</label>
+                            <input type="date" name="issue_date" class="form-control rounded-3" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-secondary small">Invoice Due Date</label>
+                            <input type="date" name="due_date" class="form-control rounded-3" required>
+                        </div>
+                        
+                        <!-- Fixed Hidden values matching your required schema constraints -->
+                        <input type="hidden" name="invoice_status" value="Unpaid">
+                        <input type="hidden" name="invoice_type" value="Maintenance">
+                    </div>
+
+                    <div class="text-end">
+                        <button type="reset" class="btn btn-light rounded-pill px-4 me-2 btn-sm fw-medium">Clear Form</button>
+                        <button type="submit" class="btn btn-dark rounded-pill px-4 btn-sm fw-medium">Save Log & Invoice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side: Status Panels & Reference Cards (5/12 width) -->
+        <div class="col-lg-5 d-flex flex-column gap-4">
+            
+            <!-- Context Summary Widget mimicking image_3ce31d.jpg layout specs -->
+            <div class="card border-0 rounded-4 shadow-sm p-4 bg-white text-center">
+                <span class="text-muted small d-block mb-1 text-uppercase fw-semibold">Active Ledger Validation</span>
+                <p class="text-muted small px-2">Submitting this form executes consecutive inserts. The system generates an integrated financial entry under type <code class="text-danger fw-bold">'Maintenance'</code> and appends its auto-generated key into your log records.</p>
+                <div class="bg-light rounded-4 p-3 d-flex align-items-center justify-content-around border">
+                    <div>
+                        <small class="text-muted d-block font-sans">Primary Link</small>
+                        <strong class="text-dark small">invoices.invoice_id</strong>
+                    </div>
+                    <div class="text-muted"><i class="bi bi-arrow-right"></i></div>
+                    <div>
+                        <small class="text-muted d-block font-sans">Foreign Key</small>
+                        <strong class="text-dark small">maintenance_logs.invoice_id</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Overview Mock Panel from image_3ce31d.jpg -->
+            <div class="card border-0 rounded-4 shadow-sm p-3 bg-white">
+                <div class="d-flex align-items-center justify-content-between px-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center border" style="width: 45px; height: 45px;">
+                            <i class="bi bi-shield-check text-success fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark small">Operations Sign-off</h6>
+                            <small class="text-muted" style="font-size: 11px;">System Integrity Manager</small>
+                        </div>
+                    </div>
+                    <i class="bi bi-chat-left-dots text-muted fs-5 cp"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

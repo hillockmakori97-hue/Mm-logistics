@@ -1,5 +1,255 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Customers Dashboard</h1>
-    {% endblock %}
+<div class="container-fluid bg-light min-vh-100 p-3 p-md-4" style="font-family: system-ui, -apple-system, sans-serif;">
+    <div class="row g-4">
+        
+        <!-- LEFT SIDEBAR PANEL (Matching image_b97b90.jpg Profile & Menu Layout) -->
+        <div class="col-xxl-2 col-lg-3 d-flex flex-column justify-content-between bg-white rounded-4 p-4 shadow-sm border border-light-subtle" style="min-height: calc(100vh - 48px);">
+            <div>
+                <!-- App Logo Brand -->
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <div class="bg-danger rounded-circle d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 36px; height: 36px;"><i class="bi bi-box-seam-fill"></i></div>
+                    <span class="fw-bold text-dark fs-5">LogiCore</span>
+                </div>
+                
+                <!-- Client Info Card -->
+                <div class="text-center bg-light rounded-4 p-3 mb-4 border border-light-subtle">
+                    <div class="bg-secondary bg-opacity-25 rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center text-secondary fw-bold fs-4" style="width: 64px; height: 64px;">
+                        <i class="bi bi-person-workspace"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Corporate Client</h6>
+                    <span class="text-muted font-monospace d-block text-truncate" style="font-size: 11px;">client@enterprise.com</span>
+                </div>
+
+                <!-- Navigation List -->
+                <div class="nav flex-column gap-2">
+                    <a href="/customers" class="nav-link active bg-danger bg-opacity-10 text-danger rounded-3 fw-semibold py-2.5 px-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-grid-1x2-fill"></i> Dashboard
+                    </a>
+                    <a href="/services" class="nav-link text-secondary hover-bg-light rounded-3 fw-medium py-2.5 px-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-truck-flatbed"></i> Services
+                    </a>
+                    <a href="/tracking" class="nav-link text-secondary hover-bg-light rounded-3 fw-medium py-2.5 px-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt"></i> Fleet Tracking
+                    </a>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTON: Triggers the Shipment Creation Modal -->
+            <div class="mt-4">
+                <button type="button" class="btn btn-dark w-100 rounded-3 py-2.5 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#newShipmentModal" style="font-size: 12px; letter-spacing: 0.5px;">
+                    <i class="bi bi-plus-circle-fill"></i> Book New Shipment
+                </button>
+            </div>
+        </div>
+
+        <!-- CENTER MAIN LOGISTICS PANELS -->
+        <div class="col-xxl-7 col-lg-6">
+            <div class="d-flex flex-column gap-4">
+                
+                <!-- Dynamic Header Greeting -->
+                <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded-4 shadow-sm border border-light-subtle">
+                    <h3 class="fw-bold text-dark mb-0 fs-4">Welcome Back, Enterprise Client!</h3>
+                    <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 fw-semibold">Secure Session</span>
+                </div>
+
+                <!-- METRIC CARDS ROW (Matching image_b97b90.jpg Upper Horizontal Cards Layout) -->
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-0 rounded-4 shadow-sm p-4 text-white text-center text-md-start" style="background: linear-gradient(135deg, #2c302e 0%, #1a1c1b 100%);">
+                            <h2 class="fw-black font-monospace mb-1">02</h2>
+                            <span class="opacity-75 small font-monospace text-uppercase" style="font-size: 10px;">Active Dispatches</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 rounded-4 shadow-sm p-4 text-dark text-center text-md-start" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);">
+                            <h2 class="fw-black font-monospace mb-1">43</h2>
+                            <span class="text-secondary small font-monospace text-uppercase" style="font-size: 10px;">Completed Shipments</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 rounded-4 shadow-sm p-4 text-dark text-center text-md-start" style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);">
+                            <h2 class="fw-black font-monospace mb-1">12.8K</h2>
+                            <span class="text-secondary small font-monospace text-uppercase" style="font-size: 10px;">Total Metric Tons</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN SHIPMENTS QUEUE TABLE (Matching image_b97b90.jpg "Your assignments" list Layout) -->
+                <div class="card border-0 rounded-4 shadow-sm p-4 bg-white border border-light-subtle">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Current Consignment Directory</h5>
+                        <button type="button" class="btn btn-link text-danger text-decoration-none p-0 small fw-bold" data-bs-toggle="modal" data-bs-target="#newShipmentModal">Add Record +</button>
+                    </div>
+                    
+                    <div class="d-flex flex-column gap-3">
+                        <!-- Simulated Row 1 -->
+                        <div class="d-flex flex-wrap justify-content-between align-items-center bg-light rounded-4 p-3 border border-light-subtle gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2"><i class="bi bi-box-seam fs-5"></i></div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">Mombasa Port Hub <i class="bi bi-arrow-right text-muted small mx-1"></i> Nairobi Yard</h6>
+                                    <span class="text-muted font-monospace" style="font-size: 11px;">#SHIP-101 &bull; General Cargo</span>
+                                </div>
+                            </div>
+                            <div class="text-md-end">
+                                <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1 text-uppercase fw-bold font-monospace mb-1 d-inline-block" style="font-size: 10px;">In Transit</span>
+                                <div class="font-monospace text-secondary small">Weight: 8,500 KG</div>
+                            </div>
+                        </div>
+
+                        <!-- Simulated Row 2 -->
+                        <div class="d-flex flex-wrap justify-content-between align-items-center bg-light rounded-4 p-3 border border-light-subtle gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2"><i class="bi bi-snow2 fs-5"></i></div>
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">Kisumu Depot <i class="bi bi-arrow-right text-muted small mx-1"></i> Eldoret Center</h6>
+                                    <span class="text-muted font-monospace" style="font-size: 11px;">#SHIP-102 &bull; Refrigerated</span>
+                                </div>
+                            </div>
+                            <div class="text-md-end">
+                                <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-1 text-uppercase fw-bold font-monospace mb-1 d-inline-block" style="font-size: 10px;">Pending</span>
+                                <div class="font-monospace text-secondary small">Weight: 4,200 KG</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR CONSOLE (Matching image_b97b90.jpg Right Calendar/Schedule Bar Layout) -->
+        <div class="col-xxl-3 col-lg-3">
+            <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100 border border-light-subtle">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-1 text-danger"></i> Dispatch Log Windows</h5>
+                <div class="position-relative border-start border-light-subtle ps-3 ms-2 flex-grow-1 d-flex flex-column gap-4 py-2">
+                    
+                    <!-- Milestone 1 -->
+                    <div class="position-relative">
+                        <div class="position-absolute bg-danger rounded-circle border border-white border-3" style="width: 14px; height: 14px; left: -24px; top: 4px;"></div>
+                        <span class="text-muted font-monospace d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">09:00 AM Execution</span>
+                        <div class="bg-light rounded-3 p-2 border border-light-subtle mt-1">
+                            <strong class="d-block text-dark small fw-bold">Nairobi Route Outbound</strong>
+                            <p class="text-secondary mb-0" style="font-size: 11px;">Truck configuration verification and layout allocation clearance checks completed.</p>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 2 -->
+                    <div class="position-relative">
+                        <div class="position-absolute bg-secondary bg-opacity-50 rounded-circle border border-white border-3" style="width: 14px; height: 14px; left: -24px; top: 4px;"></div>
+                        <span class="text-muted font-monospace d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">12:00 PM Planned Node</span>
+                        <div class="bg-light rounded-3 p-2 border border-light-subtle mt-1">
+                            <strong class="d-block text-dark small fw-bold">Mombasa Port Check-In</strong>
+                            <p class="text-secondary mb-0" style="font-size: 11px;">Expected primary trailer coupling handshake at central platform bay nodes.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ==========================================
+     FULL SCREEN MODAL: TRiggers earlier shipment split UI page 
+     ========================================== -->
+<div class="modal fade" id="newShipmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content border-0 rounded-0 bg-light">
+            <!-- Modal Header App Strip -->
+            <div class="modal-header bg-dark border-0 text-white py-2 px-4 rounded-0 d-flex justify-content-between align-items-center shadow">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-danger text-white rounded-pill px-2 py-1 text-uppercase fw-bold" style="font-size: 10px;">Interactive Panel</span>
+                    <h5 class="modal-title fw-bold text-white fs-6">Freight Booking Manifest Matrix</h5>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fw-bold border-opacity-50 font-monospace" data-bs-dismiss="modal" style="font-size: 11px;">[ Close App View ]</button>
+            </div>
+            
+            <!-- Embedded Core Design Layout Viewport Split Row Panel -->
+            <div class="modal-body p-0 overflow-hidden">
+                <div class="row g-0 h-100">
+                    
+                    <!-- LEFT COLUMN FORM MATRIX -->
+                    <div class="col-lg-5 bg-white border-end overflow-y-auto p-4" style="height: calc(100vh - 48px);">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold text-dark mb-0">Create Shipment Request</h4>
+                            <i class="bi bi-pencil-square text-danger fs-4"></i>
+                        </div>
+                        
+                        <form action="#" method="POST">
+                            <div class="mb-4">
+                                <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace" style="font-size: 10px; letter-spacing: 0.5px;">1. Transit Route Nodes</span>
+                                <div class="mb-3">
+                                    <label class="form-label small text-secondary fw-semibold">Pickup Hub Location</label>
+                                    <input type="text" class="form-control bg-light border-light-subtle" placeholder="e.g. Mombasa Port Yard" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small text-secondary fw-semibold">Drop-off Destination Center</label>
+                                    <input type="text" class="form-control bg-light border-light-subtle" placeholder="e.g. Nairobi Logistic Center" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace" style="font-size: 10px; letter-spacing: 0.5px;">2. Payload Specifications Matrix</span>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small text-secondary fw-semibold">Mass Cargo Weight (KG)</label>
+                                        <input type="number" class="form-control bg-light border-light-subtle font-monospace" placeholder="e.g. 8500" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small text-secondary fw-semibold">Cargo Profile Class</label>
+                                        <select class="form-select bg-light border-light-subtle" required>
+                                            <option>General Cargo</option>
+                                            <option>Refrigerated</option>
+                                            <option>Fragile Tech Elements</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-danger w-100 rounded-pill py-2.5 fw-bold text-uppercase shadow-sm mt-3" style="font-size: 12px; letter-spacing: 0.5px;">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Register Dispatch Payload Manifest
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- RIGHT COLUMN LIVE REPLICATED TELEMETRY VECTOR TRACKER -->
+                    <div class="col-lg-7 bg-light overflow-y-auto p-4" style="height: calc(100vh - 48px);">
+                        <span class="text-muted small d-block mb-1 text-uppercase font-monospace">Live Directory Preview Simulator</span>
+                        <h4 class="fw-bold text-dark mb-4">Real-Time Trajectory Node Vectors</h4>
+                        
+                        <!-- Visual Tracker Card Mockup matching image_ad31c8 style -->
+                        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-3">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <span class="text-muted small font-monospace d-block mb-1">#SHIP-PREVIEW-ID</span>
+                                    <h5 class="fw-bold text-dark mb-0">Origin Node <i class="bi bi-arrow-right text-danger mx-2"></i> Destination Node</h5>
+                                </div>
+                                <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1 text-uppercase fw-bold font-monospace" style="font-size: 9px;">In Transit</span>
+                            </div>
+
+                            <!-- Timeline Horizontal Path Vector Line matching previous system layouts -->
+                            <div class="bg-light rounded-4 p-3 border my-2">
+                                <div class="d-flex justify-content-around align-items-center position-relative my-2">
+                                    <div class="position-absolute bg-secondary opacity-25 start-0 end-0 mx-auto w-75" style="height: 2px;"></div>
+                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i class="bi bi-receipt"></i></div>
+                                    <div class="bg-white border border-danger border-2 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i class="bi bi-truck"></i></div>
+                                    <div class="bg-white border text-muted rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i class="bi bi-check-circle-fill"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .hover-bg-light:hover { background-color: #f8f9fa; color: #dc3545 !important; }
+</style>
+{% endblock %}

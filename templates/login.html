@@ -1,44 +1,220 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1></h1>
-<div class="container-fluid d-flex justify-content-center align-items-center vh-100"
-    style="background-image: url('{{ url_for('static', filename='pexels-justyna-sieczka-2161487384-38008106 copy.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<!-- Font Icon Style Layers -->
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <div class="login-card">
-        <div class="z-3 p-5 rounded-3 bg-dark text-light" style="width: 28rem;">
-            <div class="card text-white bg-dark border-0">
-                <div class="card-body p-0">
-                    <h5 class="card-title mb-4">Login </h5>
+<style>
+    /* Premium Ambient Dark Background styling wrapper */
+    .auth-viewport-wrapper {
+        background: radial-gradient(circle at 50% 50%, #141923 0%, #0b0c10 100%);
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
 
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1"
-                                aria-describedby="emailHelp">
+    /* Ambient Glowing Orbs */
+    .glow-orb-1 {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        top: -10%;
+        left: -10%;
+        background: radial-gradient(circle, rgba(13, 110, 253, 0.08) 0%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+    }
 
+    .glow-orb-2 {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        bottom: -20%;
+        right: -10%;
+        background: radial-gradient(circle, rgba(25, 135, 84, 0.05) 0%, rgba(0,0,0,0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .fw-black { 
+        font-weight: 900; 
+    }
+
+    .tracking-tight { 
+        letter-spacing: -0.03em; 
+    }
+
+    /* Glassmorphism styling tweaks for the card container */
+    .main-auth-card {
+        max-width: 1050px; 
+        background-color: rgba(19, 21, 26, 0.85); 
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        z-index: 1;
+    }
+
+    .custom-input {
+        background-color: #1c1f26 !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.03) !important;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .custom-input::placeholder {
+        color: #4a5568 !important;
+    }
+
+    .custom-input:focus {
+        background-color: #232730 !important;
+        border-color: rgba(13, 110, 253, 0.5) !important;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15) !important;
+        outline: none;
+    }
+
+    /* Asymmetric structural curve mapping image_1b8660.png */
+    .curved-left-panel {
+        border-radius: 0 140px 280px 0;
+        min-height: 600px;
+        background: radial-gradient(circle at 0% 0%, #f4f7ff 0%, #ffffff 60%, #eef2ff 100%);
+        overflow: hidden;
+    }
+
+    /* Visual accents overlaying the white section */
+    .panel-bg-accent-1 {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle, rgba(13, 110, 253, 0.04) 0%, rgba(13, 110, 253, 0) 70%);
+        top: 20%;
+        left: 10%;
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        pointer-events: none;
+    }
+
+    .panel-bg-accent-2 {
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle, rgba(25, 135, 84, 0.03) 0%, rgba(25, 135, 84, 0) 70%);
+        bottom: 15%;
+        right: 15%;
+        border-radius: 50% 40% 30% 60% / 50% 60% 40% 50%;
+        pointer-events: none;
+    }
+
+    /* Subtle dot matrix grid layout pattern */
+    .panel-dot-matrix {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(rgba(13, 110, 253, 0.03) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        pointer-events: none;
+        opacity: 0.8;
+    }
+</style>
+
+<div class="auth-viewport-wrapper d-flex align-items-center min-vh-100 py-5">
+    <!-- Background Glow Elements scoped safely inside the block container -->
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+
+    <div class="container d-flex justify-content-center align-items-center position-relative">
+        <!-- Main Dual-Pane Authentication Card Container -->
+        <div class="card border-0 overflow-hidden shadow-lg rounded-5 w-100 main-auth-card">
+            
+            <div class="row g-0">
+                <!-- LEFT PANEL: Light Graphical Canvas Space with accents -->
+                <div class="col-md-6 d-none d-md-flex flex-column justify-content-between p-5 curved-left-panel position-relative text-dark">
+                    
+                    <!-- Structural Design Accents inside the white panel -->
+                    <div class="panel-dot-matrix"></div>
+                    <div class="panel-bg-accent-1"></div>
+                    <div class="panel-bg-accent-2"></div>
+                    
+                    <!-- Platform Brand Header Frame -->
+                    <div class="d-flex align-items-center gap-2 position-relative" style="z-index: 2;">
+                        <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
+                            <i class="bi bi-box-seam-fill"></i>
+                        </div>
+                        <span class="fw-black text-dark fs-5 tracking-tight">Logi<span class="text-primary">Gate</span></span>
+                    </div>
+
+                    <!-- Abstract Network Graphic Content Space -->
+                    <div class="my-auto text-center px-3 position-relative" style="z-index: 2;">
+                        <div class="mb-4 text-primary" style="opacity: 0.4;">
+                            <i class="bi bi-globe-central-south" style="font-size: 5.5rem;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2">Secure Gateway Portal</h4>
+                        <p class="text-secondary small mx-auto mb-0" style="max-width: 320px;">
+                            Access your isolated metrics pipeline, manage cargo tracking manifests, and view fleet logistics spend profiles securely.
+                        </p>
+                    </div>
+
+                    <!-- Left Footer Compliance Frame -->
+                    <div class="text-muted font-monospace position-relative" style="font-size: 11px; z-index: 2;">
+                        &copy; 2026 LogiIntel Network Systems Inc.
+                    </div>
+                </div>
+
+                <!-- RIGHT PANEL: Dark Form Entry Management Panel -->
+                <div class="col-md-6 p-4 p-sm-5 d-flex flex-column justify-content-center">
+                    <div class="px-xl-4">
+                        
+                        <!-- Header Label Text -->
+                        <h1 class="fw-bold text-white mb-1" style="letter-spacing: -0.02em;">Login</h1>
+                        <p class="text-secondary small mb-4">Please input your account access parameters below.</p>
+                        
+                        <form method="POST" action="/login">
+                            <!-- Username Input Field -->
+                            <div class="mb-3">
+                                <label class="form-label text-secondary small font-monospace opacity-75">Username</label>
+                                <input type="text" name="username" class="form-control custom-input py-2.5 px-3 rounded-3" 
+                                       placeholder="Enter your username" required autocomplete="username">
+                            </div>
+                            
+                            <!-- Password Input Field -->
+                            <div class="mb-2">
+                                <label class="form-label text-secondary small font-monospace opacity-75">Password</label>
+                                <input type="password" name="password" class="form-control custom-input py-2.5 px-3 rounded-3" 
+                                       placeholder="Enter your password" required autocomplete="current-password">
+                            </div>
+
+                            <!-- Forgot Access Link Block Alignment -->
+                            <div class="text-end mb-4">
+                                <a href="/forgot-password" class="text-primary small text-decoration-none opacity-75" style="font-size: 12px;">
+                                    Forgot Password?
+                                </a>
+                            </div>
+
+                            <!-- Form Action Button Node -->
+                            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-semibold rounded-3 mb-4 shadow-sm" 
+                                    style="background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); border: none;">
+                                Login to Portal
+                            </button>
+                        </form>
+
+                        <!-- Account Registration Subtext -->
+                        <div class="text-center mb-5">
+                            <span class="text-secondary small" style="font-size: 13px;">Don't have an account? 
+                                <a href="/register" class="text-primary text-decoration-none fw-medium">Register Now</a>
+                            </span>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                        <!-- System Footnote Status Matrix Links -->
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-10" style="font-size: 11px;">
+                            <a href="/terms" class="text-secondary text-decoration-none opacity-50">Terms and Services</a>
+                            <span class="text-secondary opacity-50">Have a problem? <a href="mailto:support@logigate.com" class="text-secondary text-decoration-underline">Contact us</a></span>
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
-
 </div>
 {% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid bg-dark text-white min-vh-100 d-flex flex-column justify-content-between p-4 p-md-5"
+    style="background: linear-gradient(135deg, #1e2022 0%, #121314 100%); font-family: system-ui, -apple-system, sans-serif;">
+
+    <!-- NAVBAR LAYER -->
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div class="fw-black fs-4 tracking-tight text-white">M$M <span class="text-danger">Logistics</span></div>
+        <nav class="d-none d-md-flex gap-4">
+            <a href="/" class="text-white text-decoration-none small fw-semibold opacity-100">Home</a>
+            <a href="/tracking" class="text-white-50 text-decoration-none small fw-medium hover-white">Fleet Index</a>
+            <a href="/shipments" class="text-white-50 text-decoration-none small fw-medium hover-white">Customer
+                Portal</a>
+        </nav>
+        <a href="/shipments" class="btn btn-outline-light btn-sm rounded-pill px-3 py-1.5 fw-semibold font-monospace"
+            style="font-size: 12px;">Sign In</a>
+    </header>
+
+    <!-- MAIN HERO GRID FRAMEWORK (Replicating image_ae1289.jpg Layout) -->
+    <main class="row g-4 align-items-center my-auto">
+
+        <!-- LEFT COLUMN: Ultra-Massive Typography (5/12 Width) -->
+        <div class="col-xl-5 col-lg-6">
+            <h1 class="fw-black text-white lh-1 mb-4 text-uppercase tracking-tighter"
+                style="font-size: calc(2.5rem + 3.5vw);">
+                LOGISTICS <br>THAT DRIVES
+            </h1>
+            <p class="text-white-50 small mb-4 font-monospace tracking-wide text-uppercase"
+                style="font-size: 11px; letter-spacing: 1px;">
+                No friction checkpoints. Pure telemetry & results.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/shipments"
+                    class="btn btn-light text-dark rounded-pill px-4 py-2.5 fw-bold text-uppercase shadow-sm"
+                    style="font-size: 12px; letter-spacing: 0.5px;">Book Shipment</a>
+                <a href="/tracking"
+                    class="btn btn-outline-secondary text-white border-secondary rounded-pill px-4 py-2.5 fw-medium text-uppercase"
+                    style="font-size: 12px; letter-spacing: 0.5px;">View Live Fleet</a>
+            </div>
+        </div>
+
+        <!-- CENTER COLUMN: Visual Showcase Element Area (4/12 Width) -->
+        <div class="col-xl-4 col-lg-6 text-center position-relative">
+            <!-- Minimalistic Grey Graphic Container representing the central element in image_ae1289.jpg -->
+            <div class="mx-auto bg-secondary bg-opacity-10 border border-secondary border-opacity-25 rounded-4 d-flex align-items-center justify-content-center shadow-lg position-relative overflow-hidden transition-all"
+                style="width: 100%; max-width: 360px; height: 420px; backdrop-filter: blur(10px);">
+
+                <!-- Abstract Grey Tech Geometric Accents -->
+                <div class="position-absolute border border-secondary border-opacity-50 rounded-circle opacity-25"
+                    style="width: 280px; height: 280px; top: -10%;"></div>
+                <div class="position-absolute border border-danger border-opacity-20 rounded-circle opacity-50"
+                    style="width: 200px; height: 200px; bottom: 5%;"></div>
+
+                <!-- Core Icon Representation -->
+                <div class="z-2 text-center p-4">
+                    <i class="bi bi-shield-shaded display-1 text-white opacity-75 mb-3 d-block"></i>
+                    <span
+                        class="badge bg-danger text-white rounded-pill px-3 py-1 text-uppercase tracking-wider fw-bold"
+                        style="font-size: 10px;">Secure Nodes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Value Pitch + Stacked Stat Cards (3/12 Width) -->
+        <div class="col-xl-3 col-lg-12 d-flex flex-column gap-4 justify-content-center">
+            <!-- Side Explainer Paragraph -->
+            <div class="ps-xl-3 text-center text-xl-start">
+                <h5 class="fw-bold text-white mb-2">We Turn Transit Data Into Efficiency</h5>
+                <p class="text-white-50 small mb-0">We compile complex relational database telemetry into automated,
+                    point-to-point physical dispatch logic.</p>
+            </div>
+
+            <!-- Stacked Stat Block 1 -->
+            <div class="bg-secondary bg-opacity-10 border border-secondary border-opacity-25 rounded-4 p-4 text-center text-xl-start mx-auto w-100 shadow-sm"
+                style="max-width: 360px;">
+                <h3 class="fw-black text-white mb-1 font-monospace">+82%</h3>
+                <span class="text-white-50 small font-monospace text-uppercase tracking-wider"
+                    style="font-size: 10px;">Avg capacity optimization</span>
+            </div>
+
+            <!-- Stacked Stat Block 2 -->
+            <div class="bg-secondary bg-opacity-10 border border-secondary border-opacity-25 rounded-4 p-4 text-center text-xl-start mx-auto w-100 shadow-sm"
+                style="max-width: 360px;">
+                <h3 class="fw-black text-white mb-1 font-monospace">&lt; 57m</h3>
+                <span class="text-white-50 small font-monospace text-uppercase tracking-wider"
+                    style="font-size: 10px;">Average regional transit node turnaround</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER META BAND -->
+    <footer
+        class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-5 border-top border-secondary border-opacity-25 mt-5 small text-white-50 font-monospace"
+        style="font-size: 11px;">
+        <div>&copy; 2026 LOGICORE OPERATIONAL NETWORK.</div>
+        <div class="d-flex gap-3">
+            <span>SYS STATUS: ACTIVE</span>
+            <span class="text-success"><i class="bi bi-circle-fill me-1"
+                    style="font-size: 6px; vertical-align: middle;"></i> ONLINE</span>
+        </div>
+    </footer>
+
+</div>
+
+<!-- CSS helpers injected for handling micro-interactions cleanly -->
+<style>
+    .fw-black {
+        font-weight: 900;
+    }
+
+    .tracking-tighter {
+        letter-spacing: -0.04em;
+    }
+
+    .tracking-wider {
+        letter-spacing: 0.1em;
+    }
+
+    .hover-white:hover {
+        color: #fff !important;
+    }
+
+    .transition-all {
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+</style>
+{% endblock %}
