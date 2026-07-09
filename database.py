@@ -134,6 +134,7 @@ def insert_destination(values):
 
 # inserting driver
 def insert_driver(values):
+    
     curr.execute('insert into drivers (driver_name,phone_number,license_number,license_type,license_expiry,status) values (%s,%s,%s,%s,%s,%s)',values)
     conn.commit()
 

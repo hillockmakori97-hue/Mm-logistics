@@ -153,5 +153,103 @@ FROM trips
 WHERE status = 'completed';
             ''')
     return curr.fetchone()
+def expense_against_revenue():
+    curr.execute('''
+                 WITH monthly_revenue AS (
+    -- Total standard billing collections from customers
+    SELECT 
+        DATE_TRUNC('month', issue_date) AS month,
+        SUM(total_amount) AS total_revenue
+    FROM invoices
+    WHERE invoice_type = 'Standard' AND EXTRACT(YEAR FROM issue_date) = 2026
+    GROUP BY 1
+),
+all_cash_outflows AS (
+    -- 1. Direct pump purchases (litres * cost)
+    SELECT 
+        DATE_TRUNC('month', logged_at) AS month,
+        (litres_fueled * cost_per_litre) AS outflow_amount
+    FROM fuel_logs
+    WHERE EXTRACT(YEAR FROM logged_at) = 2026
+    
+    UNION ALL
+    
+    -- 2. Operational expense invoices + Maintenance costs linked via invoice_id
+    -- Matches Tolls, Fines, Fuel, and Maintenance invoices
+    SELECT 
+        DATE_TRUNC('month', i.issue_date) AS month,
+        i.total_amount AS outflow_amount
+    FROM invoices i
+    LEFT JOIN maintenance_logs m ON CAST(i.invoice_id AS VARCHAR) = m.invoice_id
+    WHERE (i.invoice_type IN ('Fuel', 'Toll', 'Fine') OR m.invoice_id IS NOT NULL)
+      AND EXTRACT(YEAR FROM i.issue_date) = 2026
 
-print(net_profit())
+    UNION ALL
+    
+    -- 3. Driver Payroll (Aggregating base_salary across active/listed drivers)
+    SELECT 
+        months.month,
+        SUM(d.base_salary) AS outflow_amount
+    FROM drivers d
+    CROSS JOIN (
+        SELECT GENERATE_SERIES(
+            '2026-01-01'::date, 
+            '2026-12-01'::date, 
+            '1 month'::interval
+        )::date AS month
+    ) months
+    GROUP BY months.month
+),
+aggregated_expenses AS (
+    SELECT 
+        month,
+        SUM(outflow_amount) AS total_expenses
+    FROM all_cash_outflows
+    GROUP BY 1
+)
+SELECT 
+    TO_CHAR(COALESCE(r.month, e.month), 'YYYY-MM') AS operational_month,
+    COALESCE(r.total_revenue, 0.00) AS total_revenue,
+    COALESCE(e.total_expenses, 0.00) AS total_expenses,
+    (COALESCE(r.total_revenue, 0.00) - COALESCE(e.total_expenses, 0.00)) AS net_profit
+FROM monthly_revenue r
+FULL OUTER JOIN aggregated_expenses e ON r.month = e.month
+ORDER BY COALESCE(r.month, e.month) ASC;
+    ''')
+    return curr.fetchall()
+def month_revenue():
+    ear=expense_against_revenue()
+    listed_revenue=[]
+    for count in ear:
+        v=count
+        revenue=float(v[1])
+    
+        listed_revenue.append(revenue)
+        if len(listed_revenue)>=12:
+            break
+    return listed_revenue
+def monthly_expense():
+    e=expense_against_revenue()
+    listed_expense=[]
+    for count in e:
+        ex=count
+        expense=float(ex[2])
+        listed_expense.append(expense)
+        if len(listed_expense)>=12:
+            break
+    return listed_expense
+
+# print(expense_against_revenue())
+def invoice_table():
+    curr.execute(' select invoice_id,invoice_type,status,total_amount from invoices')
+    return curr.fetchall()
+def payments_table():
+    curr.execute('select payment_id,shipment_id,amount,payment_status from payments')
+    return curr.fetchall()
+def check_user(email):
+    curr.execute('select * from users where email=%s',(email,))
+    return curr.fetchone()
+
+def get_specific_driver(user_id):
+    curr.execute('select driver_id from drivers where user_id=%s',(user_id,))
+    return curr.fetchone()

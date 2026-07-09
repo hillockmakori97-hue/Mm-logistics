@@ -5,29 +5,39 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div class="container-fluid text-white min-vh-100 p-0" style="background-color: #08090c !important; font-family: system-ui, -apple-system, sans-serif;">
+<div class="container-fluid text-white min-vh-100 p-0"
+    style="background-color: #08090c !important; font-family: system-ui, -apple-system, sans-serif;">
     <div class="row g-0">
-        
-        <!-- NARROW SIDEBAR MENU (Matching the ultra-compact menu profile from image_1aa4e0.jpg) -->
-        <div class="col-auto d-flex flex-column justify-content-between align-items-center py-4 px-3" style="background-color: #0d0f12; min-height: 100vh; border-right: 1px solid #16191f; width: 80px;">
+
+        <!-- NARROW SIDEBAR MENU (Matching the ultra-compact menu profile) -->
+        <div class="col-auto d-flex flex-column justify-content-between align-items-center py-4 px-3"
+            style="background-color: #0d0f12; min-height: 100vh; border-right: 1px solid #16191f; width: 80px;">
             <div class="d-flex flex-column align-items-center gap-4 w-100">
                 <!-- System Brand Icon Frame -->
-                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white text-center shadow-sm" style="width: 42px; height: 42px; background: linear-gradient(135deg, #2f69ff 0%, #0043e6 100%);">
+                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white text-center shadow-sm"
+                    style="width: 42px; height: 42px; background: linear-gradient(135deg, #2f69ff 0%, #0043e6 100%);">
                     <i class="bi bi-activity fs-5"></i>
                 </div>
-                
+
                 <!-- Vertical Icon List Navigation -->
                 <div class="d-flex flex-column gap-3 w-100 align-items-center mt-3">
-                    <a href="/dashboard" class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100" title="Core Dashboard">
+                    <a href="/dashboard"
+                        class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
+                        title="Core Dashboard">
                         <i class="bi bi-grid-1x2 fs-5"></i>
                     </a>
-                    <a href="/analytics" class="btn border-0 text-white p-2 rounded-3 bg-secondary bg-opacity-10 text-center w-100" title="Telemetry Analytics">
+                    <a href="/analytics"
+                        class="btn border-0 text-white p-2 rounded-3 bg-secondary bg-opacity-10 text-center w-100"
+                        title="Telemetry Analytics">
                         <i class="bi bi-graph-up-arrow fs-5"></i>
                     </a>
-                    <a href="/trucks" class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100" title="Fleet Directory">
+                    <a href="/trucks" class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
+                        title="Fleet Directory">
                         <i class="bi bi-truck fs-5"></i>
                     </a>
-                    <a href="/maintenance" class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100" title="Upkeep Logs">
+                    <a href="/maintenance"
+                        class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
+                        title="Upkeep Logs">
                         <i class="bi bi-wrench-adjustable fs-5"></i>
                     </a>
                 </div>
@@ -43,17 +53,21 @@
 
         <!-- MAIN VIEWPORT DISPLAY FRAME -->
         <div class="col p-4 p-md-5 overflow-y-auto" style="height: 100vh;">
-            
+
             <!-- System Status Header Row with integrated Search -->
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-2">
                 <div class="input-group search-box" style="max-width: 320px;">
-                    <span class="input-group-text border-0 text-secondary" style="background-color: #0d0f12;"><i class="bi bi-search"></i></span>
-                    <input type="text" class="form-control border-0 text-white small" placeholder="Search parameters..." style="background-color: #0d0f12; font-size: 13px;">
+                    <span class="input-group-text border-0 text-secondary" style="background-color: #0d0f12;"><i
+                            class="bi bi-search"></i></span>
+                    <input type="text" class="form-control border-0 text-white small" placeholder="Search parameters..."
+                        style="background-color: #0d0f12; font-size: 13px;">
                 </div>
                 <!-- Profile Indicator Node Mockup -->
                 <div class="d-flex align-items-center gap-3">
                     <i class="bi bi-bell text-secondary fs-5"></i>
-                    <div class="bg-secondary rounded-circle" style="width: 36px; height: 36px; background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80') center/cover;"></div>
+                    <div class="bg-secondary rounded-circle"
+                        style="width: 36px; height: 36px; background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80') center/cover;">
+                    </div>
                 </div>
             </div>
 
@@ -63,38 +77,46 @@
                 <p class="text-secondary small mb-0">Live status profile updates across logistics channels.</p>
             </div>
 
-            <!-- UPPER GRID SECTOR (Replicating layout architecture from image_1aa4e0.jpg) -->
+            <!-- UPPER GRID SECTOR -->
             <div class="row g-4 mb-4">
-                
+
                 <!-- Left Subgrid Pillar: Four Matrix Mini Cards Stacked -->
                 <div class="col-xl-5 col-lg-6">
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total Revenue</span>
+                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total
+                                    Revenue</span>
                                 <h3 class="fw-bold font-monospace text-white mb-2">{{totalrevenue[2]}}</h3>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace" style="font-size: 10px;">+ 2.67%</span>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace"
+                                    style="font-size: 10px;">+ 2.67%</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total Dispatches</span>
+                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total
+                                    Dispatches</span>
                                 <h3 class="fw-bold font-monospace text-white mb-2">{{totaldispatches}}</h3>
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace" style="font-size: 10px;">- 2.61%</span>
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace"
+                                    style="font-size: 10px;">- 2.61%</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Active Trips</span>
+                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Active
+                                    Trips</span>
                                 <h3 class="fw-bold font-monospace text-white mb-2">{{completedtrips}}</h3>
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace" style="font-size: 10px;">- 2.14%</span>
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace"
+                                    style="font-size: 10px;">- 2.14%</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Net Profit</span>
+                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Net
+                                    Profit</span>
                                 <h3 class="fw-bold font-monospace text-white mb-2">{{netprofit}}</h3>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace" style="font-size: 10px;">+ 5.67%</span>
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace"
+                                    style="font-size: 10px;">+ 5.67%</span>
                             </div>
                         </div>
                     </div>
@@ -102,14 +124,15 @@
 
                 <!-- Right Subgrid Pillar: Primary Graphic Display Window Line Chart -->
                 <div class="col-xl-7 col-lg-6">
-                    <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-center shadow-sm" style="background-color: #0d0f12; border: 1px solid #16191f;">
+                    <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-center shadow-sm"
+                        style="background-color: #0d0f12; border: 1px solid #16191f;">
                         <canvas id="line-chart" style="max-height: 230px;"></canvas>
                     </div>
                 </div>
 
             </div>
 
-            <!-- BAR GRAPH SECTION (Positioned right underneath the top summary row as requested) -->
+            <!-- BAR GRAPH SECTION -->
             <div class="row g-4 mb-5">
                 <div class="col-12">
                     <div class="p-4 rounded-4 shadow-sm" style="background-color: #0d0f12; border: 1px solid #16191f;">
@@ -118,33 +141,61 @@
                 </div>
             </div>
 
-            <!-- REGISTRY DATATABLES DATA CONTAINER BLOCK -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="p-4 rounded-4 table-dark-wrapper shadow-sm" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                        <h5 class="fw-bold mb-3 text-white">Consignment Registry Directory</h5>
-                        <table id="logisticsTable" class="table table-dark table-hover align-middle mb-0" style="width:100%;">
+            <!-- REGISTRY SIDE-BY-SIDE DATATABLES BLOCK -->
+            <div class="row g-4">
+                <!-- Left Registry Table Card -->
+                <div class="col-xl-6">
+                    <div class="p-4 rounded-4 table-dark-wrapper shadow-sm h-100"
+                        style="background-color: #0d0f12; border: 1px solid #16191f;">
+                        <h5 class="fw-bold mb-3 text-white">Invoices Data </h5>
+                        <table id="logisticsTableA" class="table table-dark table-hover align-middle mb-0"
+                            style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th>Route Lane Corridor</th>
-                                    <th>Cargo Profile</th>
-                                    <th>Operational Fleet Code</th>
-                                    <th class="text-end">Gross Revenue ($)</th>
+                                    <th>Invoice Id </th>
+                                    <th>Invoice Type</th>
+                                    <th>Status </th>
+                                    <th class="text-end"> Amount (Ksh)</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for i in invoice_data %}
                                 <tr>
-                                    <td>Mombasa Port to Nairobi Hub</td>
-                                    <td>General Cargo</td>
-                                    <td class="font-monospace text-secondary">YR-34DFR734W2</td>
-                                    <td class="font-monospace text-end text-success">185,000</td>
+                                    <td>{{i[0]}}</td>
+                                    <td>{{i[1]}}</td>
+                                    <td class="font-monospace text-secondary">{{i[2]}}</td>
+                                    <td class="font-monospace text-end text-success">{{i[3]}}</td>
                                 </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Right Registry Table Card (Duplicate Layout matching image_e0b7f9.png) -->
+                <div class="col-xl-6">
+                    <div class="p-4 rounded-4 table-dark-wrapper shadow-sm h-100"
+                        style="background-color: #0d0f12; border: 1px solid #16191f;">
+                        <h5 class="fw-bold mb-3 text-white">Consignment Registry Directory Secondary</h5>
+                        <table id="logisticsTableB" class="table table-dark table-hover align-middle mb-0"
+                            style="width:100%;">
+                            <thead>
                                 <tr>
-                                    <td>Kisumu Depot to Eldoret Center</td>
-                                    <td>Refrigerated</td>
-                                    <td class="font-monospace text-secondary">RE-74ER453TR5</td>
-                                    <td class="font-monospace text-end text-success">94,000</td>
+                                    <th>Payment ID</th>
+                                    <th>Shipment ID</th>
+                                    <th>Payment Status</th>
+                                    <th class="text-end">Amount($)</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in payments_data %}
+                                <tr>
+                                    <td>{{i[0]}}</td>
+                                    <td>{{i[1]}}</td>
+                                    <td class="font-monospace text-secondary">{{i[3]}}</td>
+                                    <td class="font-monospace text-end text-success">{{i[2]}}</td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -162,112 +213,91 @@
 <script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-    // Initialize Simple Framework Datatable
-    $(document).ready(function() {
-        $('#logisticsTable').DataTable({
+    // Initialize Side-by-Side Framework Datatables
+    $(document).ready(function () {
+        const dataTableOptions = {
             dom: '<"d-flex justify-content-between align-items-center mb-3"fl>t<"d-flex justify-content-between align-items-center mt-3"ip>',
             pageLength: 5,
             language: {
                 search: "_INPUT_",
                 searchPlaceholder: "Filter records directory..."
             }
-        });
+        };
+
+        // Turn both independently initialized DOM items into active layers
+        $('#logisticsTableA').DataTable(dataTableOptions);
+        $('#logisticsTableB').DataTable(dataTableOptions);
     });
 
-    // Line Chart Profile Blueprint
+    // 1. Line Chart
     new Chart(document.getElementById("line-chart"), {
         type: 'line',
         data: {
-            labels: {{ dates | safe }},
-            datasets: [{
-                data: {{ day_sales | safe }},
-                label: "Sales Per Day",
-                borderColor: "#3e95cd",
-                backgroundColor: "#3e95cd",
-                tension: 0.2,
-                fill: false
+            labels: {{ operational_months | safe }},
+        datasets: [{
+            data: {{ m_revenue | safe }},
+        label: "Total Revenue",
+        borderColor: "#3e95cd",
+        backgroundColor: "#3e95cd",
+        tension: 0.2,
+        fill: false
             }, {
-                data: {{ prod_sales | safe }},
-                label: "Sales Per Product",
-                borderColor: "#8e5ea2",
-                backgroundColor: "#8e5ea2",
-                tension: 0.2,
-                fill: false
-            }, {
-                data: {{ prod_profit | safe }},
-                label: "Profit Per Product",
-                borderColor: "#e8c3b9",
-                backgroundColor: "#e8c3b9",
-                tension: 0.2,
-                fill: false
+            data: {{ m_expense | safe }},
+        label: "Total Expenses",
+        borderColor: "#c45850",
+        backgroundColor: "#c45850",
+        tension: 0.2,
+        fill: false
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { labels: { color: '#a0aec0', boxWidth: 12 } },
-                title: { display: true, text: 'Daily Sales Against Profit Line chart', color: '#ffffff' }
-            },
-            scales: {
-                x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-                y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
-            }
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { labels: { color: '#a0aec0', boxWidth: 12 } },
+            title: { display: true, text: 'Monthly Performance: Revenue vs Expenses', color: '#ffffff' }
+        },
+        scales: {
+            x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
+            y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
         }
+    }
     });
 
-    // Bar Chart Profile Blueprint (Following exact array formatting rule requested)
+    // 2. Bar Chart
     new Chart(document.getElementById("bar-chart"), {
         type: 'bar',
         data: {
-            labels: {{ product_names | safe }},
-            datasets: [
-                {
-                    label: "Profit Value ($)",
-                    backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-                    data: {{ prod_profit | safe }}
+            labels: {{ operational_months | safe }},
+        datasets: [
+        {
+            label: "Revenue",
+            backgroundColor: "#3e95cd",
+            data: {{ m_revenue | safe }}
                 },
-                {
-                    label: "Gross Sales Value ($)",
-                    backgroundColor: ["#2a6991", "#644273", "#28826f", "#a38982", "#8c3e38"],
-                    data: {{ prod_sales | safe }}
+        {
+            label: "Total Expenses",
+            backgroundColor: "#c45850",
+            data: {{ m_expense | safe }}
                 }
-            ]
+    ]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: true, labels: { color: '#a0aec0' } },
-                title: {
-                    display: true,
-                    text: 'Daily Sales Against Profit Bar chart',
-                    color: '#ffffff'
-                }
-            },
-            scales: {
-                x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-                y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: true, labels: { color: '#a0aec0' } },
+            title: {
+                display: true,
+                text: 'Monthly Revenue vs Expenses Comparison',
+                color: '#ffffff'
             }
+        },
+        scales: {
+            x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
+            y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
         }
+    }
     });
 </script>
-
-<style>
-    .hover-bg-dark:hover { background-color: #16191f; color: #fff !important; }
-    .search-box input:focus { box-shadow: none !important; background-color: #12151a !important; }
-    
-    /* Harmonize DataTables elements to dark palette criteria from image_1aa4e0.jpg */
-    .table-dark-wrapper .dataTables_filter input, 
-    .table-dark-wrapper .dataTables_length select {
-        background-color: #16191f !important;
-        border: 1px solid #222730 !important;
-        color: #fff !important;
-        border-radius: 6px;
-        padding: 5px 10px;
-    }
-    .table-dark-wrapper .table { border-color: #16191f !important; }
-    .page-link { background-color: #16191f !important; border-color: #222730 !important; color: #a0aec0 !important; }
-    .active > .page-link { background-color: #2f69ff !important; border-color: #2f69ff !important; color: #fff !important; }
-</style>
 {% endblock %}

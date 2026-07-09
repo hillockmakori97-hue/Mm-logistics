@@ -1,12 +1,13 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver
+from flask_bcrypt import bcrypt
 app=app=Flask(__name__)
 @app.route('/')
 def homepage():
     return render_template('index.html')
-S_key=os.urandom(24)
+app.secret_key=os.urandom(24)
     
 
 @app.route('/customers')
@@ -18,11 +19,13 @@ def dashboard():
 @app.route('/drivers')
 def drivers():
 
-    test_driver_id = 202
+    test_driver_id = session.get('driver_id')
     
     driver_profile = get_driver_profile(test_driver_id)
     driver_kpis = get_driver_kpis(test_driver_id)
     trip_history = get_driver_trip_history(test_driver_id)
+
+    
     
     if not driver_profile:
         return f"Driver with ID {test_driver_id} not found in the database. Add a driver first!", 404
@@ -45,21 +48,64 @@ def analytics():
     totaldispatches=total_dispatches()
     comletedtrips=completed_trips()
     netprofit=net_profit()
+    m_expense=monthly_expense()
+    m_revenue=month_revenue()
+    table_invoice_data=invoice_table()
+    invoice_data=invoice_table()
+    payments_data=payments_table()
+
 
     return render_template(
         'analytics.html',
         totalrevenue=totalrevenue,
         totaldispatches=totaldispatches[0],
         completedtrips=comletedtrips[0],
-        netprofit=netprofit[4]
+        netprofit=netprofit[4],
+        m_expense=m_expense,
+        m_revenue=m_revenue,
+        operational_months=[str(i[0]) for i in (expense_against_revenue())],
+        invoice_data=invoice_data,
+        payments_data=payments_data
 
         )
-@app.route('/login')
+@app.route('/login',methods=['POST','GET'])
 def login():
+    if request.method=='POST':
+        possible_email=request.form['email']
+        possible_password=request.form['password']
+        user=check_user(possible_email)
+        if not user:
+            flash('Non-registered user, Please register','danger')
+            return redirect(url_for('login'))
+        else:
+            if possible_password==user[2]:
+                if user[3]=='admin':
+                    return redirect(url_for('analytics'))
+                elif user[3]=='driver':
+                    driver_login=get_specific_driver(user[0])
+                    session['driver_id']=driver_login[0]
+                    return redirect(url_for('drivers'))
+                elif user[3]=='customer':
+                    return redirect(url_for('dashboard'))
+                else:
+                    flash('No Role Assigned,Check With Admin','warning')
+
+            else:
+                flash('Incorrect password, Try Again','warning')
+                return redirect(url_for('login'))
+
+
     return render_template('login.html')
 @app.route('/maintenance')
 def maintenance():
     return render_template('maintenance.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Logged Out Successfully','Success')
+    return redirect(url_for('login'))
 app.run(debug=True)
 server=app.wsgi_app
 server.watch('static/')
