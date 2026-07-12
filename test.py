@@ -1,4 +1,4 @@
-from database2 import expense_against_revenue,get_specific_driver,check_user
+from database2 import expense_against_revenue,get_specific_driver,check_user,get_customer_details,get_customer_shipments
 from flask import session
 def month_revenue():
     ear=expense_against_revenue()
@@ -36,3 +36,7 @@ operational_months=[i[0] for i in (expense_against_revenue())]
 # driver_login=get_specific_driver(user)
 # f=session['driver_id']=driver_login[0]
 # print(f)
+user_id=4
+customer_login=get_customer_details(user_id)
+customer_id=101
+print(get_customer_shipments(customer_id))

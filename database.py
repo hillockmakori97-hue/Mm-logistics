@@ -428,3 +428,7 @@ def toll_fees_per_year():
                 ''')
     return curr.fetchall()
 print(toll_fees_per_year())
+
+def shipments_per_customer(customer_id):
+    curr.execute('select * from shipments where customer_id=%s')
+    return curr.fetchone()

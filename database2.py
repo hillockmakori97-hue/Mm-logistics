@@ -253,3 +253,43 @@ def check_user(email):
 def get_specific_driver(user_id):
     curr.execute('select driver_id from drivers where user_id=%s',(user_id,))
     return curr.fetchone()
+def shipments_per_customer(user_id):
+    curr.execute('select * from shipments where customer_id=%s',(user_id,))
+    return curr.fetchall()
+def get_customer_details(user_id):
+    curr.execute('''
+    SELECT 
+        customers.customer_id,
+        users.user_id,
+        users.email,
+        customers.company_name,
+        customers.account_status
+    FROM customers 
+    INNER JOIN users ON users.user_id = customers.user_id 
+    WHERE users.user_id =%s''',(user_id,))
+    return curr.fetchone()
+
+
+def get_customer_shipments(customer_id):
+    curr.execute('''SELECT
+    COUNT(s.shipment_id) AS total_orders 
+FROM customers c
+LEFT JOIN shipments s ON c.customer_id = s.customer_id where c.customer_id=%s
+GROUP BY c.customer_id;
+            ''',(customer_id,))
+    return curr.fetchone()
+def sidebar_logs(customer_id):
+    curr.execute('''
+        SELECT 
+            t.origin, 
+            t.destination, 
+            TO_CHAR(t.dispatch_time, 'DD Mon') AS formatted_date,
+            t.status,
+            t.trip_id
+        FROM trips t
+        JOIN shipments s ON t.trip_id = s.trip_id
+        WHERE s.customer_id = %s
+        ORDER BY t.dispatch_time DESC;
+    ''', (customer_id,))
+    return curr.fetchall()
+    
