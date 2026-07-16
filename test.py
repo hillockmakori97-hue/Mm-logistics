@@ -40,3 +40,15 @@ user_id=4
 customer_login=get_customer_details(user_id)
 customer_id=101
 print(get_customer_shipments(customer_id))
+CARGO_RATES = {
+    "General Cargo (FMCG & Retail Goods)": 14.00,
+    "Dry Bulk & Agricultural Commodities": 13.00,
+    "Heavy Industrial & Breakbulk (Metals & Machinery)": 16.00,
+    "Cold Chain & Temperature-Controlled (Perishables)": 22.00,
+    "Pharmaceutical & Medical Supplies": 20.00,
+    "Automotive & Vehicles": 18.00,
+    "Liquid Bulk": 19.00,
+    "Hazardous Materials (HazMat)": 30.00,
+    "High-Value & Secure Cargo": 35.00,
+    "Other": 12.00
+}

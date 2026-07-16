@@ -49,9 +49,9 @@ def all_customers():
 
 # All destinations function 
 def all_destinations():
+    
     curr.execute('select * from destinations')
-    destinations=curr.fetchall()
-    return destinations
+    return curr.fetchall()
 
 # print(all_destinations())
 

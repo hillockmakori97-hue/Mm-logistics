@@ -35,6 +35,10 @@ def get_driver_profile(driver_id):
     ''', (driver_id,))
     return curr.fetchone()
 
+def get_available_driver():
+    curr.execute('select * from drivers where status="completed" ')
+    return curr.fetchall()
+
 
 def get_driver_kpis(driver_id):
     # Pulls aggregations for the matching driver profile index
@@ -292,4 +296,30 @@ def sidebar_logs(customer_id):
         ORDER BY t.dispatch_time DESC;
     ''', (customer_id,))
     return curr.fetchall()
-    
+
+def all_destinations():
+    curr.execute('select * from destinations')
+    return curr.fetchall()
+def insert_shipment(values):
+    curr.execute('''
+        INSERT INTO shipments (
+            customer_id, origin, destination, trip_id, 
+            cargo_description, weight_kg, status, origin_id, destination_id
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ''', values)
+    conn.commit()
+
+
+
+CARGO_RATES = {
+    "General Cargo (FMCG & Retail Goods)": 120.00,
+    "Heavy Industrial & Breakbulk (Metals & Machinery)": 160.00,
+    "Dry Bulk & Agricultural Commodities": 130.00,
+    "Cold Chain & Temperature-Controlled (Perishables)": 220.00,
+    "Pharmaceutical & Medical Supplies": 200.00,
+    "Hazardous Materials (HazMat)": 300.00,
+    "Liquid Bulk": 250.00,
+    "Automotive & Vehicles": 180.00,
+    "High-Value & Secure Cargo": 350.00,
+    "Other": 100.00
+}

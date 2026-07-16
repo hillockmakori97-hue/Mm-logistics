@@ -41,7 +41,7 @@
             <div class="mt-4">
                 <button type="button"
                     class="btn btn-dark w-100 rounded-3 py-2.5 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#newShipmentModal"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                     style="font-size: 12px; letter-spacing: 0.5px;">
                     <i class="bi bi-plus-circle-fill"></i> Book New Shipment
                 </button>
@@ -122,6 +122,47 @@
 
 
 
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                                <input type="hidden" class="form-control" id="exampleInputEmail1"
+                                                    aria-describedby="emailHelp" name="shipment_id" value="">
+                                                <div id="emailHelp" class="form-text">We'll never share your email with
+                                                    anyone else.</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1">
+                                            </div>
+                                            <div class="mb-3 form-check">
+                                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary">Understood</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
 
                     </div>
                 </div>
@@ -130,43 +171,48 @@
         </div>
 
         <!-- RIGHT SIDEBAR CONSOLE (Matching image_b97b90.jpg Right Calendar/Schedule Bar Layout) -->
-<div class="col-xxl-3 col-lg-3">
-    <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100 border border-light-subtle">
-        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-1 text-danger"></i> Dispatch Log Windows</h5>
-        
-        <div class="position-relative border-start border-light-subtle ps-3 ms-2 flex-grow-1 d-flex flex-column gap-4 py-2">
+        <div class="col-xxl-3 col-lg-3">
+            <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100 border border-light-subtle">
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-1 text-danger"></i> Dispatch Log
+                    Windows</h5>
 
-            {% for log in sidebar %}
-            <div class="position-relative">
-                <div class="position-absolute {% if log[3]|lower == 'en_route' %}bg-warning{% else %}bg-success{% endif %} rounded-circle border border-white border-3"
-                     style="width: 14px; height: 14px; left: -24px; top: 4px;"></div>
-                
-                <span class="text-muted font-monospace d-block text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.5px;">
-                    Shipped: {{ log[2] }} — {% if log[3]|lower == 'en_route' %}Active Outbound{% else %}Completed Node{% endif %}
-                </span>
-                
-                <div class="bg-light rounded-3 p-2 border border-light-subtle mt-1">
-                    <strong class="d-block text-dark small fw-bold">{{ log[0] }} &rarr; {{ log[1] }}</strong>
-                    <p class="text-secondary mb-0" style="font-size: 11px;">
-                        Tracking ID: <span class="font-monospace text-dark fw-semibold">#TRIP-{{ log[4] }}</span>. 
-                        {% if log[3]|lower == 'en_route' %}
-                        Your consignment is currently moving along the transit pipeline.
-                        {% else %}
-                        Cargo processing finalized at the terminal destination point.
-                        {% endif %}
-                    </p>
+                <div
+                    class="position-relative border-start border-light-subtle ps-3 ms-2 flex-grow-1 d-flex flex-column gap-4 py-2">
+
+                    {% for log in sidebar %}
+                    <div class="position-relative">
+                        <div class="position-absolute {% if log[3]|lower == 'en_route' %}bg-warning{% else %}bg-success{% endif %} rounded-circle border border-white border-3"
+                            style="width: 14px; height: 14px; left: -24px; top: 4px;"></div>
+
+                        <span class="text-muted font-monospace d-block text-uppercase fw-semibold"
+                            style="font-size: 10px; letter-spacing: 0.5px;">
+                            Shipped: {{ log[2] }} — {% if log[3]|lower == 'en_route' %}Active Outbound{% else
+                            %}Completed Node{% endif %}
+                        </span>
+
+                        <div class="bg-light rounded-3 p-2 border border-light-subtle mt-1">
+                            <strong class="d-block text-dark small fw-bold">{{ log[0] }} &rarr; {{ log[1] }}</strong>
+                            <p class="text-secondary mb-0" style="font-size: 11px;">
+                                Tracking ID: <span class="font-monospace text-dark fw-semibold">#TRIP-{{ log[4]
+                                    }}</span>.
+                                {% if log[3]|lower == 'en_route' %}
+                                Your consignment is currently moving along the transit pipeline.
+                                {% else %}
+                                Cargo processing finalized at the terminal destination point.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 text-muted my-auto">
+                        <i class="bi bi-box fs-4 d-block mb-1 text-secondary opacity-50"></i>
+                        <small class="font-monospace">No active consignment activity.</small>
+                    </div>
+                    {% endfor %}
+
                 </div>
             </div>
-            {% else %}
-            <div class="text-center py-4 text-muted my-auto">
-                <i class="bi bi-box fs-4 d-block mb-1 text-secondary opacity-50"></i>
-                <small class="font-monospace">No active consignment activity.</small>
-            </div>
-            {% endfor %}
-
         </div>
-    </div>
-</div>
 
     </div>
 </div>
@@ -196,21 +242,31 @@
                             <i class="bi bi-pencil-square text-danger fs-4"></i>
                         </div>
 
-                        <form action="#" method="POST">
+                        <form action="/customers" method="POST">
                             <div class="mb-4">
                                 <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace"
                                     style="font-size: 10px; letter-spacing: 0.5px;">1. Transit Route Nodes</span>
                                 <div class="mb-3">
                                     <label class="form-label small text-secondary fw-semibold">Pickup Hub
                                         Location</label>
-                                    <input type="text" class="form-control bg-light border-light-subtle"
-                                        placeholder="e.g. Mombasa Port Yard" required>
+                                    <select class="form-select bg-light border-light-subtle" required
+                                        name="pick_up_location">
+                                        {% for pick_up in destinations_data %}
+                                        <option value="{{ pick_up[7] | float }},{{ pick_up[8] | float }}">{{ pick_up[1]
+                                            }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label small text-secondary fw-semibold">Drop-off Destination
                                         Center</label>
-                                    <input type="text" class="form-control bg-light border-light-subtle"
-                                        placeholder="e.g. Nairobi Logistic Center" required>
+                                    <select class="form-select bg-light border-light-subtle" required
+                                        name="drop_off_location">
+                                        {% for drop_off in destinations_data %}
+                                        <option value="{{ drop_off[7] | float }},{{drop_off[8] | float }}">{{
+                                            drop_off[1] }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
 
@@ -224,26 +280,63 @@
                                             (KG)</label>
                                         <input type="number"
                                             class="form-control bg-light border-light-subtle font-monospace"
-                                            placeholder="e.g. 8500" required>
+                                            placeholder="e.g. 8500" required name="weight">
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label small text-secondary fw-semibold">Cargo Profile
                                             Class</label>
-                                        <select class="form-select bg-light border-light-subtle" required>
-                                            <option>General Cargo</option>
-                                            <option>Refrigerated</option>
-                                            <option>Fragile Tech Elements</option>
+                                        <select class="form-select bg-light border-light-subtle" name="cargo_type"
+                                            required>
+                                            <option value="" disabled selected>Select Cargo Type...</option>
+                                            <option value="General Cargo (FMCG & Retail Goods)">General Cargo (FMCG
+                                                &amp; Retail Goods)</option>
+                                            <option value="Heavy Industrial & Breakbulk (Metals & Machinery)">Heavy
+                                                Industrial &amp; Breakbulk (Metals &amp; Machinery)</option>
+                                            <option value="Dry Bulk & Agricultural Commodities">Dry Bulk &amp;
+                                                Agricultural Commodities</option>
+                                            <option value="Cold Chain & Temperature-Controlled (Perishables)">Cold Chain
+                                                &amp; Temperature-Controlled (Perishables)</option>
+                                            <option value="Pharmaceutical & Medical Supplies">Pharmaceutical &amp;
+                                                Medical Supplies</option>
+                                            <option value="Hazardous Materials (HazMat)">Hazardous Materials (HazMat)
+                                            </option>
+                                            <option value="Liquid Bulk">Liquid Bulk</option>
+                                            <option value="Automotive & Vehicles">Automotive &amp; Vehicles</option>
+                                            <option value="High-Value & Secure Cargo">High-Value &amp; Secure Cargo
+                                            </option>
+                                            <option value="Other">Other</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace"
+                                        style="font-size: 10px; letter-spacing: 0.5px;">3. Date Specifications </span>
+                                    <div class="col-6">
+                                        <label class="form-label small text-secondary fw-semibold"> Pick up date
+                                        </label>
+                                        <input type="date"
+                                            class="form-control bg-light border-light-subtle font-monospace"
+                                            placeholder="required" required name="pick_up_date">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small text-secondary fw-semibold"> Expected arrival
+                                            date</label>
+                                        <input type="date"
+                                            class="form-control bg-light border-light-subtle font-monospace" required
+                                            name="expected_arrival_date">
                                     </div>
                                 </div>
                             </div>
 
                             <button type="submit"
-                                class="btn btn-danger w-100 rounded-pill py-2.5 fw-bold text-uppercase shadow-sm mt-3"
-                                style="font-size: 12px; letter-spacing: 0.5px;">
-                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Register Dispatch Payload Manifest
+                                class="btn btn-danger w-100 rounded-pill py-2 fw-bold text-uppercase shadow-sm disabled"
+                                style="font-size: 12px; letter-spacing: 0.5px;" id="registerTripBtn" disabled data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i>
+                                Register trip request
                             </button>
+
                         </form>
+
                     </div>
 
                     <div class="col-lg-7 bg-light overflow-y-auto p-4" style="height: calc(100vh - 48px);">
@@ -251,42 +344,146 @@
                             Simulator</span>
                         <h4 class="fw-bold text-dark mb-4">Real-Time Trajectory Node Vectors</h4>
 
-                        <!-- Visual Tracker Card Mockup matching image_ad31c8 style -->
                         <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-3">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-                                    <span class="text-muted small font-monospace d-block mb-1">#SHIP-PREVIEW-ID</span>
-                                    <h5 class="fw-bold text-dark mb-0">Origin Node <i
-                                            class="bi bi-arrow-right text-danger mx-2"></i> Destination Node</h5>
-                                </div>
-                                <span
-                                    class="badge bg-warning-subtle text-warning rounded-pill px-3 py-1 text-uppercase fw-bold font-monospace"
-                                    style="font-size: 9px;">In Transit</span>
-                            </div>
+                            <div class="card w-100 mb-3 border-0">
+                                <div class="card-body p-0">
+                                    <h5 class="card-title text-secondary small text-uppercase mb-3">Mm-Logistics
+                                        Policies</h5>
 
-                            <div class="bg-light rounded-4 p-3 border my-2">
-                                <div class="d-flex justify-content-around align-items-center position-relative my-2">
-                                    <div class="position-absolute bg-secondary opacity-25 start-0 end-0 mx-auto w-75"
-                                        style="height: 2px;"></div>
-                                    <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                        style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i
-                                            class="bi bi-receipt"></i></div>
-                                    <div class="bg-white border border-danger border-2 text-danger rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                        style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i
-                                            class="bi bi-truck"></i></div>
-                                    <div class="bg-white border text-muted rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width: 28px; height: 28px; font-size: 11px; z-index: 2;"><i
-                                            class="bi bi-check-circle-fill"></i></div>
+                                    <div class="container-fluid px-3 py-2" style="max-width: 800px;">
+                                        <div class="text-center mb-4 border-bottom pb-4">
+                                            <h1 class="display-6 fw-bold text-dark">Terms and Conditions</h1>
+                                            <p class="text-muted mt-2 mb-1">Last Updated: July 2026</p>
+                                            <p class="small text-primary fw-semibold mb-0">Please read these terms
+                                                carefully before booking a transit with Mm-logistics.</p>
+                                        </div>
+
+                                        <div class="bg-white rounded-3 border p-4 p-md-5 vstack gap-4">
+
+                                            <section>
+                                                <h4 class="fw-bold text-dark mb-3">1. Acceptance of Terms</h4>
+                                                <p class="text-secondary mb-0">
+                                                    By booking, scheduling, or utilizing any cargo transport or delivery
+                                                    services provided by <strong>Mm-logistics</strong> (referred to as
+                                                    "the Service", "we", "us", or "our"), you ("the Customer", "the
+                                                    User") agree to be bound by these Terms and Conditions. If you do
+                                                    not agree to these terms, you must not use our services.
+                                                </p>
+                                            </section>
+
+                                            <section
+                                                class="bg-warning-subtle border-start border-4 border-warning p-4 rounded-end">
+                                                <h4 class="fw-bold text-warning-emphasis mb-2">2. Transit Times &
+                                                    Mandatory Waiting Periods</h4>
+                                                <div class="text-warning-emphasis vstack gap-2 small">
+                                                    <p class="mb-0">
+                                                        <strong>No Guaranteed Delivery Times:</strong> While we strive
+                                                        to meet all estimated delivery schedules, all transit times
+                                                        provided by Mm-logistics are <strong>estimates only</strong> and
+                                                        are not guaranteed.
+                                                    </p>
+                                                    <p class="mb-0">
+                                                        <strong>Subject to Waiting:</strong> Once cargo is loaded or in
+                                                        transit, the Customer explicitly acknowledges and accepts that
+                                                        the shipment is subject to transit delays. These delays may
+                                                        occur due to factors beyond our control, including traffic
+                                                        congestion, road construction, route diversions, vehicle
+                                                        inspections, or mechanical checks.
+                                                    </p>
+                                                    <p class="mt-2 fw-bold text-warning-emphasis mb-0">
+                                                        Under no circumstances shall Mm-logistics be held liable for any
+                                                        direct, indirect, incidental, or consequential losses resulting
+                                                        from transit delays or waiting times.
+                                                    </p>
+                                                </div>
+                                            </section>
+
+                                            <section>
+                                                <h4 class="fw-bold text-dark mb-3">3. Customer Obligations & Cargo
+                                                    Declaration</h4>
+                                                <p class="text-secondary mb-3">
+                                                    The Customer is solely responsible for ensuring that:
+                                                </p>
+                                                <ul class="text-secondary ps-3 mb-0">
+                                                    <li class="mb-2">The cargo is accurately declared (weight,
+                                                        dimensions, and material type) at the time of booking.</li>
+                                                    <li class="mb-2">No hazardous, illegal, prohibited, or restricted
+                                                        substances are loaded.</li>
+                                                    <li class="mb-0">The cargo is securely packed and prepared to
+                                                        withstand normal handling during road transit.</li>
+                                                </ul>
+                                            </section>
+
+                                            <section>
+                                                <h4 class="fw-bold text-dark mb-3">4. Limitation of Liability & Force
+                                                    Majeure</h4>
+                                                <div
+                                                    class="bg-light border rounded p-4 text-secondary small vstack gap-2">
+                                                    <p class="mb-0">
+                                                        <strong>No Liability for Loss or Damage:</strong> While we
+                                                        exercise reasonable care, Mm-logistics shall not be held liable
+                                                        for physical damage, loss, theft, or destruction of cargo during
+                                                        loading, transit, unloading, or storage, except where directly
+                                                        caused by our proven gross negligence.
+                                                    </p>
+                                                    <p class="mb-0">
+                                                        <strong>Force Majeure:</strong> We are not liable for any
+                                                        failure or delay in performing our services due to acts of God,
+                                                        natural disasters, strikes, government actions, or any other
+                                                        events completely beyond our control.
+                                                    </p>
+                                                    <p class="fw-bold text-dark mb-0">
+                                                        <strong>Insurance Recommendation:</strong> The Customer is
+                                                        strongly advised to secure their own transit insurance for
+                                                        high-value items.
+                                                    </p>
+                                                </div>
+                                            </section>
+
+                                            <section>
+                                                <h4 class="fw-bold text-dark mb-3">5. Pricing & Payments</h4>
+                                                <p class="text-secondary mb-0">
+                                                    Pricing is calculated based on system parameters (weight, cargo
+                                                    type, and distance). All payments must be settled as agreed upon
+                                                    booking. Mm-logistics reserves the right to withhold cargo if the
+                                                    payment terms are breached.
+                                                </p>
+                                            </section>
+
+                                            <section>
+                                                <h4 class="fw-bold text-dark mb-3">6. Governing Law</h4>
+                                                <p class="text-secondary mb-0">
+                                                    These Terms and Conditions shall be governed by and construed in
+                                                    accordance with local transport and logistics regulations.
+                                                </p>
+                                            </section>
+
+                                        </div>
+
+                                        <div class="mt-4 text-center small text-muted">
+                                            <p class="mb-0">&copy; 2026 Mm-logistics. All rights reserved.</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-check mb-3 mt-4">
+                                        <input class="form-check-input border-secondary" type="checkbox"
+                                            id="agreeCheckbox" required>
+                                        <label class="form-check-label small text-secondary fw-semibold"
+                                            for="agreeCheckbox" style="cursor: pointer;">
+                                            I agree to the transit policies and data processing terms.
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+
         </div>
     </div>
 </div>
+
 
 <style>
     .fw-black {
@@ -298,4 +495,61 @@
         color: #dc3545 !important;
     }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const registerBtn = document.getElementById("registerTripBtn");
+        const termsContainer = document.getElementById("termsContainer");
+        const acceptBtn = document.getElementById("accept_terms");
+        const tripForm = document.getElementById("tripForm");
+
+        // Elements for the new checkbox requirement
+        const agreeCheckbox = document.getElementById("agreeCheckbox");
+
+        // 1. Monitor the checkbox status to enable/disable the "Register trip request" button
+        if (agreeCheckbox && registerBtn) {
+            agreeCheckbox.addEventListener("change", function () {
+                if (this.checked) {
+                    // Enable button and make it active
+                    registerBtn.removeAttribute("disabled");
+                    registerBtn.classList.remove("disabled");
+                } else {
+                    // Disable button
+                    registerBtn.setAttribute("disabled", "true");
+                    registerBtn.classList.add("disabled");
+                }
+            });
+        }
+
+        // 2. Handle revealing the Terms & Conditions
+        if (registerBtn && termsContainer) {
+            registerBtn.addEventListener("click", function (event) {
+                // Extra safety guard: don't reveal if checkbox is somehow bypassed
+                if (agreeCheckbox && !agreeCheckbox.checked) {
+                    event.preventDefault();
+                    return;
+                }
+
+                // Prevent form submission/page reload on register click
+                event.preventDefault();
+
+                // Show the Terms & Conditions column
+                termsContainer.classList.remove("d-none");
+
+                // Smoothly scroll down to the terms section
+                termsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+
+        // 3. Handle final form submission on "I Accept" Click
+        if (acceptBtn && tripForm) {
+            acceptBtn.addEventListener("click", function (event) {
+                // Stop the default anchor jump link behavior
+                event.preventDefault();
+
+                // Submit the form to your Flask backend
+                tripForm.submit();
+            });
+        }
+    });
+</script>
 {% endblock %}

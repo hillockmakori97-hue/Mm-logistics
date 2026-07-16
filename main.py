@@ -1,8 +1,10 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations
+from helper_functions import calculate_haversine_distance
 from flask_bcrypt import bcrypt
+from datetime import datetime
 app=app=Flask(__name__)
 app.secret_key=os.urandom(24)
 @app.route('/')
@@ -42,7 +44,7 @@ def login():
 
 
 
-@app.route('/customers')
+@app.route('/customers', methods=['POST','GET'])
 def customers():
     account_id = session.get('customer_id')
     
@@ -61,6 +63,32 @@ def customers():
     shipments_ordered=get_customer_shipments(customer_id)
     listed_shipments=shipments_per_customer(customer_id)
     sidebar=sidebar_logs(customer_id)
+    destinations_data=all_destinations()
+    if request.method == 'POST':
+        weight = request.form['weight']
+        cargo_type = request.form['cargo_type']
+        
+        drop_off_location = request.form['drop_off_location']
+        pick_up_location = request.form['pick_up_location']
+        
+        drop_off_location = tuple(map(float, drop_off_location.split(',')))
+        pick_up_location = tuple(map(float, pick_up_location.split(',')))
+        
+    
+        print(type(drop_off_location))  
+        print(drop_off_location)       
+        print(pick_up_location)        
+        
+        distance = calculate_haversine_distance(
+            pick_up_location[0],
+            pick_up_location[1],
+            drop_off_location[0],
+            drop_off_location[1]
+        )
+        print(distance)
+
+    
+        
 
     return render_template('customers.html',
                            account_status=account_status,
@@ -68,7 +96,8 @@ def customers():
                            customer_email=customer_email,
                            customer_name=customer_name,
                            listed_shipments=listed_shipments,
-                           sidebar=sidebar
+                           sidebar=sidebar,
+                           destinations_data=destinations_data
                            )
 
 
