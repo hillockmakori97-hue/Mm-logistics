@@ -1,29 +1,29 @@
 import math
-def calculate_cost(cargo_type,estimated_distance,weight):
-    # Check the cargo type and assign the baseline rate
+def calculate_cost(cargo_type, estimated_distance, weight):
     if cargo_type == "General Cargo (FMCG & Retail Goods)":
-        base_rate = 14.00
+        base_rate = 1.4
     elif cargo_type == "Heavy Industrial & Breakbulk (Metals & Machinery)":
-        base_rate = 16.00
+        base_rate = 1.6
     elif cargo_type == "Dry Bulk & Agricultural Commodities":
-        base_rate = 13.00
+        base_rate = 1.3
     elif cargo_type == "Cold Chain & Temperature-Controlled (Perishables)":
-        base_rate = 22.00
+        base_rate = 2.2
     elif cargo_type == "Pharmaceutical & Medical Supplies":
-        base_rate = 20.00
+        base_rate = 2.0
     elif cargo_type == "Hazardous Materials (HazMat)":
-        base_rate = 30.00
+        base_rate = 3.0
     elif cargo_type == "Liquid Bulk":
-        base_rate = 19.00
+        base_rate = 1.9
     elif cargo_type == "Automotive & Vehicles":
-        base_rate = 18.00
+        base_rate = 1.8
     elif cargo_type == "High-Value & Secure Cargo":
-        base_rate = 35.00
+        base_rate = 3.5
+    elif cargo_type == "Other": 
+        base_rate = 1.2
     else:
-        base_rate = 12.00
-    cost=(base_rate*estimated_distance*weight)
+        base_rate = 1.2      
+    cost = base_rate * estimated_distance * weight
     return cost
-
 
 
 def calculate_haversine_distance(lat1, lon1, lat2, lon2):

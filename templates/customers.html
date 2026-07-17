@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container-fluid bg-light min-vh-100 p-3 p-md-4" style="font-family: system-ui, -apple-system, sans-serif;">
     <div class="row g-4">
+        <!-- LEFT SIDEBAR -->
         <div class="col-xxl-2 col-lg-3 d-flex flex-column justify-content-between bg-white rounded-4 p-4 shadow-sm border border-light-subtle"
             style="min-height: calc(100vh - 48px);">
             <div>
@@ -38,16 +39,18 @@
                 </div>
             </div>
 
+            <!-- Fixed: Added Modal Triggers & changed ID to avoid duplication -->
             <div class="mt-4">
                 <button type="button"
                     class="btn btn-dark w-100 rounded-3 py-2.5 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2 shadow-sm"
-                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    id="sidebarBookBtn" data-bs-toggle="modal" data-bs-target="#newShipmentModal"
                     style="font-size: 12px; letter-spacing: 0.5px;">
                     <i class="bi bi-plus-circle-fill"></i> Book New Shipment
                 </button>
             </div>
         </div>
 
+        <!-- MAIN DASHBOARD CONTENT -->
         <div class="col-xxl-7 col-lg-6">
             <div class="d-flex flex-column gap-4">
 
@@ -71,8 +74,6 @@
                         <div class="card border-0 rounded-4 shadow-sm p-4 text-dark text-center text-md-start"
                             style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);">
                             <h2 class="fw-black font-monospace mb-1">{{ shipments_ordered }}</h2>
-                            <span class="text-secondary small font-monospace text-uppercase"
-                                style="font-size: 10px;"></span>
                             <span class="opacity-75 small font-monospace text-uppercase"
                                 style="font-size: 10px;">Shipments Made</span>
                         </div>
@@ -81,8 +82,8 @@
                         <div class="card border-0 rounded-4 shadow-sm p-4 text-dark text-center text-md-start"
                             style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);">
                             <h2 class="fw-black font-monospace mb-1">12.8K</h2>
-                            <span class="text-secondary small font-monospace text-uppercase"
-                                style="font-size: 10px;">Total Metric Tons</span>
+                            <span class="opacity-75 small font-monospace text-uppercase" style="font-size: 10px;">Total
+                                Metric Tons</span>
                         </div>
                     </div>
                 </div>
@@ -99,14 +100,16 @@
                         <div
                             class="d-flex flex-wrap justify-content-between align-items-center bg-light rounded-4 p-3 border border-light-subtle gap-2">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2"><i
-                                        class="bi bi-box-seam fs-5"></i></div>
+                                <div class="bg-danger bg-opacity-10 text-danger rounded-3 p-2">
+                                    <i class="bi bi-box-seam fs-5"></i>
+                                </div>
                                 <div>
-                                    <h6 class="fw-bold text-dark mb-0">{{i[2]}}<i
-                                            class="bi bi-arrow-right text-muted small mx-1"></i>{{i[3]}}</h6>
-                                    <span class="text-muted font-monospace" style="font-size: 11px;">SHIP-{{i[0]}}
-                                        &bull;
-                                        {{i[5]}}</span>
+                                    <h6 class="fw-bold text-dark mb-0">
+                                        {{i[2]}}<i class="bi bi-arrow-right text-muted small mx-1"></i>{{i[3]}}
+                                    </h6>
+                                    <span class="text-muted font-monospace" style="font-size: 11px;">
+                                        SHIP-{{i[0]}} &bull; {{i[5]}}
+                                    </span>
                                 </div>
                             </div>
                             <div class="text-md-end">
@@ -120,49 +123,68 @@
                         </div>
                         {% endfor%}
 
+                        <!-- Payments Checkout Modal -->
 
 
-                        <!-- Modal -->
+                        <!-- Inside your Payments Checkout Modal (#staticBackdrop) body -->
+                        <!-- PAYMENTS CHECKOUT MODAL -->
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header bg-dark text-white">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Payments Checkout</h1>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <form>
+
+                                    <!-- Standard HTML form submitting to your payment processor -->
+                                    <form action="/customers" method="POST">
+                                        <div class="modal-body">
+                                            <!-- Payment details -->
                                             <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                                <input type="hidden" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp" name="shipment_id" value="">
-                                                <div id="emailHelp" class="form-text">We'll never share your email with
-                                                    anyone else.</div>
+                                                <label class="form-label small text-secondary fw-semibold">Payment
+                                                    Method</label>
+                                                <select class="form-select bg-light border-light-subtle"
+                                                    name="paymentmethod" required>
+                                                    <option value="mpesa" selected>MPESA</option>
+                                                    <option value="bank">BANK TRANSFER</option>
+                                                </select>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="exampleInputPassword1">
+                                                <label
+                                                    class="form-label small text-secondary fw-semibold">Amount</label>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item" value="" >{{amount}}</li>
+                                                </ul>
                                             </div>
-                                            <div class="mb-3 form-check">
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                                            <div class="mb-3">
+                                                <label for="t"
+                                                    class="form-label small text-secondary fw-semibold">Amount</label>
+                                                <ul class="list-group">
+                                                    <li class="list-group-item" value="amount">An item</li>
+                                                </ul>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Understood</button>
-                                    </div>
+                                            <div class="mb-3">
+                                                <label for="accNumber"
+                                                    class="form-label small text-secondary fw-semibold">Phone/Account
+                                                    Number</label>
+                                                <input type="tel"
+                                                    class="form-control bg-light border-light-subtle font-monospace"
+                                                    name="account_number" required placeholder="e.g. 0712345678">
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer bg-light">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-success btn-sm px-4 fw-bold">Proceed &
+                                                Pay</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-
-
-
 
                     </div>
                 </div>
@@ -170,7 +192,7 @@
             </div>
         </div>
 
-        <!-- RIGHT SIDEBAR CONSOLE (Matching image_b97b90.jpg Right Calendar/Schedule Bar Layout) -->
+        <!-- RIGHT SIDEBAR CONSOLE -->
         <div class="col-xxl-3 col-lg-3">
             <div class="card border-0 rounded-4 shadow-sm p-4 bg-white h-100 border border-light-subtle">
                 <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-1 text-danger"></i> Dispatch Log
@@ -178,7 +200,6 @@
 
                 <div
                     class="position-relative border-start border-light-subtle ps-3 ms-2 flex-grow-1 d-flex flex-column gap-4 py-2">
-
                     {% for log in sidebar %}
                     <div class="position-relative">
                         <div class="position-absolute {% if log[3]|lower == 'en_route' %}bg-warning{% else %}bg-success{% endif %} rounded-circle border border-white border-3"
@@ -209,7 +230,6 @@
                         <small class="font-monospace">No active consignment activity.</small>
                     </div>
                     {% endfor %}
-
                 </div>
             </div>
         </div>
@@ -217,6 +237,7 @@
     </div>
 </div>
 
+<!-- FULLSCREEN NEW SHIPMENT REQUEST MODAL -->
 <div class="modal fade" id="newShipmentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
@@ -235,14 +256,14 @@
 
             <div class="modal-body p-0 overflow-hidden">
                 <div class="row g-0 h-100">
-
+                    <!-- LEFT COLUMN: Booking Form -->
                     <div class="col-lg-5 bg-white border-end overflow-y-auto p-4" style="height: calc(100vh - 48px);">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="fw-bold text-dark mb-0">Create Shipment Request</h4>
                             <i class="bi bi-pencil-square text-danger fs-4"></i>
                         </div>
 
-                        <form action="/customers" method="POST">
+                        <form action="/customers" method="POST" id="tripForm">
                             <div class="mb-4">
                                 <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace"
                                     style="font-size: 10px; letter-spacing: 0.5px;">1. Transit Route Nodes</span>
@@ -263,7 +284,7 @@
                                     <select class="form-select bg-light border-light-subtle" required
                                         name="drop_off_location">
                                         {% for drop_off in destinations_data %}
-                                        <option value="{{ drop_off[7] | float }},{{drop_off[8] | float }}">{{
+                                        <option value="{{ drop_off[7] | float }},{{ drop_off[8] | float }}">{{
                                             drop_off[1] }}</option>
                                         {% endfor %}
                                     </select>
@@ -288,23 +309,9 @@
                                         <select class="form-select bg-light border-light-subtle" name="cargo_type"
                                             required>
                                             <option value="" disabled selected>Select Cargo Type...</option>
-                                            <option value="General Cargo (FMCG & Retail Goods)">General Cargo (FMCG
-                                                &amp; Retail Goods)</option>
-                                            <option value="Heavy Industrial & Breakbulk (Metals & Machinery)">Heavy
-                                                Industrial &amp; Breakbulk (Metals &amp; Machinery)</option>
-                                            <option value="Dry Bulk & Agricultural Commodities">Dry Bulk &amp;
-                                                Agricultural Commodities</option>
-                                            <option value="Cold Chain & Temperature-Controlled (Perishables)">Cold Chain
-                                                &amp; Temperature-Controlled (Perishables)</option>
-                                            <option value="Pharmaceutical & Medical Supplies">Pharmaceutical &amp;
-                                                Medical Supplies</option>
-                                            <option value="Hazardous Materials (HazMat)">Hazardous Materials (HazMat)
-                                            </option>
-                                            <option value="Liquid Bulk">Liquid Bulk</option>
-                                            <option value="Automotive & Vehicles">Automotive &amp; Vehicles</option>
-                                            <option value="High-Value & Secure Cargo">High-Value &amp; Secure Cargo
-                                            </option>
-                                            <option value="Other">Other</option>
+                                            {% for i in categories %}
+                                            <option value="{{i[1]}}">{{i[1]}}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>
@@ -312,14 +319,13 @@
                                     <span class="text-muted small d-block mb-3 text-uppercase fw-bold font-monospace"
                                         style="font-size: 10px; letter-spacing: 0.5px;">3. Date Specifications </span>
                                     <div class="col-6">
-                                        <label class="form-label small text-secondary fw-semibold"> Pick up date
-                                        </label>
+                                        <label class="form-label small text-secondary fw-semibold">Pick up date</label>
                                         <input type="date"
-                                            class="form-control bg-light border-light-subtle font-monospace"
-                                            placeholder="required" required name="pick_up_date">
+                                            class="form-control bg-light border-light-subtle font-monospace" required
+                                            name="pick_up_date">
                                     </div>
                                     <div class="col-6">
-                                        <label class="form-label small text-secondary fw-semibold"> Expected arrival
+                                        <label class="form-label small text-secondary fw-semibold">Expected arrival
                                             date</label>
                                         <input type="date"
                                             class="form-control bg-light border-light-subtle font-monospace" required
@@ -328,17 +334,18 @@
                                 </div>
                             </div>
 
+                            <!-- Submit Trigger (Will be enabled dynamically by Javascript below) -->
+                            <!-- Update this button in your form -->
                             <button type="submit"
                                 class="btn btn-danger w-100 rounded-pill py-2 fw-bold text-uppercase shadow-sm disabled"
-                                style="font-size: 12px; letter-spacing: 0.5px;" id="registerTripBtn" disabled data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                style="font-size: 12px; letter-spacing: 0.5px;" id="registerTripBtn" disabled>
                                 <i class="bi bi-cloud-arrow-up-fill me-1"></i>
                                 Register trip request
                             </button>
-
                         </form>
-
                     </div>
 
+                    <!-- RIGHT COLUMN: Terms and Policies Document -->
                     <div class="col-lg-7 bg-light overflow-y-auto p-4" style="height: calc(100vh - 48px);">
                         <span class="text-muted small d-block mb-1 text-uppercase font-monospace">Live Directory Preview
                             Simulator</span>
@@ -359,7 +366,6 @@
                                         </div>
 
                                         <div class="bg-white rounded-3 border p-4 p-md-5 vstack gap-4">
-
                                             <section>
                                                 <h4 class="fw-bold text-dark mb-3">1. Acceptance of Terms</h4>
                                                 <p class="text-secondary mb-0">
@@ -457,13 +463,13 @@
                                                     accordance with local transport and logistics regulations.
                                                 </p>
                                             </section>
-
                                         </div>
 
                                         <div class="mt-4 text-center small text-muted">
                                             <p class="mb-0">&copy; 2026 Mm-logistics. All rights reserved.</p>
                                         </div>
                                     </div>
+
                                     <div class="form-check mb-3 mt-4">
                                         <input class="form-check-input border-secondary" type="checkbox"
                                             id="agreeCheckbox" required>
@@ -477,6 +483,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -484,72 +491,47 @@
     </div>
 </div>
 
-
 <style>
     .fw-black {
         font-weight: 900;
     }
 
+    /* Completed truncated style rule */
     .hover-bg-light:hover {
-        background-color: #f8f9fa;
-        color: #dc3545 !important;
+        background-color: var(--bs-light-bg-subtle, #f8f9fa) !important;
+        transition: background-color 0.2s ease-in-out;
     }
 </style>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const checkbox = document.getElementById("agreeCheckbox");
         const registerBtn = document.getElementById("registerTripBtn");
-        const termsContainer = document.getElementById("termsContainer");
-        const acceptBtn = document.getElementById("accept_terms");
-        const tripForm = document.getElementById("tripForm");
 
-        // Elements for the new checkbox requirement
-        const agreeCheckbox = document.getElementById("agreeCheckbox");
-
-        // 1. Monitor the checkbox status to enable/disable the "Register trip request" button
-        if (agreeCheckbox && registerBtn) {
-            agreeCheckbox.addEventListener("change", function () {
-                if (this.checked) {
-                    // Enable button and make it active
+        // 1. Sync & Toggle the button state
+        if (checkbox && registerBtn) {
+            const toggleButton = () => {
+                if (checkbox.checked) {
                     registerBtn.removeAttribute("disabled");
                     registerBtn.classList.remove("disabled");
                 } else {
-                    // Disable button
                     registerBtn.setAttribute("disabled", "true");
                     registerBtn.classList.add("disabled");
                 }
-            });
+            };
+
+            toggleButton(); // Run on load
+            checkbox.addEventListener("change", toggleButton); // Run on change
         }
 
-        // 2. Handle revealing the Terms & Conditions
-        if (registerBtn && termsContainer) {
-            registerBtn.addEventListener("click", function (event) {
-                // Extra safety guard: don't reveal if checkbox is somehow bypassed
-                if (agreeCheckbox && !agreeCheckbox.checked) {
-                    event.preventDefault();
-                    return;
-                }
-
-                // Prevent form submission/page reload on register click
-                event.preventDefault();
-
-                // Show the Terms & Conditions column
-                termsContainer.classList.remove("d-none");
-
-                // Smoothly scroll down to the terms section
-                termsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
+        // 2. Open payment modal if drop_off_location was submitted and passed back
+        {% if drop_off_location is not none %}
+        const paymentModalEl = document.getElementById('staticBackdrop');
+        if (paymentModalEl) {
+            const paymentModal = bootstrap.Modal.getOrCreateInstance(paymentModalEl);
+            paymentModal.show();
         }
-
-        // 3. Handle final form submission on "I Accept" Click
-        if (acceptBtn && tripForm) {
-            acceptBtn.addEventListener("click", function (event) {
-                // Stop the default anchor jump link behavior
-                event.preventDefault();
-
-                // Submit the form to your Flask backend
-                tripForm.submit();
-            });
-        }
+        {% endif %}
     });
 </script>
 {% endblock %}

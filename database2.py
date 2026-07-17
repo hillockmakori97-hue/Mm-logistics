@@ -323,3 +323,15 @@ CARGO_RATES = {
     "High-Value & Secure Cargo": 350.00,
     "Other": 100.00
 }
+def get_dest_id(lat, lon):
+    curr.execute(
+        "SELECT destination_id FROM destinations WHERE latitude = %s AND longitude = %s LIMIT 1;",
+        (lat, lon),
+    )
+    return curr.fetchone()
+def get_categories():
+    curr.execute('select * from categories')
+    return curr.fetchall()
+def randomize_driver():
+    curr.execute("select driver_id from drivers where status='completed'")
+    return curr.fetchall
