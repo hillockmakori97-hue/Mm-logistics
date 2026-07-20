@@ -1,4 +1,4 @@
-from database2 import expense_against_revenue,get_specific_driver,check_user,get_customer_details,get_customer_shipments
+from database2 import expense_against_revenue,get_specific_driver,check_user,get_customer_details,get_customer_shipments,all_destinations,get_dest_coords
 from flask import session
 def month_revenue():
     ear=expense_against_revenue()
@@ -52,3 +52,5 @@ CARGO_RATES = {
     "High-Value & Secure Cargo": 35.00,
     "Other": 12.00
 }
+g=get_dest_coords(407)
+print(g)

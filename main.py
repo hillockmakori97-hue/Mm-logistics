@@ -1,9 +1,9 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_id,get_categories
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name
 from helper_functions import calculate_haversine_distance,calculate_cost
-from flask_bcrypt import bcrypt
+# from flask_bcrypt import bcrypt
 from datetime import datetime
 app=app=Flask(__name__)
 app.secret_key=os.urandom(24)
@@ -68,39 +68,28 @@ def customers():
     cargo_type=None
     amount=None
     payment_method=None
+    weight=None
+    origin_id=None
+    destination_id=None
+    pick_up_location=None
+    drop_off_location=None
+
     if request.method == 'POST':
-    # 1. Only grab payment details if they were actually submitted in the request
-        if 'paymentmethod' in request.form:
-            payment_method = request.form['paymentmethod']
-            # If your payment processing logic goes here, it's safe now!
-            
-        # 2. Otherwise, run your trip registration calculations
-        else:
-            weight = float(request.form['weight'])
-            cargo_type = request.form['cargo_type']
-            drop_off_location = request.form['drop_off_location']
-            pick_up_location = request.form['pick_up_location']
-            
-            drop_off_location = tuple(map(float, drop_off_location.split(',')))
-            pick_up_location = tuple(map(float, pick_up_location.split(',')))
-            origin_id = get_dest_id(pick_up_location[0], pick_up_location[1])
-            destination_id = get_dest_id(drop_off_location[0], drop_off_location[1])
-            
-            distance = calculate_haversine_distance(
-                pick_up_location[0],
-                pick_up_location[1],
-                drop_off_location[0],
-                drop_off_location[1]
-            )
+        origin_id=int(request.form['drop_off_location'])
+        destination_id=int(request.form['pick_up_location'])
+        origin_coords=get_dest_coords(origin_id)
+        destination_coords=get_dest_coords(destination_id)
+        lat1=origin_coords[0]
+        lon1=origin_coords[1]
+        lat2=destination_coords[0]
+        lon2=destination_coords[1]
+        distance=calculate_haversine_distance(lat1,lon1,lat2,lon2)
+        cargo_type=request.form['cargo_type']
+        weight=float(request.form['weight'])
+        cost=calculate_cost(cargo_type,distance,weight)
+        print(cost)
 
-            amount = calculate_cost(cargo_type, distance, weight)
-            
-            print(origin_id)
-            print(destination_id)
-            print(type(drop_off_location))  
-            print(drop_off_location)       
-            print(pick_up_location)        
-
+        
     return render_template('customers.html',
                            account_status=account_status,
                            shipments_ordered=shipments_ordered[0],

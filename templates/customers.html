@@ -146,7 +146,7 @@
                                                 <label class="form-label small text-secondary fw-semibold">Payment
                                                     Method</label>
                                                 <select class="form-select bg-light border-light-subtle"
-                                                    name="paymentmethod" required>
+                                                    name="payment_method" required>
                                                     <option value="mpesa" selected>MPESA</option>
                                                     <option value="bank">BANK TRANSFER</option>
                                                 </select>
@@ -158,13 +158,7 @@
                                                     <li class="list-group-item" value="" >{{amount}}</li>
                                                 </ul>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="t"
-                                                    class="form-label small text-secondary fw-semibold">Amount</label>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item" value="amount">An item</li>
-                                                </ul>
-                                            </div>
+                                            
                                             <div class="mb-3">
                                                 <label for="accNumber"
                                                     class="form-label small text-secondary fw-semibold">Phone/Account
@@ -273,8 +267,7 @@
                                     <select class="form-select bg-light border-light-subtle" required
                                         name="pick_up_location">
                                         {% for pick_up in destinations_data %}
-                                        <option value="{{ pick_up[7] | float }},{{ pick_up[8] | float }}">{{ pick_up[1]
-                                            }}</option>
+                                        <option value="{{pick_up[0]}}">{{pick_up[1]}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -284,7 +277,7 @@
                                     <select class="form-select bg-light border-light-subtle" required
                                         name="drop_off_location">
                                         {% for drop_off in destinations_data %}
-                                        <option value="{{ drop_off[7] | float }},{{ drop_off[8] | float }}">{{
+                                        <option value="{{drop_off[0]}}">{{
                                             drop_off[1] }}</option>
                                         {% endfor %}
                                     </select>
@@ -310,7 +303,7 @@
                                             required>
                                             <option value="" disabled selected>Select Cargo Type...</option>
                                             {% for i in categories %}
-                                            <option value="{{i[1]}}">{{i[1]}}</option>
+                                            <option value="{{i[0]}}">{{i[1]}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
