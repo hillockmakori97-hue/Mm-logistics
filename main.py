@@ -1,10 +1,11 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
+import random
 app=app=Flask(__name__)
 app.secret_key=os.urandom(24)
 @app.route('/')
@@ -91,6 +92,8 @@ def customers():
         cost=calculate_cost(cargo_type,distance,weight)
         session['cost']=cost
         session['payment_method']=payment_method
+        session['origin']=get_dest_name(origin_id)
+        session['destination']=get_dest_name(destination_id)
         
     return render_template('customers.html',
                            account_status=account_status,
@@ -186,6 +189,31 @@ def payments():
         else:
             phone_number=request.form['acc_number']
             flash('Payment Received Successfully','success')
+            trucks=get_truck('active')
+            print(trucks)
+            listed_trucks=[i[0] for i in trucks]
+            print(listed_trucks)
+            if not trucks:
+                flash('All Trucks En-route,Your Shipment will be handled as soon as possible','info')
+            else:
+                selected_truck=random.choice(listed_trucks)
+                available_driver=get_available_driver('completed')
+                if not available_driver:
+                    flash('No Availabe Driver, We Will Get To Your Shipment As Soon As Possible','info')
+                else:
+                    listed_driver=[i[0] for i in available_driver]
+                    selected_driver=random.choice(listed_driver)
+                    flash('Driver And Truck Assigned Successfully Trip Assignment In Process','success')
+                
+                # if not selected_driver or not selected_truck:
+                #     driver_id=selected_driver
+                #     truck_id=selected_truck
+                #     origin=session.get('origin')
+                #     destination=session.get('destination')
+
+                
+
+                
             session.pop('cost')
         
     return redirect(url_for('customers'))

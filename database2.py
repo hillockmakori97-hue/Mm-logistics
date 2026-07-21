@@ -35,8 +35,8 @@ def get_driver_profile(driver_id):
     ''', (driver_id,))
     return curr.fetchone()
 
-def get_available_driver():
-    curr.execute('select * from drivers where status="completed" ')
+def get_available_driver(status):
+    curr.execute('select driver_id from drivers where status=%s',(status,))
     return curr.fetchall()
 
 
@@ -331,9 +331,16 @@ def get_dest_coords(destination_id):
 def get_categories():
     curr.execute('select * from categories')
     return curr.fetchall()
-def randomize_driver():
+def get_driver():
     curr.execute("select driver_id from drivers where status='completed'")
     return curr.fetchall()
 def get_dest_name(dest_id):
     curr.execute('select city from destinations where destination_id=%s',(dest_id,))
     curr.fetchone()
+def get_truck(status):
+    curr.execute('select truck_id from trucks where status=%s',(status,))
+    return curr.fetchall()
+
+def get_truck_start_odo(truck_id):
+    curr.execute('select odo_start from trips where truck_id=%s',(truck_id,))
+    return curr.fetchone()
