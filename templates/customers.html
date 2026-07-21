@@ -139,7 +139,7 @@
                                     </div>
 
                                     <!-- Standard HTML form submitting to your payment processor -->
-                                    <form action="/customers" method="POST">
+                                    <form action="/payments" method="POST">
                                         <div class="modal-body">
                                             <!-- Payment details -->
                                             <div class="mb-3">
@@ -155,7 +155,7 @@
                                                 <label
                                                     class="form-label small text-secondary fw-semibold">Amount</label>
                                                 <ul class="list-group">
-                                                    <li class="list-group-item" value="" >{{amount}}</li>
+                                                    <li class="list-group-item" value="" >{{cost}}</li>
                                                 </ul>
                                             </div>
                                             
@@ -165,7 +165,7 @@
                                                     Number</label>
                                                 <input type="tel"
                                                     class="form-control bg-light border-light-subtle font-monospace"
-                                                    name="account_number" required placeholder="e.g. 0712345678">
+                                                    name="acc_number" required placeholder="e.g. 0712345678">
                                             </div>
 
                                         </div>
@@ -497,34 +497,39 @@
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const checkbox = document.getElementById("agreeCheckbox");
-        const registerBtn = document.getElementById("registerTripBtn");
+document.addEventListener("DOMContentLoaded", function () {
+    const checkbox = document.getElementById("agreeCheckbox");
+    const registerBtn = document.getElementById("registerTripBtn");
 
-        // 1. Sync & Toggle the button state
-        if (checkbox && registerBtn) {
-            const toggleButton = () => {
-                if (checkbox.checked) {
-                    registerBtn.removeAttribute("disabled");
-                    registerBtn.classList.remove("disabled");
-                } else {
-                    registerBtn.setAttribute("disabled", "true");
-                    registerBtn.classList.add("disabled");
-                }
-            };
+    // 1. Sync & Toggle the button state
+    if (checkbox && registerBtn) {
+        const toggleButton = () => {
+            if (checkbox.checked) {
+                registerBtn.removeAttribute("disabled");
+                registerBtn.classList.remove("disabled");
+            } else {
+                registerBtn.setAttribute("disabled", "true");
+                registerBtn.classList.add("disabled");
+            }
+        };
 
-            toggleButton(); // Run on load
-            checkbox.addEventListener("change", toggleButton); // Run on change
+        toggleButton(); // Run on load
+        checkbox.addEventListener("change", toggleButton); // Run on change
+    }
+
+    // 2. Open payment modal on POST submit
+    {% if drop_off_location is defined and drop_off_location is not none and drop_off_location != '' %}
+    const paymentModalEl = document.getElementById('staticBackdrop');
+    if (paymentModalEl) {
+        const paymentModal = bootstrap.Modal.getOrCreateInstance(paymentModalEl);
+        paymentModal.show();
+
+        // Immediately wipe the history state so refreshing/reloading won't reopen the modal
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.pathname);
         }
-
-        // 2. Open payment modal if drop_off_location was submitted and passed back
-        {% if drop_off_location is not none %}
-        const paymentModalEl = document.getElementById('staticBackdrop');
-        if (paymentModalEl) {
-            const paymentModal = bootstrap.Modal.getOrCreateInstance(paymentModalEl);
-            paymentModal.show();
-        }
-        {% endif %}
-    });
+    }
+    {% endif %}
+});
 </script>
 {% endblock %}

@@ -73,8 +73,10 @@ def customers():
     destination_id=None
     pick_up_location=None
     drop_off_location=None
+    cost=0
 
     if request.method == 'POST':
+        drop_off_location=request.form['drop_off_location']
         origin_id=int(request.form['drop_off_location'])
         destination_id=int(request.form['pick_up_location'])
         origin_coords=get_dest_coords(origin_id)
@@ -87,8 +89,8 @@ def customers():
         cargo_type=request.form['cargo_type']
         weight=float(request.form['weight'])
         cost=calculate_cost(cargo_type,distance,weight)
-        print(cost)
-
+        session['cost']=cost
+        session['payment_method']=payment_method
         
     return render_template('customers.html',
                            account_status=account_status,
@@ -101,7 +103,9 @@ def customers():
                            categories=categories,
                            cargo_type=cargo_type,
                            amount=amount,
-                           payment_method=payment_method
+                           payment_method=payment_method,
+                           cost=cost,
+                           drop_off_location=drop_off_location
                            )
 
 
@@ -172,6 +176,19 @@ def analytics():
         payments_data=payments_data
 
         )
+@app.route('/payments',methods=['POST','GET'])
+def payments():
+    if request.method=='POST':
+        cost=session.get('cost')
+        payment_method=request.form['payment_method']
+        if not cost or cost==0:
+          flash('Nothing To Pay here, Make Trip Request First','warning')
+        else:
+            phone_number=request.form['acc_number']
+            flash('Payment Received Successfully','success')
+            session.pop('cost')
+        
+    return redirect(url_for('customers'))
 
 
 @app.route('/maintenance')
