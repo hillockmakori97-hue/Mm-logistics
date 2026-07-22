@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -78,8 +78,8 @@ def customers():
 
     if request.method == 'POST':
         drop_off_location=request.form['drop_off_location']
-        origin_id=int(request.form['drop_off_location'])
-        destination_id=int(request.form['pick_up_location'])
+        destination_id=int(request.form['drop_off_location'])
+        origin_id=int(request.form['pick_up_location'])
         origin_coords=get_dest_coords(origin_id)
         destination_coords=get_dest_coords(destination_id)
         lat1=origin_coords[0]
@@ -94,6 +94,9 @@ def customers():
         session['payment_method']=payment_method
         session['origin']=get_dest_name(origin_id)
         session['destination']=get_dest_name(destination_id)
+        session['origin_id']=origin_id
+        
+        
         
     return render_template('customers.html',
                            account_status=account_status,
@@ -205,17 +208,26 @@ def payments():
                     selected_driver=random.choice(listed_driver)
                     flash('Driver And Truck Assigned Successfully Trip Assignment In Process','success')
                 
-                # if not selected_driver or not selected_truck:
-                #     driver_id=selected_driver
-                #     truck_id=selected_truck
-                #     origin=session.get('origin')
-                #     destination=session.get('destination')
-
-                
-
-                
+                if not selected_driver or not selected_truck:
+                    pass
+                else:
+                    driver_id=selected_driver
+                    truck_id=selected_truck
+                    origin_id=session.get('origin_id')
+                    origin=session.get('origin')
+                    destination=session.get('destination')
+                    odo_start=get_truck_end_odo(truck_id)
+                    odo_start=odo_start[0]
+                    dispatched_by=get_dispatcher(origin_id)
+                    values=[driver_id,truck_id,origin,destination,odo_start,dispatched_by]
+                    print(odo_start)
+                    print(dispatched_by)
+                    print(origin)
+                    print(destination)
+                    print(driver_id)
+                    print(truck_id)
+                    insert_trip(values)                
             session.pop('cost')
-        
     return redirect(url_for('customers'))
 
 

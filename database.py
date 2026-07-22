@@ -176,8 +176,8 @@ def insert_payment(values):
 def insert_trip(values):
     curr.execute('''
         INSERT INTO trips (
-            truck_id, driver_id, origin, destination,actual_arrival_time)
-        ) VALUES (%s, %s, %s, %s, %s)
+            driver_id,truck_id,origin,destination,odo_start,dispatched_by)
+        ) VALUES (%s, %s, %s, %s, %s,%s)
     ''', values)
     conn.commit()
 

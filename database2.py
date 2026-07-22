@@ -336,11 +336,21 @@ def get_driver():
     return curr.fetchall()
 def get_dest_name(dest_id):
     curr.execute('select city from destinations where destination_id=%s',(dest_id,))
-    curr.fetchone()
+    return curr.fetchone()
 def get_truck(status):
     curr.execute('select truck_id from trucks where status=%s',(status,))
     return curr.fetchall()
 
-def get_truck_start_odo(truck_id):
-    curr.execute('select odo_start from trips where truck_id=%s',(truck_id,))
+def get_truck_end_odo(truck_id):
+    curr.execute('select odo_end from trips where truck_id=%s',(truck_id,))
     return curr.fetchone()
+def get_dispatcher(destination_id):
+    curr.execute('select managed_by_staff_id from destinations where destination_id=%s',(destination_id,))
+    return curr.fetchone()
+def insert_trip(values):
+    curr.execute('''
+        INSERT INTO trips (
+            driver_id,truck_id,origin,destination,odo_start,dispatched_by
+        ) VALUES (%s, %s, %s, %s, %s,%s)
+    ''', values)
+    conn.commit()
