@@ -361,3 +361,7 @@ def insert_trip(values):
     result = curr.fetchone()
     return result[0] 
 
+# inserting_payment
+def insert_payment(values):
+    curr.execute('insert into payments (customer_id, shipment_id, amount, payment_method, transaction_reference, payment_status) values (%s, %s, %s, %s, %s, %s)', values)
+    conn.commit()

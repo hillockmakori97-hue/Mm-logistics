@@ -167,7 +167,7 @@ def insert_maintenance_log(Invoice_values,maintenance_values):
 
 # inserting_payment
 def insert_payment(values):
-    curr.execute('insert into payments (customer_id, shipment_id, amount, payment_method, transaction_reference, payment_date, payment_status) values (%s, %s, %s, %s, %s, %s, %s)', values)
+    curr.execute('insert into payments (customer_id, shipment_id, amount, payment_method, transaction_reference, payment_status) values (%s, %s, %s, %s, %s, %s)', values)
     conn.commit()
 
 

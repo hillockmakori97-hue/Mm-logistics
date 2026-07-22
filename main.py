@@ -1,11 +1,12 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
 import random
+import string
 app=app=Flask(__name__)
 app.secret_key=os.urandom(24)
 @app.route('/')
@@ -221,7 +222,7 @@ def payments():
                     origin=shipment_details[0]
                     destination=shipment_details[1]
                     odo_end=get_truck_end_odo(truck_id)
-                    odo_start=odo_end[0]
+                    odo_start=odo_end
                     cargo_type=shipment_details[5]
                     dispatched_by=get_dispatcher(origin_id)
                     weight=shipment_details[3]
@@ -235,11 +236,12 @@ def payments():
                     print(truck_id)
                     trip_id=insert_trip(values)    
                     acc_id=session.get('acc_id')
-            
-                    
                     shipment_values=(acc_id,origin,destination,trip_id,cargo_type,weight,origin_id,destination_id)
                     shipment_id=insert_shipment(shipment_values)
                     print(shipment_id)
+                    code = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+                    payment_values=(acc_id,shipment_id,cost,payment_method,code,'completed')
+                    insert_payment(payment_values)
             session.pop('cost')
     return redirect(url_for('customers'))
 
