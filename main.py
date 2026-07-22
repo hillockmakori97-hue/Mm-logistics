@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -57,6 +57,7 @@ def customers():
     if not customer_details:
         flash (f"Could not find a customer profile matching User ID {account_id}.",'danger')
     customer_id         = customer_details[0]
+    session['acc_id']=customer_details[0]
     user_id             = customer_details[1]
     customer_email      = customer_details[2]
     customer_name       = customer_details[3] 
@@ -92,10 +93,11 @@ def customers():
         cost=calculate_cost(cargo_type,distance,weight)
         session['cost']=cost
         session['payment_method']=payment_method
-        session['origin']=get_dest_name(origin_id)
-        session['destination']=get_dest_name(destination_id)
+        origin_name=get_dest_name(origin_id)
+        destination_name=get_dest_name(destination_id)
         session['origin_id']=origin_id
-        
+        shipment_details=(origin_name,destination_name,origin_id,weight,destination_id,cargo_type)
+        session['shipment_details']=shipment_details
         
         
     return render_template('customers.html',
@@ -189,6 +191,7 @@ def payments():
         payment_method=request.form['payment_method']
         if not cost or cost==0:
           flash('Nothing To Pay here, Make Trip Request First','warning')
+          return redirect(url_for('customers'))
         else:
             phone_number=request.form['acc_number']
             flash('Payment Received Successfully','success')
@@ -211,14 +214,18 @@ def payments():
                 if not selected_driver or not selected_truck:
                     pass
                 else:
+                    shipment_details=session.get('shipment_details')
                     driver_id=selected_driver
                     truck_id=selected_truck
-                    origin_id=session.get('origin_id')
-                    origin=session.get('origin')
-                    destination=session.get('destination')
-                    odo_start=get_truck_end_odo(truck_id)
-                    odo_start=odo_start[0]
+                    origin_id=shipment_details[2]
+                    origin=shipment_details[0]
+                    destination=shipment_details[1]
+                    odo_end=get_truck_end_odo(truck_id)
+                    odo_start=odo_end[0]
+                    cargo_type=shipment_details[5]
                     dispatched_by=get_dispatcher(origin_id)
+                    weight=shipment_details[3]
+                    destination_id=shipment_details[4]
                     values=[driver_id,truck_id,origin,destination,odo_start,dispatched_by]
                     print(odo_start)
                     print(dispatched_by)
@@ -226,7 +233,13 @@ def payments():
                     print(destination)
                     print(driver_id)
                     print(truck_id)
-                    insert_trip(values)                
+                    trip_id=insert_trip(values)    
+                    acc_id=session.get('acc_id')
+            
+                    
+                    shipment_values=(acc_id,origin,destination,trip_id,cargo_type,weight,origin_id,destination_id)
+                    shipment_id=insert_shipment(shipment_values)
+                    print(shipment_id)
             session.pop('cost')
     return redirect(url_for('customers'))
 

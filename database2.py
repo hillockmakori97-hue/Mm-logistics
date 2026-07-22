@@ -304,10 +304,13 @@ def insert_shipment(values):
     curr.execute('''
         INSERT INTO shipments (
             customer_id, origin, destination, trip_id, 
-            cargo_description, weight_kg, status, origin_id, destination_id
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            cargo_description, weight_kg, origin_id, destination_id
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) 
+        RETURNING shipment_id;
     ''', values)
     conn.commit()
+    result = curr.fetchone()
+    return result[0] if result else None
 
 
 
@@ -350,7 +353,11 @@ def get_dispatcher(destination_id):
 def insert_trip(values):
     curr.execute('''
         INSERT INTO trips (
-            driver_id,truck_id,origin,destination,odo_start,dispatched_by
-        ) VALUES (%s, %s, %s, %s, %s,%s)
+            driver_id, truck_id, origin, destination, odo_start, dispatched_by
+        ) VALUES (%s, %s, %s, %s, %s, %s)
+        RETURNING trip_id; 
     ''', values)
     conn.commit()
+    result = curr.fetchone()
+    return result[0] 
+
