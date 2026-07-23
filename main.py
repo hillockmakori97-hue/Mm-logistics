@@ -246,8 +246,30 @@ def payments():
     return redirect(url_for('customers'))
 
 
-@app.route('/maintenance')
+@app.route('/maintenance',methods=['GET','POST'])
 def maintenance():
+    if request.method=='POST':
+        truck_id=request.form['target_truck_id']
+        odometer=request.form['odometer']
+        service_date=request.form['service_date']
+        description=request.form['description']
+        subtotal=request.form['subtotal']
+        tax=request.form['tax']
+        total=request.form['total']
+        issue_date=request.form['issue_date']
+        due_date=request.form['due_date']
+        invoice_type=request.form['invoice_type']
+        print(truck_id)
+        print(odometer)
+        print(service_date)
+        print(description)
+        print(subtotal)
+        print(tax)
+        print(total)
+        print(issue_date)
+        print(issue_date)
+        print(due_date)
+        print(invoice_type)
     return render_template('maintenance.html')
 
 

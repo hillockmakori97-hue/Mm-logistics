@@ -26,18 +26,15 @@
                     </div>
                     <h5 class="fw-bold mb-0 text-dark">Record New Service Entry</h5>
                 </div>
-
-                <!-- POST Form target pointing to your Flask Route execution -->
-                <form action="{{ url_for('maintenance') }}" method="POST">
+                <form action="/maintenance" method="POST">
                     
-                    <!-- Section 1: Maintenance Details Tuple Data -->
                     <div class="row g-3 mb-4">
                         <div class="col-12">
                             <span class="text-muted small fw-semibold text-uppercase d-block mb-2">1. Maintenance Log Details</span>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small">Target Truck ID</label>
-                            <input type="number" name="truck_id" class="form-control rounded-3" placeholder="e.g., 3" required>
+                            <input type="number" name="target_truck_id" class="form-control rounded-3" placeholder="e.g., 3" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-secondary small">Odometer At Service (km)</label>
