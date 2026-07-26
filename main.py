@@ -1,14 +1,24 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
 import random
 import string
-app=app=Flask(__name__)
+from functools import wraps
+app=Flask(__name__)
 app.secret_key=os.urandom(24)
+
+def admin_protected(function):
+    @wraps(function)
+    def n(*k,**n):
+        if 'admin_id' not in session:
+            flash('This page is admin protected,PLease Log In As Admin','info')
+            return redirect (url_for('login'))
+        return function(*k,**n)
+    return n
 @app.route('/')
 def homepage():
     return render_template('index.html')
@@ -25,6 +35,7 @@ def login():
         else:
             if possible_password==user[2]:
                 if user[3]=='admin':
+                    session['admin_id']=user[0]
                     return redirect(url_for('analytics'))
                 elif user[3]=='driver':
                     driver_login=get_specific_driver(user[0])
@@ -127,18 +138,12 @@ def dashboard():
 
 @app.route('/drivers')
 def drivers():
-
     test_driver_id = session.get('driver_id')
-    
     driver_profile = get_driver_profile(test_driver_id)
     driver_kpis = get_driver_kpis(test_driver_id)
     trip_history = get_driver_trip_history(test_driver_id)
-
-    
-    
     if not driver_profile:
         return f"Driver with ID {test_driver_id} not found in the database. Add a driver first!", 404
-
     return render_template(
         'drivers.html', 
         profile=driver_profile, 
@@ -154,12 +159,15 @@ def services():
 
 
 @app.route('/trucks')
+@admin_protected
 def trucks():
-    return render_template('trucks.html')
+    truck_data=all_trucks()
+    return render_template('trucks.html',truck_data=truck_data)
 
 
 
 @app.route('/analytics')
+@admin_protected
 def analytics():
     totalrevenue= total_revenue()
     totaldispatches=total_dispatches()
@@ -185,6 +193,8 @@ def analytics():
         payments_data=payments_data
 
         )
+
+
 @app.route('/payments',methods=['POST','GET'])
 def payments():
     if request.method=='POST':
@@ -246,31 +256,33 @@ def payments():
     return redirect(url_for('customers'))
 
 
+
+
 @app.route('/maintenance',methods=['GET','POST'])
 def maintenance():
+    truck_data=all_trucks()
     if request.method=='POST':
         truck_id=request.form['target_truck_id']
         odometer=request.form['odometer']
         service_date=request.form['service_date']
         description=request.form['description']
-        subtotal=request.form['subtotal']
-        tax=request.form['tax']
         total=request.form['total']
         issue_date=request.form['issue_date']
         due_date=request.form['due_date']
         invoice_type=request.form['invoice_type']
+        
         print(truck_id)
         print(odometer)
         print(service_date)
         print(description)
-        print(subtotal)
-        print(tax)
         print(total)
         print(issue_date)
         print(issue_date)
         print(due_date)
         print(invoice_type)
-    return render_template('maintenance.html')
+        invoice_values=[truck_id,description,odometer,service_date,total]
+        insert_maintenance_log(invoice_values)
+    return render_template('maintenance.html',truck_data=truck_data)
 
 
 @app.route('/logout')

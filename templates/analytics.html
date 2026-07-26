@@ -229,75 +229,92 @@
         $('#logisticsTableB').DataTable(dataTableOptions);
     });
 
-    // 1. Line Chart
-    new Chart(document.getElementById("line-chart"), {
-        type: 'line',
-        data: {
-            labels: {{ operational_months | safe }},
-        datasets: [{
-            data: {{ m_revenue | safe }},
-        label: "Total Revenue",
-        borderColor: "#3e95cd",
-        backgroundColor: "#3e95cd",
-        tension: 0.2,
-        fill: false
-            }, {
-            data: {{ m_expense | safe }},
-        label: "Total Expenses",
-        borderColor: "#c45850",
-        backgroundColor: "#c45850",
-        tension: 0.2,
-        fill: false
-            }]
-        },
-        options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { labels: { color: '#a0aec0', boxWidth: 12 } },
-            title: { display: true, text: 'Monthly Performance: Revenue vs Expenses', color: '#ffffff' }
-        },
-        scales: {
-            x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-            y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
-        }
-    }
-    });
-
-    // 2. Bar Chart
-    new Chart(document.getElementById("bar-chart"), {
-        type: 'bar',
-        data: {
-            labels: {{ operational_months | safe }},
-        datasets: [
-        {
-            label: "Revenue",
-            backgroundColor: "#3e95cd",
-            data: {{ m_revenue | safe }}
+    // Run Chart.js after layout and styling complete to guarantee trigger
+    window.addEventListener('load', function () {
+        // 1. Line Chart
+        new Chart(document.getElementById("line-chart"), {
+            type: 'line',
+            data: {
+                labels: {{ operational_months | safe }},
+                datasets: [{
+                    data: {{ m_revenue | safe }},
+                    label: "Total Revenue",
+                    borderColor: "#3e95cd",
+                    backgroundColor: "#3e95cd",
+                    tension: 0.2,
+                    fill: false
+                }, {
+                    data: {{ m_expense | safe }},
+                    label: "Total Expenses",
+                    borderColor: "#c45850",
+                    backgroundColor: "#c45850",
+                    tension: 0.2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animations: {
+                    y: {
+                        from: 0,
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
                 },
-        {
-            label: "Total Expenses",
-            backgroundColor: "#c45850",
-            data: {{ m_expense | safe }}
+                plugins: {
+                    legend: { labels: { color: '#a0aec0', boxWidth: 12 } },
+                    title: { display: true, text: 'Monthly Performance: Revenue vs Expenses', color: '#ffffff' }
+                },
+                scales: {
+                    x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
+                    y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
                 }
-    ]
-        },
-        options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: true, labels: { color: '#a0aec0' } },
-            title: {
-                display: true,
-                text: 'Monthly Revenue vs Expenses Comparison',
-                color: '#ffffff'
             }
-        },
-        scales: {
-            x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-            y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
-        }
-    }
+        });
+
+        // 2. Bar Chart
+        new Chart(document.getElementById("bar-chart"), {
+            type: 'bar',
+            data: {
+                labels: {{ operational_months | safe }},
+                datasets: [
+                    {
+                        label: "Revenue",
+                        backgroundColor: "#3e95cd",
+                        data: {{ m_revenue | safe }}
+                    },
+                    {
+                        label: "Total Expenses",
+                        backgroundColor: "#c45850",
+                        data: {{ m_expense | safe }}
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animations: {
+                    y: {
+                        from: 0,
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                },
+                plugins: {
+                    legend: { display: true, labels: { color: '#a0aec0' } },
+                    title: {
+                        display: true,
+                        text: 'Monthly Revenue vs Expenses Comparison',
+                        color: '#ffffff'
+                    }
+                },
+                scales: {
+                    x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
+                    y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
+                }
+            }
+        });
     });
 </script>
 {% endblock %}
