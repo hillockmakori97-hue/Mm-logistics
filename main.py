@@ -1,13 +1,14 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
 import random
 import string
 from functools import wraps
+from decimal import Decimal
 app=Flask(__name__)
 app.secret_key=os.urandom(24)
 
@@ -172,7 +173,14 @@ def analytics():
     totalrevenue= total_revenue()
     totaldispatches=total_dispatches()
     comletedtrips=completed_trips()
+    maitenance_sum=Decimal(sum_maintenance_logs())
+    print(maitenance_sum)
     netprofit=net_profit()
+    netprofit=list(netprofit)
+    Decimal(netprofit[4])
+    print(netprofit[4])
+    netprofit[4]=netprofit[4]-maitenance_sum
+    # netprofit=netprofit[4]-maitenance_sum
     m_expense=monthly_expense()
     m_revenue=month_revenue()
     table_invoice_data=invoice_table()

@@ -374,4 +374,6 @@ def get_date():
     curr.execute('select service_date from maintenance_logs where truck_id=306;')
     return curr.fetchall()
 
-
+def sum_maintenance_logs():
+    curr.execute('select sum(amount) from maintenance_logs')
+    return curr.fetchone()[0]
