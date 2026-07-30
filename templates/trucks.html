@@ -1,44 +1,32 @@
 {% extends 'base.html' %}
+
 {% block content %}
+<!-- Include DataTables & Bootstrap Icons -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
-    body {
-        background-color: #0b0d14 !important;
-        background-image:
-            radial-gradient(at 20% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-            radial-gradient(at 80% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, rgba(14, 165, 233, 0.05) 0px, transparent 60%);
-        background-attachment: fixed;
-        color: #f1f5f9;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    /* Global Theme Tokens */
+    body, .dashboard-viewport {
+        background-color: #f4f6f8 !important;
+        color: #2d3748 !important;
+        font-family: system-ui, -apple-system, sans-serif;
     }
 
-    .custom-table-card {
-        background: rgba(15, 23, 42, 0.8) !important;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 20px !important;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    /* Clean Card Architecture */
+    .dash-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .table-dark {
-        --bs-table-bg: transparent;
-        --bs-table-hover-bg: rgba(255, 255, 255, 0.03);
+    .dash-card:hover {
+        border-color: #cbd5e0;
+        box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.05);
     }
 
-    .table>thead {
-        border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .table>tbody>tr {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        transition: background-color 0.2s ease, transform 0.15s ease;
-    }
-
-    .table>tbody>tr:hover {
-        background-color: rgba(56, 189, 248, 0.04) !important;
-    }
-
+    /* Dynamic Status Badges */
     .status-pill {
         padding: 0.35rem 0.75rem;
         border-radius: 50rem;
@@ -51,160 +39,198 @@
 
     .status-active,
     .status-pill-active {
-        background-color: rgba(34, 197, 94, 0.15);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-        box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
+        background-color: #e6f7f3;
+        color: #248a71;
+        border: 1px solid #b2e4d8;
     }
 
     .status-maintenance,
     .status-pill-maintenance {
-        background-color: rgba(245, 158, 11, 0.15);
-        color: #fbbf24;
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        box-shadow: 0 0 10px rgba(245, 158, 11, 0.1);
+        background-color: #fef3c7;
+        color: #d97706;
+        border: 1px solid #fde68a;
     }
 
     .status-out,
     .status-pill-out {
-        background-color: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+        background-color: #fee2e2;
+        color: #dc2626;
+        border: 1px solid #fca5a5;
     }
 
-    .kpi-card {
-        background: rgba(15, 23, 42, 0.6) !important;
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
-        transition: transform 0.2s ease, border-color 0.2s ease;
+    /* License Plate Tag */
+    .plate-tag {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        font-family: monospace;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
     }
 
-    .kpi-card:hover {
-        border-color: rgba(56, 189, 248, 0.3);
-        transform: translateY(-2px);
+    /* Light DataTable Custom Styling */
+    .table-custom-wrapper .dataTables_wrapper {
+        color: #4a5568;
+        font-size: 0.875rem;
     }
 
-    .table-responsive::-webkit-scrollbar {
-        height: 6px;
+    .table-custom-wrapper table.dataTable {
+        border-collapse: separate !important;
+        border-spacing: 0;
     }
 
-    .table-responsive::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 10px;
+    .table-custom-wrapper table.dataTable thead th {
+        background-color: #f8fafc;
+        color: #4a5568;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+        padding: 14px 12px;
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
     }
 
-    .table-responsive::-webkit-scrollbar-thumb:hover {
-        background: rgba(56, 189, 248, 0.4);
+    .table-custom-wrapper table.dataTable tbody td {
+        border-bottom: 1px solid #edf2f7;
+        padding: 12px;
+        color: #2d3748;
+    }
+
+    .table-custom-wrapper table.dataTable tbody tr:hover {
+        background-color: #f8fafc !important;
     }
 </style>
 
-<div class="container-fluid min-vh-100 py-5 px-3 px-lg-5">
-    <div class="mx-auto" style="max-width: 1500px;">
+<div class="container-fluid dashboard-viewport min-vh-100 p-4 p-md-5">
 
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="p-3 kpi-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-secondary small d-block mb-1">Total Fleet Records</span>
-                        <h4 class="fw-bold text-white mb-0">{{ truck_data|length }} Units</h4>
-                    </div>
-                    <div
-                        class="p-3 rounded-3 bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 fs-4">
-                        🚛
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="p-3 kpi-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-secondary small d-block mb-1">System Status</span>
-                        <h4 class="fw-bold text-success mb-0">Active Operations</h4>
-                    </div>
-                    <div
-                        class="p-3 rounded-3 bg-success bg-opacity-10 text-success border border-success border-opacity-25 fs-4">
-                        ⚡
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="p-3 kpi-card d-flex align-items-center justify-content-between">
-                    <div>
-                        <span class="text-secondary small d-block mb-1">Database Sync</span>
-                        <h4 class="fw-bold text-info mb-0">Live Feed</h4>
-                    </div>
-                    <div
-                        class="p-3 rounded-3 bg-info bg-opacity-10 text-info border border-info border-opacity-25 fs-4">
-                        📡
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-4 p-md-5 custom-table-card w-100">
-
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-2">
+    <!-- TOP KPI STATS SECTOR -->
+    <div class="row g-3 mb-4">
+        <!-- Fleet Count Card -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="p-4 rounded-4 dash-card d-flex align-items-center justify-content-between">
                 <div>
-                    <h4 class="fw-bold text-white mb-1">Truck Fleet Directory</h4>
-                    <p class="text-secondary small mb-0">Overview of active vehicles, fuel efficiency & maintenance
-                        schedules</p>
+                    <span class="text-muted d-block small mb-1 fw-medium" style="font-size: 12px;">Total Fleet Records</span>
+                    <h3 class="fw-bold text-dark mb-0 font-monospace" style="font-size: 1.6rem;">{{ truck_data|length }} Units</h3>
                 </div>
-                <span
-                    class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill font-monospace">
-                    Live Data
-                </span>
-            </div>
-
-            <div class="table-responsive">
-                <table id="logisticsTableA" class="table table-dark table-hover align-middle mb-0 text-nowrap">
-                    <thead>
-                        <tr class="text-secondary text-uppercase small fs-7">
-                            <th class="py-3">Truck ID</th>
-                            <th class="py-3">Plate</th>
-                            <th class="py-3">Model</th>
-                            <th class="py-3">Axle Config</th>
-                            <th class="py-3 text-center">Status</th>
-                            <th class="py-3 text-end">Expected KPL</th>
-                            <th class="py-3 text-end">Fuel Cap. (L)</th>
-                            <th class="py-3">Last Insurance</th>
-                            <th class="py-3">Next Insurance</th>
-                            <th class="py-3">Last Maintenance</th>
-                            <th class="py-3">Next Maintenance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for i in truck_data %}
-                        <tr>
-                            <td class="fw-bold text-white font-monospace">{{i[0]}}</td>
-                            <td><span
-                                    class="badge bg-dark border border-secondary text-light font-monospace px-2 py-1">{{i[1]}}</span>
-                            </td>
-                            <td class="fw-semibold text-light">{{i[2]}}</td>
-                            <td><span
-                                    class="badge bg-secondary bg-opacity-25 border border-secondary text-secondary">{{i[3]}}</span>
-                            </td>
-
-                            <td class="text-center">
-                                <span
-                                    class="status-pill {% if i[4]|lower == 'active' %}status-active{% elif 'maint' in i[4]|lower %}status-maintenance{% else %}status-out{% endif %}">
-                                    {{i[4]}}
-                                </span>
-                            </td>
-
-                            <td class="font-monospace text-end fw-semibold text-info">{{i[5]}}</td>
-                            <td class="font-monospace text-end fw-semibold text-light">{{i[6]}}</td>
-                            <td class="text-secondary small">{{i[7]}}</td>
-                            <td class="text-secondary small">{{i[8]}}</td>
-                            <td class="text-secondary small">{{i[9]}}</td>
-                            <td class="text-warning small fw-medium">{{i[10]}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center"
+                    style="background-color: #e6f7f3; color: #31b393; width: 48px; height: 48px;">
+                    <i class="bi bi-truck fs-4"></i>
+                </div>
             </div>
         </div>
 
+        <!-- System Status Card -->
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="p-4 rounded-4 dash-card d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted d-block small mb-1 fw-medium" style="font-size: 12px;">System Status</span>
+                    <h3 class="fw-bold mb-0" style="font-size: 1.35rem; color: #31b393;">Active Operations</h3>
+                </div>
+                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center"
+                    style="background-color: #fef3c7; color: #d97706; width: 48px; height: 48px;">
+                    <i class="bi bi-lightning-charge fs-4"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Sync Card -->
+        <div class="col-12 col-md-4">
+            <div class="p-4 rounded-4 dash-card d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted d-block small mb-1 fw-medium" style="font-size: 12px;">Database Sync</span>
+                    <h3 class="fw-bold text-primary mb-0" style="font-size: 1.35rem; color: #2563eb !important;">Live Feed</h3>
+                </div>
+                <div class="rounded-3 p-3 d-flex align-items-center justify-content-center"
+                    style="background-color: #eff6ff; color: #2563eb; width: 48px; height: 48px;">
+                    <i class="bi bi-broadcast fs-4"></i>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- MAIN FLEET DIRECTORY TABLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="p-4 rounded-4 dash-card table-custom-wrapper">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold text-dark mb-1">Truck Fleet Directory</h4>
+                        <p class="text-muted small mb-0">Overview of active vehicles, fuel efficiency & maintenance schedules</p>
+                    </div>
+                    <div>
+                        <span class="badge rounded-pill px-3 py-2 font-monospace" style="background-color: #e6f7f3; color: #248a71;">
+                            <i class="bi bi-dot me-1"></i>Live Data
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="logisticsTableA" class="table table-hover align-middle mb-0 text-nowrap" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Truck ID</th>
+                                <th>Plate</th>
+                                <th>Model</th>
+                                <th>Axle Config</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-end">Expected KPL</th>
+                                <th class="text-end">Fuel Cap. (L)</th>
+                                <th>Last Insurance</th>
+                                <th>Next Insurance</th>
+                                <th>Last Maintenance</th>
+                                <th>Next Maintenance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in truck_data %}
+                            <tr>
+                                <td class="fw-bold font-monospace text-dark">{{i[0]}}</td>
+                                <td><span class="plate-tag">{{i[1]}}</span></td>
+                                <td class="fw-semibold text-dark">{{i[2]}}</td>
+                                <td><span class="badge bg-light text-secondary border font-monospace">{{i[3]}}</span></td>
+                                
+                                <td class="text-center">
+                                    <span class="status-pill {% if i[4]|lower == 'active' %}status-active{% elif 'maint' in i[4]|lower %}status-maintenance{% else %}status-out{% endif %}">
+                                        {{i[4]}}
+                                    </span>
+                                </td>
+
+                                <td class="font-monospace text-end fw-bold" style="color: #2563eb;">{{i[5]}}</td>
+                                <td class="font-monospace text-end text-secondary">{{i[6]}}</td>
+                                <td class="text-muted small">{{i[7]}}</td>
+                                <td class="text-muted small">{{i[8]}}</td>
+                                <td class="text-muted small">{{i[9]}}</td>
+                                <td><span class="fw-semibold font-monospace" style="color: #d97706;">{{i[10]}}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<!-- Scripts Module Inject Engine -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#logisticsTableA').DataTable({
+            dom: '<"d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2"fl>t<"d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2"ip>',
+            pageLength: 10,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search fleet records..."
+            }
+        });
+    });
+</script>
 {% endblock %}

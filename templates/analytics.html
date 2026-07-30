@@ -1,43 +1,119 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Include UI Icons & DataTables Layers -->
+<!-- Include DataTables & Bootstrap Icons Layers -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div class="container-fluid text-white min-vh-100 p-0"
-    style="background-color: #08090c !important; font-family: system-ui, -apple-system, sans-serif;">
+<style>
+    /* Theme Canvas Tokens */
+    .dashboard-viewport {
+        background-color: #f4f6f8 !important;
+        color: #2d3748 !important;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Minimal Floating Sidebar */
+    .sidebar-nav {
+        background-color: #ffffff !important;
+        border-right: 1px solid #e2e8f0;
+        width: 80px;
+    }
+
+    .sidebar-icon-link {
+        color: #718096;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .sidebar-icon-link:hover {
+        color: #31b393;
+        background-color: #e6f7f3;
+    }
+
+    .sidebar-icon-active {
+        color: #31b393 !important;
+        background-color: #e6f7f3 !important;
+    }
+
+    /* Clean Card Architecture */
+    .dash-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dash-card:hover {
+        border-color: #cbd5e0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Light DataTable Styling Overrides */
+    .table-custom-wrapper .dataTables_wrapper {
+        color: #4a5568;
+        font-size: 0.875rem;
+    }
+
+    .table-custom-wrapper table.dataTable {
+        border-collapse: separate !important;
+        border-spacing: 0;
+    }
+
+    .table-custom-wrapper table.dataTable thead th {
+        background-color: #f8fafc;
+        color: #4a5568;
+        font-weight: 600;
+        border-bottom: 2px solid #e2e8f0;
+        padding: 12px;
+    }
+
+    .table-custom-wrapper table.dataTable tbody td {
+        border-bottom: 1px solid #edf2f7;
+        padding: 12px;
+        color: #2d3748;
+    }
+
+    .table-custom-wrapper table.dataTable tbody tr:hover {
+        background-color: #f8fafc !important;
+    }
+
+    /* Input Pill Tweaks */
+    .search-input-pill {
+        background-color: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #2d3748 !important;
+    }
+
+    .search-input-pill:focus {
+        border-color: #31b393 !important;
+        box-shadow: 0 0 0 3px rgba(49, 179, 147, 0.15) !important;
+    }
+</style>
+
+<div class="container-fluid dashboard-viewport min-vh-100 p-0">
     <div class="row g-0">
 
-        <!-- NARROW SIDEBAR MENU (Matching the ultra-compact menu profile) -->
-        <div class="col-auto d-flex flex-column justify-content-between align-items-center py-4 px-3"
-            style="background-color: #0d0f12; min-height: 100vh; border-right: 1px solid #16191f; width: 80px;">
+        <!-- NARROW SIDEBAR MENU -->
+        <div class="col-auto d-flex flex-column justify-content-between align-items-center py-4 px-3 sidebar-nav" style="min-height: 100vh;">
             <div class="d-flex flex-column align-items-center gap-4 w-100">
                 <!-- System Brand Icon Frame -->
-                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white text-center shadow-sm"
-                    style="width: 42px; height: 42px; background: linear-gradient(135deg, #2f69ff 0%, #0043e6 100%);">
+                <div class="rounded-circle d-flex align-items-center justify-content-center text-white text-center shadow-sm"
+                    style="width: 42px; height: 42px; background: linear-gradient(135deg, #31b393 0%, #248a71 100%);">
                     <i class="bi bi-activity fs-5"></i>
                 </div>
 
-                <!-- Vertical Icon List Navigation -->
+                <!-- Vertical Navigation Links -->
                 <div class="d-flex flex-column gap-3 w-100 align-items-center mt-3">
-                    <a href="/dashboard"
-                        class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
-                        title="Core Dashboard">
+                    <a href="/dashboard" class="btn border-0 sidebar-icon-link p-2 rounded-3 text-center w-100" title="Core Dashboard">
                         <i class="bi bi-grid-1x2 fs-5"></i>
                     </a>
-                    <a href="/analytics"
-                        class="btn border-0 text-white p-2 rounded-3 bg-secondary bg-opacity-10 text-center w-100"
-                        title="Telemetry Analytics">
+                    <a href="/analytics" class="btn border-0 sidebar-icon-active p-2 rounded-3 text-center w-100" title="Telemetry Analytics">
                         <i class="bi bi-graph-up-arrow fs-5"></i>
                     </a>
-                    <a href="/trucks" class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
-                        title="Fleet Directory">
+                    <a href="/trucks" class="btn border-0 sidebar-icon-link p-2 rounded-3 text-center w-100" title="Fleet Directory">
                         <i class="bi bi-truck fs-5"></i>
                     </a>
-                    <a href="/maintenance_logs"
-                        class="btn border-0 text-secondary p-2 rounded-3 hover-bg-dark text-center w-100"
-                        title="Upkeep Logs">
+                    <a href="/maintenance_logs" class="btn border-0 sidebar-icon-link p-2 rounded-3 text-center w-100" title="Upkeep Logs">
                         <i class="bi bi-wrench-adjustable fs-5"></i>
                     </a>
                 </div>
@@ -45,7 +121,7 @@
 
             <!-- Bottom Exit Node -->
             <div>
-                <a href="/login" class="text-secondary hover-bg-dark p-2 rounded-3 text-center d-block">
+                <a href="/login" class="sidebar-icon-link p-2 rounded-3 text-center d-block">
                     <i class="bi bi-box-arrow-left fs-5"></i>
                 </a>
             </div>
@@ -54,27 +130,31 @@
         <!-- MAIN VIEWPORT DISPLAY FRAME -->
         <div class="col p-4 p-md-5 overflow-y-auto" style="height: 100vh;">
 
-            <!-- System Status Header Row with integrated Search -->
+            <!-- Header Row with Integrated Search -->
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-2">
                 <div class="input-group search-box" style="max-width: 320px;">
-                    <span class="input-group-text border-0 text-secondary" style="background-color: #0d0f12;"><i
-                            class="bi bi-search"></i></span>
-                    <input type="text" class="form-control border-0 text-white small" placeholder="Search parameters..."
-                        style="background-color: #0d0f12; font-size: 13px;">
+                    <span class="input-group-text border-end-0 search-input-pill text-muted" style="border-radius: 8px 0 0 8px;">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0 search-input-pill small ps-0" placeholder="Search parameters..."
+                           style="font-size: 13px; border-radius: 0 8px 8px 0;">
                 </div>
-                <!-- Profile Indicator Node Mockup -->
+                
+                <!-- Profile Indicator Node -->
                 <div class="d-flex align-items-center gap-3">
-                    <i class="bi bi-bell text-secondary fs-5"></i>
-                    <div class="bg-secondary rounded-circle"
-                        style="width: 36px; height: 36px; background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80') center/cover;">
+                    <button class="btn btn-light rounded-circle border-0 shadow-sm text-secondary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+                        <i class="bi bi-bell fs-6"></i>
+                    </button>
+                    <div class="rounded-circle shadow-sm"
+                        style="width: 38px; height: 38px; background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80') center/cover; border: 2px solid #ffffff;">
                     </div>
                 </div>
             </div>
 
             <!-- Greeting Context Band -->
-            <div class="mb-5">
-                <h2 class="fw-bold text-white mb-1">System Intelligence Overview</h2>
-                <p class="text-secondary small mb-0">Live status profile updates across logistics channels.</p>
+            <div class="mb-4">
+                <h2 class="fw-bold text-dark mb-1">System Intelligence Overview</h2>
+                <p class="text-muted small mb-0">Live status profile updates across logistics channels.</p>
             </div>
 
             <!-- UPPER GRID SECTOR -->
@@ -84,39 +164,31 @@
                 <div class="col-xl-5 col-lg-6">
                     <div class="row g-3">
                         <div class="col-6">
-                            <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total
-                                    Revenue</span>
-                                <h3 class="fw-bold font-monospace text-white mb-2">{{totalrevenue[2]}}</h3>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace"
-                                    style="font-size: 10px;">+ 2.67%</span>
+                            <div class="p-4 rounded-4 dash-card">
+                                <span class="text-muted d-block small mb-2 fw-medium" style="font-size: 12px;">Total Revenue</span>
+                                <h3 class="fw-bold font-monospace text-dark mb-2" style="font-size: 1.35rem;">{{totalrevenue[2]}}</h3>
+                                <span class="badge bg-emerald-subtle text-emerald rounded-pill font-monospace" style="font-size: 10px; background-color: #e6f7f3; color: #31b393;">+ 2.67%</span>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Total
-                                    Dispatches</span>
-                                <h3 class="fw-bold font-monospace text-white mb-2">{{totaldispatches}}</h3>
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace"
-                                    style="font-size: 10px;">- 2.61%</span>
+                            <div class="p-4 rounded-4 dash-card">
+                                <span class="text-muted d-block small mb-2 fw-medium" style="font-size: 12px;">Total Dispatches</span>
+                                <h3 class="fw-bold font-monospace text-dark mb-2" style="font-size: 1.35rem;">{{totaldispatches}}</h3>
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace" style="font-size: 10px;">- 2.61%</span>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Active
-                                    Trips</span>
-                                <h3 class="fw-bold font-monospace text-white mb-2">{{completedtrips}}</h3>
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace"
-                                    style="font-size: 10px;">- 2.14%</span>
+                            <div class="p-4 rounded-4 dash-card">
+                                <span class="text-muted d-block small mb-2 fw-medium" style="font-size: 12px;">Active Trips</span>
+                                <h3 class="fw-bold font-monospace text-dark mb-2" style="font-size: 1.35rem;">{{completedtrips}}</h3>
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill font-monospace" style="font-size: 10px;">- 2.14%</span>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="p-4 rounded-4" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                                <span class="text-secondary d-block small mb-2" style="font-size: 12px;">Net
-                                    Profit</span>
-                                <h3 class="fw-bold font-monospace text-white mb-2">{{netprofit}}</h3>
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill font-monospace"
-                                    style="font-size: 10px;">+ 5.67%</span>
+                            <div class="p-4 rounded-4 dash-card">
+                                <span class="text-muted d-block small mb-2 fw-medium" style="font-size: 12px;">Net Profit</span>
+                                <h3 class="fw-bold font-monospace text-dark mb-2" style="font-size: 1.35rem;">{{netprofit}}</h3>
+                                <span class="badge rounded-pill font-monospace" style="font-size: 10px; background-color: #e6f7f3; color: #31b393;">+ 5.67%</span>
                             </div>
                         </div>
                     </div>
@@ -124,8 +196,7 @@
 
                 <!-- Right Subgrid Pillar: Primary Graphic Display Window Line Chart -->
                 <div class="col-xl-7 col-lg-6">
-                    <div class="p-4 rounded-4 h-100 d-flex flex-column justify-content-center shadow-sm"
-                        style="background-color: #0d0f12; border: 1px solid #16191f;">
+                    <div class="p-4 rounded-4 dash-card h-100 d-flex flex-column justify-content-center">
                         <canvas id="line-chart" style="max-height: 230px;"></canvas>
                     </div>
                 </div>
@@ -133,10 +204,10 @@
             </div>
 
             <!-- BAR GRAPH SECTION -->
-            <div class="row g-4 mb-5">
+            <div class="row g-4 mb-4">
                 <div class="col-12">
-                    <div class="p-4 rounded-4 shadow-sm" style="background-color: #0d0f12; border: 1px solid #16191f;">
-                        <canvas id="bar-chart" style="max-height: 320px;"></canvas>
+                    <div class="p-4 rounded-4 dash-card">
+                        <canvas id="bar-chart" style="max-height: 300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -145,17 +216,15 @@
             <div class="row g-4">
                 <!-- Left Registry Table Card -->
                 <div class="col-xl-6">
-                    <div class="p-4 rounded-4 table-dark-wrapper shadow-sm h-100"
-                        style="background-color: #0d0f12; border: 1px solid #16191f;">
-                        <h5 class="fw-bold mb-3 text-white">Invoices Data </h5>
-                        <table id="logisticsTableA" class="table table-dark table-hover align-middle mb-0"
-                            style="width:100%;">
+                    <div class="p-4 rounded-4 dash-card table-custom-wrapper h-100">
+                        <h5 class="fw-bold mb-3 text-dark">Invoices Data</h5>
+                        <table id="logisticsTableA" class="table table-hover align-middle mb-0" style="width:100%;">
                             <thead>
                                 <tr>
-                                    <th>Invoice Id </th>
+                                    <th>Invoice Id</th>
                                     <th>Invoice Type</th>
-                                    <th>Status </th>
-                                    <th class="text-end"> Amount (Ksh)</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Amount (Ksh)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -163,8 +232,8 @@
                                 <tr>
                                     <td>{{i[0]}}</td>
                                     <td>{{i[1]}}</td>
-                                    <td class="font-monospace text-secondary">{{i[2]}}</td>
-                                    <td class="font-monospace text-end text-success">{{i[3]}}</td>
+                                    <td><span class="badge bg-light text-secondary border font-monospace">{{i[2]}}</span></td>
+                                    <td class="font-monospace text-end fw-semibold" style="color: #31b393;">{{i[3]}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -172,19 +241,17 @@
                     </div>
                 </div>
 
-                <!-- Right Registry Table Card (Duplicate Layout matching image_e0b7f9.png) -->
+                <!-- Right Registry Table Card -->
                 <div class="col-xl-6">
-                    <div class="p-4 rounded-4 table-dark-wrapper shadow-sm h-100"
-                        style="background-color: #0d0f12; border: 1px solid #16191f;">
-                        <h5 class="fw-bold mb-3 text-white">Consignment Registry Directory Secondary</h5>
-                        <table id="logisticsTableB" class="table table-dark table-hover align-middle mb-0"
-                            style="width:100%;">
+                    <div class="p-4 rounded-4 dash-card table-custom-wrapper h-100">
+                        <h5 class="fw-bold mb-3 text-dark">Consignment Registry Directory</h5>
+                        <table id="logisticsTableB" class="table table-hover align-middle mb-0" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>Payment ID</th>
                                     <th>Shipment ID</th>
                                     <th>Payment Status</th>
-                                    <th class="text-end">Amount($)</th>
+                                    <th class="text-end">Amount ($)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,8 +259,8 @@
                                 <tr>
                                     <td>{{i[0]}}</td>
                                     <td>{{i[1]}}</td>
-                                    <td class="font-monospace text-secondary">{{i[3]}}</td>
-                                    <td class="font-monospace text-end text-success">{{i[2]}}</td>
+                                    <td><span class="badge bg-light text-secondary border font-monospace">{{i[3]}}</span></td>
+                                    <td class="font-monospace text-end fw-semibold" style="color: #31b393;">{{i[2]}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -224,12 +291,11 @@
             }
         };
 
-        // Turn both independently initialized DOM items into active layers
         $('#logisticsTableA').DataTable(dataTableOptions);
         $('#logisticsTableB').DataTable(dataTableOptions);
     });
 
-    // Run Chart.js after layout and styling complete to guarantee trigger
+    // Run Chart.js
     window.addEventListener('load', function () {
         // 1. Line Chart
         new Chart(document.getElementById("line-chart"), {
@@ -239,16 +305,16 @@
                 datasets: [{
                     data: {{ m_revenue | safe }},
                     label: "Total Revenue",
-                    borderColor: "#3e95cd",
-                    backgroundColor: "#3e95cd",
-                    tension: 0.2,
+                    borderColor: "#31b393",
+                    backgroundColor: "#31b393",
+                    tension: 0.3,
                     fill: false
                 }, {
                     data: {{ m_expense | safe }},
                     label: "Total Expenses",
-                    borderColor: "#c45850",
-                    backgroundColor: "#c45850",
-                    tension: 0.2,
+                    borderColor: "#e65258",
+                    backgroundColor: "#e65258",
+                    tension: 0.3,
                     fill: false
                 }]
             },
@@ -258,17 +324,17 @@
                 animations: {
                     y: {
                         from: 0,
-                        duration: 1500,
+                        duration: 1200,
                         easing: 'easeOutQuart'
                     }
                 },
                 plugins: {
-                    legend: { labels: { color: '#a0aec0', boxWidth: 12 } },
-                    title: { display: true, text: 'Monthly Performance: Revenue vs Expenses', color: '#ffffff' }
+                    legend: { labels: { color: '#4a5568', boxWidth: 12, font: { size: 12 } } },
+                    title: { display: true, text: 'Monthly Performance: Revenue vs Expenses', color: '#2d3748', font: { weight: 'bold', size: 14 } }
                 },
                 scales: {
-                    x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-                    y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
+                    x: { grid: { color: '#edf2f7' }, ticks: { color: '#718096' } },
+                    y: { grid: { color: '#edf2f7' }, ticks: { color: '#718096' } }
                 }
             }
         });
@@ -281,12 +347,14 @@
                 datasets: [
                     {
                         label: "Revenue",
-                        backgroundColor: "#3e95cd",
+                        backgroundColor: "#31b393",
+                        borderRadius: 4,
                         data: {{ m_revenue | safe }}
                     },
                     {
                         label: "Total Expenses",
-                        backgroundColor: "#c45850",
+                        backgroundColor: "#e65258",
+                        borderRadius: 4,
                         data: {{ m_expense | safe }}
                     }
                 ]
@@ -297,21 +365,22 @@
                 animations: {
                     y: {
                         from: 0,
-                        duration: 1500,
+                        duration: 1200,
                         easing: 'easeOutQuart'
                     }
                 },
                 plugins: {
-                    legend: { display: true, labels: { color: '#a0aec0' } },
+                    legend: { display: true, labels: { color: '#4a5568' } },
                     title: {
                         display: true,
                         text: 'Monthly Revenue vs Expenses Comparison',
-                        color: '#ffffff'
+                        color: '#2d3748',
+                        font: { weight: 'bold', size: 14 }
                     }
                 },
                 scales: {
-                    x: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } },
-                    y: { grid: { color: '#16191f' }, ticks: { color: '#a0aec0' } }
+                    x: { grid: { color: '#edf2f7' }, ticks: { color: '#718096' } },
+                    y: { grid: { color: '#edf2f7' }, ticks: { color: '#718096' } }
                 }
             }
         });

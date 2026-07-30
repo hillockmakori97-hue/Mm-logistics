@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -178,7 +178,7 @@ def maintenance_logs():
 @app.route('/trucks')
 @admin_protected
 def trucks():
-    truck_data=get_truck('en-route')
+    truck_data=all_trucks()
     return render_template('trucks.html',truck_data=truck_data)
 
 
@@ -329,6 +329,32 @@ def maintenance():
         invoice_values=[truck_id,description,odometer,service_date,total]
         insert_maintenance_log(invoice_values)
     return render_template('maintenance.html',truck_data=truck_data)
+
+@app.route('/terms')
+def terms():
+    return render_template('reception.html')
+
+
+@app.route('/register', methods=['POST','GET'])
+def register():
+    if request.method=='POST':
+        company_name = request.form['company_name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        phone_no=request.form['phone']
+        if password != confirm_password:
+            flash("Passwords do not match!")
+            return redirect(url_for('register'))
+        possible_user=check_user(email)
+        if possible_user:
+            flash('Account Already Registered Please Login','danger')
+            return redirect(url_for('login'))
+        x=[email,password,'customer']
+        a=[company_name,phone_no,'active']
+        insert_customer(x,a)
+    return render_template('register.html')
+
 
 
 @app.route('/logout')

@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Include Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* Viewport & Background Accents */
+    .viewport-container {
+        background-color: #eef2f5;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* Abstract background shapes matching image design */
+    .bg-shape-top-right {
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 350px;
+        height: 350px;
+        background-color: #e65258;
+        transform: rotate(45deg);
+        z-index: 1;
+    }
+
+    .bg-shape-bottom-left {
+        position: absolute;
+        bottom: -120px;
+        left: -80px;
+        width: 320px;
+        height: 320px;
+        background-color: #f7ca45;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    /* Main Auth Container */
+    .auth-card {
+        background-color: #ffffff;
+        border-radius: 1.25rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        width: 100%;
+        max-width: 900px;
+        z-index: 2;
+        border: none;
+    }
+
+    /* Left Side Panel (Welcome Back Overlay) */
+    .auth-side-panel {
+        background: linear-gradient(135deg, #2ebf91 0%, #31b393 100%);
+        color: #ffffff;
+        padding: 3rem 2.5rem;
+        display: flex;
+        flex-column: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Subtle geometric overlay graphics on green panel */
+    .panel-geo-1 {
+        position: absolute;
+        top: 20%;
+        right: 10%;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.08);
+        transform: rotate(45deg);
+    }
+
+    .panel-geo-2 {
+        position: absolute;
+        bottom: 15%;
+        right: 25%;
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.08);
+        transform: rotate(20deg);
+    }
+
+    /* Brand Header in Left Panel */
+    .brand-logo-panel {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: -0.02em;
+    }
+
+    .btn-outline-light-custom {
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        border-radius: 50rem;
+        padding: 0.6rem 2.5rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        transition: all 0.25 ease;
+        background: transparent;
+    }
+
+    .btn-outline-light-custom:hover {
+        background-color: #ffffff;
+        color: #31b393;
+    }
+
+    /* Right Side Registration Form */
+    .auth-form-panel {
+        padding: 3rem 3rem;
+    }
+
+    .form-title {
+        color: #31b393;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    /* Social Icons Circle */
+    .social-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #475569;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+    }
+
+    .social-btn:hover {
+        background-color: #f8fafc;
+        border-color: #cbd5e1;
+        color: #31b393;
+    }
+
+    /* Form Input Fields */
+    .custom-input-group {
+        background-color: #f4f6f8;
+        border-radius: 0.5rem;
+        border: 1px solid #f4f6f8;
+        transition: all 0.2s ease;
+    }
+
+    .custom-input-group:focus-within {
+        background-color: #ffffff;
+        border-color: #31b393;
+        box-shadow: 0 0 0 3px rgba(49, 179, 147, 0.15);
+    }
+
+    .custom-input-group .input-group-text {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        padding-left: 1.25rem;
+    }
+
+    .custom-input-group .form-control {
+        background: transparent;
+        border: none;
+        padding: 0.75rem 1.25rem 0.75rem 0.75rem;
+        font-size: 0.9rem;
+        color: #334155;
+    }
+
+    .custom-input-group .form-control:focus {
+        box-shadow: none;
+    }
+
+    .custom-input-group .form-control::placeholder {
+        color: #94a3b8;
+    }
+
+    /* Main Submit Button */
+    .btn-emerald-submit {
+        background-color: #31b393;
+        color: #ffffff !important;
+        border-radius: 50rem;
+        padding: 0.75rem 3rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        border: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(49, 179, 147, 0.25);
+    }
+
+    .btn-emerald-submit:hover {
+        background-color: #27967b;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(49, 179, 147, 0.35);
+    }
+</style>
+
+<div class="viewport-container p-3">
+
+    <!-- Decorative background elements -->
+    <div class="bg-shape-top-right"></div>
+    <div class="bg-shape-bottom-left"></div>
+
+    <!-- Main Auth Card -->
+    <div class="card auth-card">
+        <div class="row g-0">
+
+            <!-- LEFT PANEL: Welcome / Sign In Switcher -->
+            <div class="col-lg-5 auth-side-panel">
+                <div class="panel-geo-1"></div>
+                <div class="panel-geo-2"></div>
+
+                <div class="brand-logo-panel mb-5">
+                    <i class="bi bi-box-seam me-1"></i> M<span style="opacity: 0.8;">$</span>M Logistics
+                </div>
+
+                <div class="my-auto text-center py-4">
+                    <h2 class="fw-bold mb-3 display-6">Welcome Back!</h2>
+                    <p class="small text-white-50 lh-base mb-4 px-2" style="font-size: 0.9rem;">
+                        To keep connected with us please login with your personal info
+                    </p>
+                    <a href="/login" class="btn btn-outline-light-custom text-uppercase">
+                        Sign In
+                    </a>
+                </div>
+
+                <div class="small text-white-50 font-monospace" style="font-size: 11px;">
+                    &copy; 2026 LOGICORE NETWORK
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Registration Form -->
+            <div class="col-lg-7 auth-form-panel d-flex flex-column justify-content-center">
+
+                <div class="text-center mb-4">
+                    <h2 class="form-title h3 mb-3">Create Account</h2>
+
+                    <!-- Social Login Round Icons -->
+                    <div class="d-flex justify-content-center gap-2 mb-3">
+                        <a href="#" class="social-btn" title="Sign up with Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="social-btn" title="Sign up with Google">
+                            <i class="bi bi-google"></i>
+                        </a>
+                        <a href="#" class="social-btn" title="Sign up with LinkedIn">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    </div>
+
+                    <span class="text-muted small" style="font-size: 0.8rem;">or use your email for registration:</span>
+                </div>
+
+                <!-- Registration Form -->
+                <form action="/register" method="POST">
+
+                    <!-- Company Name Field -->
+                    <div class="mb-3">
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text"><i class="bi bi-building"></i></span>
+                            <input type="text" name="company_name" class="form-control" placeholder="Company Name"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                            <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="mb-4">
+                        <div class="input-group custom-input-group">
+                            <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                            <input type="password" name="confirm_password" class="form-control"
+                                placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center pt-2">
+                        <button type="submit" class="btn btn-emerald-submit text-uppercase">
+                            Sign Up
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

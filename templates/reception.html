@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Include Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    /* Global Theme Tokens */
+    .viewport-bg {
+        background-color: #f4f6f8 !important;
+        color: #1e293b !important;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .brand-accent {
+        color: #31b393 !important;
+    }
+
+    /* Clean Card Architecture */
+    .terms-card {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+        border-radius: 1.5rem;
+    }
+
+    /* Navigation Styling */
+    .nav-link-custom {
+        color: #64748b;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link-custom:hover {
+        color: #1e293b !important;
+    }
+
+    .btn-outline-custom {
+        border: 1px solid #cbd5e1;
+        color: #475569;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-custom:hover {
+        border-color: #31b393;
+        color: #31b393;
+        background-color: #e6f7f3;
+    }
+
+    /* Primary Emerald Button */
+    .btn-emerald {
+        background-color: #31b393;
+        color: #ffffff !important;
+        font-weight: 600;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-emerald:hover {
+        background-color: #27967b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(49, 179, 147, 0.25);
+    }
+
+    /* Secondary Action Button */
+    .btn-light-subtle {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .btn-light-subtle:hover {
+        background-color: #f1f5f9;
+        color: #334155;
+    }
+
+    /* Custom Emerald List Styling */
+    .emerald-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .emerald-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #475569;
+    }
+
+    .emerald-list li::before {
+        content: "■";
+        position: absolute;
+        left: 0;
+        color: #31b393;
+        font-size: 0.75rem;
+        top: 0.1rem;
+    }
+
+    .fw-black {
+        font-weight: 900;
+    }
+</style>
+
+<div class="container-fluid viewport-bg min-vh-100 d-flex flex-column justify-content-between p-4 p-md-5">
+
+    <!-- NAVBAR LAYER -->
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div class="fw-black fs-4 tracking-tight text-dark">
+            M<span class="brand-accent">$</span>M <span class="brand-accent">Logistics</span>
+        </div>
+        <nav class="d-none d-md-flex gap-4">
+            <a href="/" class="nav-link-custom text-decoration-none small fw-medium">Home</a>
+            <a href="/customers" class="nav-link-custom text-decoration-none small fw-medium">Customer Portal</a>
+        </nav>
+        <a href="/login" class="btn btn-outline-custom btn-sm rounded-pill px-3 py-1.5 fw-semibold font-monospace"
+            style="font-size: 12px;">Sign In</a>
+    </header>
+
+    <!-- MAIN LEGAL DOCUMENT CONTAINER -->
+    <main class="row justify-content-center my-auto">
+        <div class="col-xl-9 col-lg-10">
+            <div class="terms-card p-4 p-md-5 my-4">
+
+                <!-- SECTION HEADER -->
+                <span class="text-uppercase font-monospace fw-bold small brand-accent d-block mb-2"
+                    style="letter-spacing: 0.1em; font-size: 0.75rem;">
+                    Agreement
+                </span>
+                <h1 class="fw-black text-dark display-5 mb-4" style="letter-spacing: -0.03em;">
+                    Terms of Service
+                </h1>
+
+                <!-- INTRODUCTORY PARAGRAPHS WITH EMERALD EMPHASIS -->
+                <p class="text-secondary lh-base mb-4">
+                    We know it's tempting to skip these Terms of Service, but it's important to establish what you can
+                    expect from us as you use <strong class="brand-accent fw-bold">M$M Logistics</strong> services, and
+                    what we expect from you.
+                </p>
+
+                <p class="text-secondary lh-base mb-4">
+                    These Terms of Service reflect the way <strong class="brand-accent fw-bold">M$M Logistics</strong>
+                    operates, the transport regulations that apply to our network, and certain principles we've always
+                    held as standard. As a result, these Terms of Service help define our relationship with you as you
+                    interact with our telemetry, dispatch, and fleet services. For example, these terms include the
+                    following topic headings:
+                </p>
+
+                <!-- BULLET LIST WITH EMERALD ACCENTS & HIGHLIGHTS -->
+                <ul class="emerald-list mb-4">
+                    <li>
+                        <strong class="text-dark">What you can expect from us</strong>, which describes how we provide,
+                        manage, and dispatch our fleet services.
+                    </li>
+                    <li>
+                        <strong class="text-dark">What we expect from you</strong>, which establishes rules for booking
+                        transit nodes and accessing live telemetry logic.
+                    </li>
+                    <li>
+                        <strong class="text-dark">Content in M$M Logistics services</strong>, which describes
+                        intellectual property rights to transit data and telemetry logs—whether that data belongs to
+                        you, <strong class="brand-accent fw-bold">M$M Logistics</strong>, or partners.
+                    </li>
+                    <li>
+                        <strong class="text-dark">In case of problems or disagreements</strong>, which describes legal
+                        recourse and what to expect if node service or delivery schedules are disrupted.
+                    </li>
+                </ul>
+
+                <hr class="my-5 text-border opacity-25">
+
+                <!-- 1. CARGO & GOODS LIABILITY DISCLAIMER -->
+                <section class="mb-5">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge rounded-pill me-2 px-3 py-2 font-monospace"
+                            style="background-color: #e6f7f3; color: #248a71;">SECTION 1</span>
+                        <h2 class="h4 fw-bold text-dark mb-0">CARGO & GOODS LIABILITY DISCLAIMER</h2>
+                    </div>
+                    <p class="text-muted small font-monospace mb-4">(For Public Visitors, Non-Contracted Shippers, and
+                        Prospective Clients)</p>
+
+                    <!-- 1.1 -->
+                    <div class="mb-4 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">1.1 Non-Assumption of Risk Prior to Formal Execution</h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            Nothing displayed on this public platform—including transit estimates, route calculators,
+                            node booking forms, or capacity indicators—constitutes an acceptance of custody, care,
+                            control, or liability over any physical goods or cargo. <strong
+                                class="brand-accent fw-bold">M$M Logistics</strong> explicitly disclaims all liability,
+                            duty of care, and bailment obligations for any physical property until all of the following
+                            conditions are met:
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li>A formal Master Transportation Agreement or Spot-Freight Contract has been executed by
+                                an authorized representative of <strong class="brand-accent fw-bold">M$M
+                                    Logistics</strong>.</li>
+                            <li>A formal Bill of Lading (BOL) or electronic freight tender has been issued, verified,
+                                and accepted in our dispatch system.</li>
+                            <li>The cargo has been physically loaded onto our vehicle or designated carrier unit and
+                                inspected at an authorized node checkpoint.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 1.2 -->
+                    <div class="mb-4 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">1.2 Limitation of Liability on Public Rate Estimations
+                        </h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            Rate quotes, transit time estimates, or node turnaround metrics generated on public
+                            interfaces are non-binding operational projections. <strong class="brand-accent fw-bold">M$M
+                                Logistics</strong> assumes no financial or legal liability for:
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li><strong class="text-dark">Production or Factory Downtime:</strong> Any losses, supply
+                                chain delays, or operational shutdowns incurred as a result of reliance on public
+                                transit time estimates.</li>
+                            <li><strong class="text-dark">Price Variations:</strong> Discrepancies between public
+                                estimation calculators and final contractual quotes driven by fuel index changes, weight
+                                class re-classifications, or axle load requirements.</li>
+                            <li><strong class="text-dark">Loss of Market:</strong> Any indirect, special, incidental, or
+                                consequential damages resulting from freight scheduling decisions made prior to formal
+                                contract execution.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 1.3 -->
+                    <div class="mb-0 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">1.3 Force Majeure and Excluded Risks</h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            To the extent permitted by law, <strong class="brand-accent fw-bold">M$M Logistics</strong>
+                            is not liable for any cargo loss, damage, delay, or failure to perform resulting from events
+                            beyond our reasonable operational control. These include, but are not limited to:
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li><strong class="text-dark">Acts of God & Nature:</strong> Floods, severe storms,
+                                earthquakes, landslides, or extreme weather conditions affecting highway infrastructure.
+                            </li>
+                            <li><strong class="text-dark">Civil & Regulatory Disruptions:</strong> Highway closures,
+                                military actions, terrorism, labor strikes, customs detentions, quarantine orders, or
+                                government-mandated vehicle inspections.</li>
+                            <li><strong class="text-dark">Shipper Fault:</strong> Inadequate packaging, latent defects
+                                in the goods, inaccurate weight disclosures, or failure to disclose hazardous materials.
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <hr class="my-5 text-border opacity-25">
+
+                <!-- 2. INTELLECTUAL PROPERTY & DATA OWNERSHIP -->
+                <section class="mb-5">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge rounded-pill me-2 px-3 py-2 font-monospace"
+                            style="background-color: #e6f7f3; color: #248a71;">SECTION 2</span>
+                        <h2 class="h4 fw-bold text-dark mb-0">INTELLECTUAL PROPERTY & DATA OWNERSHIP</h2>
+                    </div>
+                    <p class="text-muted small font-monospace mb-4">(Governing System Code, Telemetry, and Platform
+                        Assets)</p>
+
+                    <!-- 2.1 -->
+                    <div class="mb-4 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">2.1 Ownership of Platform Infrastructure and Algorithms
+                        </h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            The Website, customer portal interfaces, and underlying tech stack—including but not limited
+                            to database schemas, relational telemetry logic, dynamic dispatch algorithms, UI templates,
+                            CSS styles, custom icons, source code, and visual designs—are the sole and exclusive
+                            property of <strong class="brand-accent fw-bold">M$M Logistics</strong>.
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li><strong class="text-dark">No Transfer of Rights:</strong> Visiting, accessing, or
+                                interacting with the Website does not grant you any ownership, implied license, or title
+                                in or to any of our digital assets or underlying technologies.</li>
+                            <li><strong class="text-dark">Proprietary Trade Secrets:</strong> All mathematical models,
+                                KPL consumption algorithms, capacity optimization formulas, and node turnaround
+                                calculations displayed or utilized on this site are protected trade secrets of <strong
+                                    class="brand-accent fw-bold">M$M Logistics</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2.2 -->
+                    <div class="mb-4 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">2.2 Ownership of Telemetry & Transit Data</h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            All telemetry data, GPS tracking logs, network performance metrics, node transit histories,
+                            and system analytics generated by or passing through our servers remain the exclusive
+                            intellectual property of <strong class="brand-accent fw-bold">M$M Logistics</strong>.
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li><strong class="text-dark">Public User License:</strong> Non-customers and general
+                                visitors are granted a temporary, non-exclusive, non-transferable, and revocable license
+                                to view public telemetry displays solely for informational and preliminary evaluation
+                                purposes.</li>
+                            <li><strong class="text-dark">Prohibited Data Exploitation:</strong> You are strictly
+                                prohibited from storing, aggregating, reverse-engineering, scraping, or publishing any
+                                system metrics, tracking parameters, or network performance data without explicit prior
+                                written consent from <strong class="brand-accent fw-bold">M$M Logistics</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <!-- 2.3 -->
+                    <div class="mb-0 ps-2">
+                        <h3 class="h6 fw-bold text-dark mb-2">2.3 User-Submitted Data and Inquiries</h3>
+                        <p class="text-secondary small lh-base mb-3">
+                            By submitting information, feedback, freight quotes, or business inquiries through our
+                            public forms or contact channels:
+                        </p>
+                        <ul class="emerald-list small mb-0">
+                            <li>You grant <strong class="brand-accent fw-bold">M$M Logistics</strong> a royalty-free,
+                                perpetual, world-wide license to process, store, and utilize that data for the purpose
+                                of generating quotes, optimizing network routes, and communicating with your business.
+                            </li>
+                            <li>You warrant that you own or have obtained all necessary legal rights, permissions, and
+                                authority to submit any business details or cargo specifications provided to us.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <hr class="my-4 text-border opacity-25">
+
+                <p class="text-secondary lh-base mb-4 small">
+                    Understanding these terms is important because, to utilize our transport network and API services,
+                    you must accept these terms.
+                </p>
+
+                <p class="text-secondary lh-base mb-5 small">
+                    Besides these terms, we also publish a <a href="#"
+                        class="brand-accent text-decoration-none fw-semibold">Privacy Policy</a>. Although it's not part
+                    of these terms, we encourage you to read it to better understand how you can update, manage, export,
+                    and protect your dispatch information.
+                </p>
+
+                <!-- ACTION CONTROLS -->
+                <div class="d-flex flex-wrap align-items-center gap-3 pt-3 border-top"
+                    style="border-color: #f1f5f9 !important;">
+                    <a href="/customers" class="btn btn-emerald rounded-pill px-4 py-2.5 small">
+                        I agree with terms
+                    </a>
+                    <a href="/" class="btn btn-light-subtle rounded-pill px-4 py-2.5 small">
+                        Not right now...
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER META BAND -->
+    <footer
+        class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-4 border-top mt-5 small text-muted font-monospace"
+        style="font-size: 11px; border-color: #e2e8f0 !important;">
+        <div>&copy; 2026 LOGICORE OPERATIONAL NETWORK.</div>
+        <div class="d-flex gap-3">
+            <span>SYS STATUS: ACTIVE</span>
+            <span class="fw-bold" style="color: #248a71;">
+                <i class="bi bi-circle-fill me-1" style="font-size: 6px; vertical-align: middle;"></i> ONLINE
+            </span>
+        </div>
+    </footer>
+
+</div>
+{% endblock %}

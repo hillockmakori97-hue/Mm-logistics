@@ -421,3 +421,13 @@ def get_stations():
 def insert_fuel_log(values):
     curr.execute('insert into fuel_logs (trip_id, station_name, litres_fueled, cost_per_litre,truck_id) values (%s, %s, %s, %s,%s)', values)
     conn.commit()
+
+
+def insert_customer(user_values,customer_values):
+    curr.execute('insert into users (email,password,role) values(%s,%s,%s) returning user_id',user_values)
+    user_id=curr.fetchone()[0]
+    conn.commit()
+    all_values=list(customer_values)+[user_id]
+    curr.execute('INSERT INTO customers (company_name, contact_phone, account_status, user_id) VALUES (%s, %s, %s, %s)',all_values)
+    conn.commit()
+
