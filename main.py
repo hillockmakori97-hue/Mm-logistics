@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -20,12 +20,22 @@ def admin_protected(function):
             return redirect (url_for('login'))
         return function(*k,**n)
     return n
+
+def driver_protected(driver_access):
+    @wraps(driver_access)
+    def t(*e,**r):
+        if 'driver_id' not in session:
+            flash('This Page Is for Drivers Please Log In As A Driver','info')
+            return redirect (url_for('login'))
+        return driver_access(*e,**r)
+    return t
 @app.route('/')
 def homepage():
     return render_template('index.html')
     
 @app.route('/login',methods=['POST','GET'])
 def login():
+
     if request.method=='POST':
         possible_email=request.form['email']
         possible_password=request.form['password']
@@ -138,31 +148,37 @@ def dashboard():
 
 
 @app.route('/drivers')
+@driver_protected
 def drivers():
     test_driver_id = session.get('driver_id')
     driver_profile = get_driver_profile(test_driver_id)
     driver_kpis = get_driver_kpis(test_driver_id)
     trip_history = get_driver_trip_history(test_driver_id)
+    fuel_trucks=all_trucks()
+    stations=get_stations()
     if not driver_profile:
         return f"Driver with ID {test_driver_id} not found in the database. Add a driver first!", 404
     return render_template(
         'drivers.html', 
         profile=driver_profile, 
         kpis=driver_kpis, 
-        trips=trip_history
+        trips=trip_history,
+        fuel_trucks=fuel_trucks,
+        stations=stations
     )
 
 
 
-@app.route('/services')
-def services():
-    return render_template('services.html')
+@app.route('/maintenance_logs')
+def maintenance_logs():
+    maintenance_logs=get_maintenence_logs()
+    return render_template('services.html',maintenance_logs=maintenance_logs)
 
 
 @app.route('/trucks')
 @admin_protected
 def trucks():
-    truck_data=all_trucks()
+    truck_data=get_truck('en-route')
     return render_template('trucks.html',truck_data=truck_data)
 
 
@@ -202,6 +218,27 @@ def analytics():
 
         )
 
+
+
+@app.route('/fuel',methods=['POST','GET'])
+def fuel():
+    if request.method=='POST':
+        litres=request.form['litres']
+        truck_id=request.form['truck_id']
+        trip_id=request.form['trip_id']
+        cpl=request.form['cpl']
+        station=request.form['station']
+        litres=float(litres)
+        cpl=float(cpl)
+        l=[trip_id,station,litres,cpl,truck_id]
+        insert_fuel_log(l)
+
+
+    return redirect(url_for('drivers'))
+
+
+
+    
 
 @app.route('/payments',methods=['POST','GET'])
 def payments():
@@ -267,6 +304,7 @@ def payments():
 
 
 @app.route('/maintenance',methods=['GET','POST'])
+@driver_protected
 def maintenance():
     truck_data=all_trucks()
     if request.method=='POST':

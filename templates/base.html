@@ -15,15 +15,151 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <style>
+        /* ==========================================
+       1. NAVBAR STYLES
+       ========================================== */
+        .custom-navbar,
+        nav.navbar {
+            background-color: #18191b !important;
+            border: 1px solid #2b2d32 !important;
+            border-radius: 12px !important;
+            /* Restored rounded corners */
+            margin-top: 1rem !important;
+            margin-bottom: 1rem !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        }
 
+        /* Brand Logo */
+        .custom-navbar .navbar-brand {
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.02em;
+        }
 
+        .custom-navbar .navbar-brand span {
+            color: #e63946 !important;
+            /* Crimson Red Accent */
+        }
+
+        /* Links & Hover States */
+        .custom-navbar .nav-link {
+            color: #94a3b8 !important;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.85rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .custom-navbar .nav-link:hover {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-navbar .nav-link.active {
+            color: #38bdf8 !important;
+        }
+
+        /* Dropdown Styling */
+        .custom-navbar .dropdown-menu {
+            background-color: #202225 !important;
+            border: 1px solid #2b2d32 !important;
+            border-radius: 12px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+            padding: 0.5rem !important;
+        }
+
+        .custom-navbar .dropdown-item {
+            color: #cbd5e1 !important;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            padding: 0.45rem 0.75rem;
+            transition: all 0.15s ease;
+        }
+
+        .custom-navbar .dropdown-item:hover {
+            background-color: rgba(230, 57, 70, 0.12) !important;
+            color: #e63946 !important;
+        }
+
+        .custom-navbar .dropdown-divider {
+            border-top: 1px solid #2b2d32 !important;
+        }
+
+        .custom-navbar .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .custom-navbar .navbar-toggler-icon {
+            filter: invert(1);
+        }
+
+        /* ==========================================
+       2. SLIDE-IN FLASH ALERTS
+       ========================================== */
+        @keyframes slideDownFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .slide-in-alert {
+            animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .alert-custom {
+            background-color: #202225 !important;
+            border: 1px solid #2b2d32 !important;
+            border-left: 4px solid #e63946 !important;
+            color: #f8fafc !important;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            padding: 0.85rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .alert-custom.alert-success {
+            border-left-color: #10b981 !important;
+        }
+
+        .alert-custom.alert-danger,
+        .alert-custom.alert-error {
+            border-left-color: #ef4444 !important;
+        }
+
+        .alert-custom.alert-warning {
+            border-left-color: #f59e0b !important;
+        }
+
+        .alert-custom.alert-info {
+            border-left-color: #38bdf8 !important;
+        }
+
+        .alert-custom .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .alert-custom .btn-close:hover {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <nav class="navbar navbar-expand-lg custom-navbar px-3">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">M&M Logistics </a>
+                <a class="navbar-brand" href="/"><span>M&M</span> Logistics </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -50,9 +186,9 @@
                             <a class="nav-link active" aria-current="page" href="/login">login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url_for('logout') }}">Logout</a>
+                            <a class="nav-link active text-danger" aria-current="page"
+                                href="{{ url_for('logout') }}">Logout</a>
                         </li>
-
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -60,12 +196,12 @@
                                 Dropdown
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="/fuel">Request Fueling Invoice</a></li>
+                                <li><a class="dropdown-item" href="#">Shipment Reception</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="#">View Fueling Records</a></li>
                             </ul>
                         </li>
 
@@ -74,13 +210,30 @@
             </div>
         </nav>
         <div>
-            {% with messages = get_flashed_messages(with_categories=true) %} {% if
-            messages %} {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-custom alert-dismissible fade show d-flex align-items-center gap-2 mb-3 slide-in-alert"
+                role="alert">
+
+                <!-- Category Icon -->
+                {% if category == 'success' %}
+                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                {% elif category == 'danger' or category == 'error' %}
+                <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+                {% elif category == 'warning' %}
+                <i class="bi bi-exclamation-circle-fill text-warning fs-5"></i>
+                {% else %}
+                <i class="bi bi-info-circle-fill text-info fs-5"></i>
+                {% endif %}
+
+                <div class="flex-grow-1">{{ message }}</div>
+
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            {% endfor %} {% endif %} {% endwith %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
         </div>
 
     </div>
@@ -89,8 +242,18 @@
         crossorigin="anonymous"></script>
 
 
+    <script>
+        setTimeout(function () {
+            let alerts = document.querySelectorAll('.slide-in-alert');
+            alerts.forEach(function (alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 4000); // Closes after 4 seconds
+    </script>
 
     {% block content %}
+
 
     {% endblock %}
 </body>

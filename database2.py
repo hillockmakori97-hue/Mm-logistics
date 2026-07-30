@@ -332,25 +332,40 @@ def get_dest_coords(destination_id):
         'select latitude, longitude from destinations where destination_id=%s',(destination_id,)
     )
     return curr.fetchone()
+
+
 def get_categories():
     curr.execute('select * from categories')
     return curr.fetchall()
+
+
+
 def get_driver():
     curr.execute("select driver_id from drivers where status='completed'")
     return curr.fetchall()
+
+
 def get_dest_name(dest_id):
     curr.execute('select city from destinations where destination_id=%s',(dest_id,))
     return curr.fetchone()
+
+
 def get_truck(status):
     curr.execute('select truck_id from trucks where status=%s',(status,))
     return curr.fetchall()
 
+
+
 def get_truck_end_odo(truck_id):
     curr.execute('select odo_end from trips where truck_id=%s',(truck_id,))
     return curr.fetchone()
+
+
 def get_dispatcher(destination_id):
     curr.execute('select managed_by_staff_id from destinations where destination_id=%s',(destination_id,))
     return curr.fetchone()
+
+
 def insert_trip(values):
     curr.execute('''
         INSERT INTO trips (
@@ -367,13 +382,42 @@ def insert_payment(values):
     curr.execute('insert into payments (customer_id, shipment_id, amount, payment_method, transaction_reference, payment_status) values (%s, %s, %s, %s, %s, %s)', values)
     conn.commit()
 
+
+
 def insert_maintenance_log(Invoice_values):
     curr.execute('insert into maintenance_logs (truck_id, service_description, odometer_at_service, service_date,amount) values (%s, %s, %s, %s, %s)',Invoice_values)
     conn.commit()
+
+
+
 def get_date():
     curr.execute('select service_date from maintenance_logs where truck_id=306;')
     return curr.fetchall()
 
+
+
 def sum_maintenance_logs():
     curr.execute('select sum(amount) from maintenance_logs')
     return curr.fetchone()[0]
+
+
+
+def get_fuel_logs():
+    curr.execute('select * from fuel_logs')
+    return curr.fetchall()
+
+
+
+def get_maintenence_logs():
+    curr.execute('select * from maintenance_logs')
+    return curr.fetchall()
+
+
+def get_stations():
+    curr.execute('select * from fueling_stations')
+    return curr.fetchall()
+
+
+def insert_fuel_log(values):
+    curr.execute('insert into fuel_logs (trip_id, station_name, litres_fueled, cost_per_litre,truck_id) values (%s, %s, %s, %s,%s)', values)
+    conn.commit()

@@ -142,7 +142,7 @@ def insert_driver(values):
 
 # insering fuel logs
 def insert_fuel_log(values):
-    curr.execute('insert into fuel_logs (trip_id, station_name, litres_fueled, cost_per_litre) values (%s, %s, %s, %s)', values)
+    curr.execute('insert into fuel_logs (trip_id, station_name, litres_fueled, cost_per_litre,truck_id) values (%s, %s, %s, %s,%s)', values)
     conn.commit()
 
 

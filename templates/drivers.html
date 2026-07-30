@@ -118,8 +118,15 @@
                     allocation directory matrix. Ensure your log book odometer readings align with physical gauges at
                     check-in stations.</p>
             </div>
+            <div>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Request Prior Fueling
+                </button>
+            </div>
 
         </div>
+
 
         <!-- Right Column: Historical Route Log Table (5/12 layout width) -->
         <div class="col-lg-5">
@@ -166,6 +173,60 @@
             </div>
         </div>
 
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/fuel" method="post">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Truck</label>
+                                <select class="form-select" aria-label="Default select example" name="truck_id">
+                                    {% for n in fuel_trucks %}
+                                    <option value="{{n[0]}}">{{n[1]}}, {{n[2]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Trip ID</label>
+                                <input type="number" class="form-control" id="exampleInputPassword1" name="trip_id"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Litres fueled </label>
+                                <input type="number" class="form-control" id="exampleInputPassword1" name="litres"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Cost Per Litre </label>
+                                <select class="form-select" aria-label="Default select example" name="cpl" required>
+                                    <option value="248">248</option>
+                                </select>
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Trip ID</label>
+                                <select class="form-select" aria-label="Default select example" name="station" required>
+                                    {% for i in stations %}
+                                    <option value="{{i[2]}}">{{i[1]}}-{{i[2]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-{% endblock %} 
+</div>
+{% endblock %}

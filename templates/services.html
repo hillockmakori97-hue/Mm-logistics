@@ -1,5 +1,186 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Customers Dashboard</h1>
-    {% endblock %}
+<style>
+    /* Deep Emerald Dark Theme (Matching reference UI) */
+    body {
+        background-color: #0b1319 !important;
+        color: #94a3b8;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Main Table Container / Panel */
+    .inventory-card {
+        background: #111c24 !important;
+        border: 1px solid #1a2936 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Table Header Styling */
+    .table-emerald {
+        --bs-table-bg: transparent;
+        --bs-table-color: #94a3b8;
+        --bs-table-hover-bg: #162430;
+    }
+
+    .table-emerald thead {
+        background-color: #162430 !important;
+        border-bottom: 1px solid #203344 !important;
+    }
+
+    .table-emerald thead th {
+        color: #94a3b8;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: none !important;
+        padding: 1rem 0.75rem !important;
+    }
+
+    /* Table Body Rows */
+    .table-emerald tbody tr {
+        border-bottom: 1px solid #1a2835 !important;
+        transition: background-color 0.15s ease;
+    }
+
+    .table-emerald tbody td {
+        padding: 0.9rem 0.75rem !important;
+        vertical-align: middle;
+        border: none !important;
+        color: #cbd5e1;
+        font-size: 0.875rem;
+    }
+
+    /* Green accent text for titles/descriptions */
+    .text-emerald {
+        color: #10b981 !important;
+    }
+
+    /* Button Action Styling */
+    .btn-approve {
+        background-color: rgba(16, 185, 129, 0.12);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.75rem;
+        padding: 0.35rem 0.65rem;
+        transition: all 0.2s ease;
+    }
+    .btn-approve:hover {
+        background-color: #10b981;
+        color: #0b1319;
+        box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-disapprove {
+        background-color: rgba(239, 68, 68, 0.12);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 0.75rem;
+        padding: 0.35rem 0.65rem;
+        transition: all 0.2s ease;
+    }
+    .btn-disapprove:hover {
+        background-color: #ef4444;
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Checkbox Styling */
+    .form-check-input-emerald {
+        background-color: #162430;
+        border: 1px solid #2b4257;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .form-check-input-emerald:checked {
+        background-color: #10b981;
+        border-color: #10b981;
+    }
+
+    /* Scrollbar */
+    .table-responsive::-webkit-scrollbar {
+        height: 6px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #203344;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="container-fluid min-vh-100 py-4 px-3 px-lg-5">
+    <div class="mx-auto" style="max-width: 1500px;">
+
+        <!-- Main Panel -->
+        <div class="p-4 inventory-card w-100">
+            
+            <!-- Top Action Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4 class="fw-bold text-white mb-1">Maintenance Dashboard</h4>
+                    <p class="text-secondary small mb-0">Manage vehicle service logs and pending approvals</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <span class="badge bg-dark border border-secondary text-light px-3 py-2 rounded-3 font-monospace">
+                        Logs Count: {{ maintenance_logs|length }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table id="example" class="table table-emerald table-hover align-middle mb-0 text-nowrap">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">
+                                <input class="form-check-input form-check-input-emerald" type="checkbox">
+                            </th>
+                            <th>Log ID</th>
+                            <th>Truck ID</th>
+                            <th>Service Description</th>
+                            <th class="text-end">Odometer</th>
+                            <th>Service Date</th>
+                            <th class="text-end">Cost</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in maintenance_logs %}
+                        <tr>
+                            <td>
+                                <input class="form-check-input form-check-input-emerald" type="checkbox">
+                            </td>
+                            <td class="fw-semibold text-white font-monospace">#LOG-{{ i[0] }}</td>
+                            <td><span class="badge bg-dark border border-secondary text-light font-monospace px-2 py-1">TRK-{{i[1]}}</span></td>
+                            <td class="fw-semibold text-emerald">{{i[2]}}</td>
+                            <td class="font-monospace text-end text-light fw-medium">{{i[3]}} km</td>
+                            <td class="text-secondary small">{{i[4]}}</td>
+                            <td class="font-monospace text-end text-white fw-bold">{{i[5]}}</td>
+                            
+                            <!-- Action Buttons -->
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-approve d-flex align-items-center gap-1">
+                                        ✓ Approve
+                                    </button>
+                                    <button type="button" class="btn btn-disapprove d-flex align-items-center gap-1">
+                                        ✕ Reject
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
