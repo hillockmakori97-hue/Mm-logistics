@@ -15,10 +15,8 @@
     }
 </style>
 
-<!-- Main Container Wrapper -->
 <div class="container-fluid px-4 py-3">
 
-    <!-- Top Row Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="h3 mb-1 fw-bold text-dark">Driver Performance Panel</h1>
@@ -33,14 +31,11 @@
         </div>
     </div>
 
-    <!-- Main Dashboard Grid Layout Layout Modules -->
     <div class="row g-4">
 
-        <!-- Left Column: Profile Card & Summary Metrics (7/12 layout width) -->
         <div class="col-lg-7 d-flex flex-column gap-4">
 
             <div class="row g-4">
-                <!-- Driver Profile Card Segment -->
                 <div class="col-md-6">
                     <div class="card dashboard-card p-4 h-100">
                         <div class="d-flex align-items-center gap-3 mb-3">
@@ -55,7 +50,6 @@
                             </div>
                         </div>
 
-                        <!-- Core Truck Assignment Details -->
                         <div class="my-3 bg-light rounded-4 p-3 text-center border">
                             <span class="text-muted d-block small mb-1">Active Truck Assignment</span>
                             <span class="badge bg-dark fs-6 rounded-pill px-3 font-monospace">{{ profile[8] }}</span>
@@ -84,9 +78,7 @@
                     </div>
                 </div>
 
-                <!-- Aggregated KPIs Operational Counter Boxes -->
                 <div class="col-md-6 d-flex flex-column gap-4">
-                    <!-- Metric Card 1: Total Operational Journeys Driven -->
                     <div
                         class="card dashboard-card p-4 flex-grow-1 d-flex flex-row justify-content-between align-items-center">
                         <div>
@@ -163,7 +155,6 @@
                         </div>
                     </div>
                     {% else %}
-                    <!-- Fallback Element State if Empty List Returned -->
                     <div class="text-center py-5 text-muted my-auto">
                         <i class="bi bi-folder-x display-4 d-block mb-2 text-secondary"></i>
                         No recorded trips logged for this personnel identifier index.

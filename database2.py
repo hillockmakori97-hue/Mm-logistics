@@ -89,6 +89,12 @@ def total_revenue():
             ''')
     result=curr.fetchone()
     return result
+
+def get_staff_id(user_id):
+    curr.execute('select staff_id from office_staff where user_id=%s',(user_id,))
+    return curr.fetchone()
+
+
 def total_dispatches():
     curr.execute('''
         SELECT 
@@ -431,3 +437,35 @@ def insert_customer(user_values,customer_values):
     curr.execute('INSERT INTO customers (company_name, contact_phone, account_status, user_id) VALUES (%s, %s, %s, %s)',all_values)
     conn.commit()
 
+def all_trips():
+    curr.execute('select * from trips')
+    return curr.fetchall()
+
+def all_shipments():
+    curr.execute('select * from shipments')
+    shipments=curr.fetchall()
+    return shipments
+def get_dispatcher_info(staff_id):
+    curr.execute('select * from office_staff where staff_id=%s',(staff_id,))
+    return curr.fetchone()
+def get_station_assignment(staff_id):
+    curr.execute('select location_name from destinations where managed_by_staff_id=%s',(staff_id,))
+    return curr.fetchone()[0]
+def get_shipments_handled(staff_id):
+    curr.execute('select count(shipment_id) from shipments join destinations on shipments.destination_id=destinations.destination_id where destinations.managed_by_staff_id =%s;',(staff_id,))
+    return curr.fetchone()[0]
+def get_weight_handled(staff_id):
+    curr.execute('select sum(weight_kg) from shipments join destinations on destinations.destination_id=shipments.destination_id join office_staff on office_staff.staff_id=destinations.managed_by_staff_id where staff_id=%s;',(staff_id,))
+    return curr.fetchone()[0]
+def listed_shipments(status,staff_id):
+    curr.execute('select * from shipments join trips on trips.trip_id=shipments.trip_id join destinations on destinations.destination_id=shipments.destination_id where trips.status=%s and destinations.managed_by_staff_id=%s;',(status,staff_id))
+    return curr.fetchall()
+def set_trip_completed(status,shipment_id):
+    curr.execute('''
+        UPDATE trips 
+        SET status = %s 
+        FROM shipments 
+        WHERE trips.trip_id = shipments.trip_id 
+          AND shipments.shipment_id = %s
+    ''', (status, shipment_id))
+    conn.commit()
