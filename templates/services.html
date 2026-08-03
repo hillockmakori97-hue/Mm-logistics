@@ -2,14 +2,12 @@
 
 {% block content %}
 <style>
-    /* Deep Emerald Dark Theme (Matching reference UI) */
     body {
         background-color: #0b1319 !important;
         color: #94a3b8;
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* Main Table Container / Panel */
     .inventory-card {
         background: #111c24 !important;
         border: 1px solid #1a2936 !important;
@@ -17,7 +15,6 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
-    /* Table Header Styling */
     .table-emerald {
         --bs-table-bg: transparent;
         --bs-table-color: #94a3b8;
@@ -39,7 +36,6 @@
         padding: 1rem 0.75rem !important;
     }
 
-    /* Table Body Rows */
     .table-emerald tbody tr {
         border-bottom: 1px solid #1a2835 !important;
         transition: background-color 0.15s ease;
@@ -53,12 +49,10 @@
         font-size: 0.875rem;
     }
 
-    /* Green accent text for titles/descriptions */
     .text-emerald {
         color: #10b981 !important;
     }
 
-    /* Button Action Styling */
     .btn-approve {
         background-color: rgba(16, 185, 129, 0.12);
         color: #34d399;
@@ -91,7 +85,6 @@
         box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
     }
 
-    /* Checkbox Styling */
     .form-check-input-emerald {
         background-color: #162430;
         border: 1px solid #2b4257;
@@ -103,7 +96,6 @@
         border-color: #10b981;
     }
 
-    /* Scrollbar */
     .table-responsive::-webkit-scrollbar {
         height: 6px;
     }
@@ -116,10 +108,8 @@
 <div class="container-fluid min-vh-100 py-4 px-3 px-lg-5">
     <div class="mx-auto" style="max-width: 1500px;">
 
-        <!-- Main Panel -->
         <div class="p-4 inventory-card w-100">
             
-            <!-- Top Action Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h4 class="fw-bold text-white mb-1">Maintenance Dashboard</h4>
@@ -132,7 +122,6 @@
                 </div>
             </div>
 
-            <!-- Table -->
             <div class="table-responsive">
                 <table id="example" class="table table-emerald table-hover align-middle mb-0 text-nowrap">
                     <thead>

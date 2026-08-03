@@ -13,7 +13,6 @@
 
     .brand-accent {
         color: #ef4444 !important;
-        /* Red accent matching top navbar */
     }
 
     /* Card Architecture */
@@ -24,7 +23,6 @@
         box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
     }
 
-    /* Top Floating Dark Navbar */
     .dark-nav-pill {
         background-color: #0f172a;
         border-radius: 0.75rem;
@@ -285,7 +283,6 @@
                                 Fines: 0
                             </span>
 
-                            <!-- SUBMIT BUTTON FORM -->
                             <form onsubmit="handleRouteSubmit(event)">
                                 <input type="hidden" name="shipment_id" value="{{ i[0] }}">
                                 <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold"
@@ -296,7 +293,6 @@
                         </div>
                     </div>
                     {% else %}
-                    <!-- Fallback Element State if Empty List Returned -->
                     <div class="text-center py-5 text-muted my-auto">
                         <i class="bi bi-folder-x display-4 d-block mb-2 text-secondary"></i>
                         No recorded trips logged for this personnel identifier index.
@@ -318,7 +314,6 @@
             const formData = new FormData(form);
             const payload = Object.fromEntries(formData.entries());
 
-            // Show loading state on button
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Processing...`;
 
@@ -331,11 +326,9 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Show success visual feedback on button
                     submitBtn.className = "btn btn-sm btn-success rounded-pill px-3 py-1 fw-semibold";
                     submitBtn.innerHTML = `<i class="bi bi-check-lg me-1"></i> Done`;
 
-                    // Reset back after 2 seconds
                     setTimeout(() => {
                         submitBtn.disabled = false;
                         submitBtn.className = "btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold";

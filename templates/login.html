@@ -1,16 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    /* Clean light background matching the target UI */
-    .auth-viewport-wrapper {
+<style>    .auth-viewport-wrapper {
         background-color: #ebedef;
         position: relative;
         overflow: hidden;
         width: 100%;
     }
 
-    /* Target background shapes */
     .bg-shape-red {
         position: absolute;
         top: -80px;
@@ -33,7 +30,6 @@
         z-index: 0;
     }
 
-    /* Target input container pill styling */
     .custom-input-group {
         background-color: #f4f6f7 !important;
         border-radius: 4px;
@@ -51,7 +47,6 @@
         color: #a0aec0 !important;
     }
 
-    /* Geometric accents inside emerald panel */
     .emerald-accent-1 {
         position: absolute;
         width: 40px;
@@ -76,29 +71,23 @@
 </style>
 
 <div class="auth-viewport-wrapper d-flex align-items-center min-vh-100 py-5">
-    <!-- Background Accent Shapes -->
     <div class="bg-shape-red"></div>
     <div class="bg-shape-yellow"></div>
 
     <div class="container d-flex justify-content-center align-items-center position-relative z-1">
-        <!-- Main Dual-Pane Authentication Card Container -->
         <div class="card border-0 overflow-hidden shadow-lg rounded-4 w-100 position-relative z-1" style="max-width: 900px;">
             
             <div class="row g-0">
-                <!-- LEFT PANEL: Emerald Welcome/Brand Canvas -->
                 <div class="col-md-5 text-white d-flex flex-column justify-content-between p-4 p-lg-5 text-center position-relative overflow-hidden" style="background-color: #31b393; min-height: 520px;">
                     
-                    <!-- Structural Design Accents -->
                     <div class="emerald-accent-1"></div>
                     <div class="emerald-accent-2"></div>
                     
-                    <!-- Platform Brand Header Frame -->
                     <div class="d-flex align-items-center gap-2 text-start position-relative z-1">
                         <i class="bi bi-grid-1x2-fill fs-5"></i>
                         <span class="fw-bold tracking-wide fs-6">LogiGate</span>
                     </div>
 
-                    <!-- Center Branding Content -->
                     <div class="my-auto py-4 position-relative z-1">
                         <h2 class="fw-bold mb-3 display-6">Welcome Back!</h2>
                         <p class="small text-white-50 px-md-2 mb-4">
@@ -109,20 +98,16 @@
                         </a>
                     </div>
 
-                    <!-- Left Footer Compliance Frame -->
                     <div class="text-white-50 small position-relative z-1" style="font-size: 11px;">
                         &copy; 2026 LogiIntel Network Systems Inc.
                     </div>
                 </div>
 
-                <!-- RIGHT PANEL: Form Entry Panel -->
                 <div class="col-md-7 bg-white p-4 p-lg-5 text-center d-flex flex-column justify-content-center">
                     <div class="px-xl-3">
                         
-                        <!-- Header Label Text -->
                         <h2 class="fw-bold mb-4" style="color: #31b393;">Sign In</h2>
                         
-                        <!-- Social Icons Row -->
                         <div class="d-flex justify-content-center gap-3 mb-3">
                             <a href="#" class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center border-light-subtle shadow-sm" style="width: 42px; height: 42px; color: #333;">
                                 <i class="bi bi-facebook"></i>
@@ -138,7 +123,6 @@
                         <p class="text-muted small mb-4">or use your email account:</p>
 
                         <form method="POST" action="/login">
-                            <!-- Email Input Field -->
                             <div class="input-group custom-input-group mb-3">
                                 <span class="input-group-text border-0 bg-transparent text-muted ps-3">
                                     <i class="bi bi-envelope"></i>
@@ -147,7 +131,6 @@
                                        placeholder="Email" required autocomplete="username">
                             </div>
                             
-                            <!-- Password Input Field -->
                             <div class="input-group custom-input-group mb-2">
                                 <span class="input-group-text border-0 bg-transparent text-muted ps-3">
                                     <i class="bi bi-lock"></i>
@@ -156,21 +139,18 @@
                                        placeholder="Password" required autocomplete="current-password">
                             </div>
 
-                            <!-- Forgot Access Link -->
                             <div class="mb-4 text-center">
                                 <a href="/forgot-password" class="text-muted small text-decoration-none" style="font-size: 13px;">
                                     Forgot your password?
                                 </a>
                             </div>
 
-                            <!-- Form Action Button Node -->
                             <button type="submit" class="btn text-white rounded-pill px-5 py-2 fw-bold text-uppercase shadow-sm mb-4" 
                                     style="background-color: #31b393; font-size: 0.85rem; letter-spacing: 1px;">
                                 Sign In
                             </button>
                         </form>
 
-                        <!-- System Footnote Status Links -->
                         <div class="d-flex justify-content-between align-items-center pt-3 border-top border-light-subtle" style="font-size: 11px;">
                             <a href="/terms" class="text-muted text-decoration-none">Terms and Services</a>
                             <span class="text-muted">Have a problem? <a href="mailto:support@logigate.com" class="text-muted text-decoration-underline">Contact us</a></span>

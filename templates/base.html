@@ -167,35 +167,52 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        {% if session.get('role') %}
+
+                        {% if session.get('role')|trim == 'admin' %}
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/analytics">Analytics </a>
+                            <a class="nav-link active" aria-current="page" href="/analytics">Analytics</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/customers">Customers</a>
+                            <a class="nav-link active" aria-current="page" href="/trucks">Trucks</a>
                         </li>
+                        {% endif %}
+
+                        {% if session.get('role')|trim == 'driver' %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/drivers">Drivers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/maintenance">Maintenance</a>
                         </li>
+                        {% endif %}
+
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/trucks">Trucks</a>
+                            <a class="nav-link active" aria-current="page" href="/customers">Customers</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/login">login</a>
+                            <a class="nav-link active" aria-current="page" href="/dispatchers">Dispatchers</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link active text-danger" aria-current="page"
                                 href="{{ url_for('logout') }}">Logout</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/dispatchers">dispatchers </a>
-                        </li>
 
-                       
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/login">Login</a>
+                        </li>
+                        {% endif %}
 
                     </ul>
+                    <li class="nav-item ms-lg-2 d-flex align-items-center">
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="themeToggleBtn"
+                            type="button">
+                            <span id="themeToggleIcon">🌙</span> <span id="themeToggleText" class="ms-1">Dark</span>
+                        </button>
+                    </li>
                 </div>
             </div>
         </nav>
@@ -239,7 +256,36 @@
                 let bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
             });
-        }, 4000); // Closes after 4 seconds
+        }, 4000);
+    </script>
+    <script>
+        // Function to apply theme
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            const icon = document.getElementById('themeToggleIcon');
+            const text = document.getElementById('themeToggleText');
+
+            if (theme === 'dark') {
+                icon.textContent = '☀️';
+                text.textContent = 'Light';
+            } else {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark';
+            }
+        }
+
+        // Load saved theme on initial page load
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Toggle button click listener
+        document.getElementById('themeToggleBtn').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        });
     </script>
 
     {% block content %}

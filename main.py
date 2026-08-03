@@ -47,19 +47,23 @@ def login():
             if possible_password==user[2]:
                 if user[3]=='admin':
                     session['admin_id']=user[0]
+                    session['role']=user[3]
                     return redirect(url_for('analytics'))
                 elif user[3]=='driver':
                     driver_login=get_specific_driver(user[0])
                     session['driver_id']=driver_login[0]
+                    session['role']=user[3]
                     return redirect(url_for('drivers'))
                 elif user[3]=='customer':
                     customer_login=get_customer_details(user[0])
                     session['customer_id']=user[0]
+                    session['role']=user[3]
                     return redirect(url_for('customers'))
                 elif user[3]=='dispatcher':
                     staff_id=get_staff_id(user[0])
                     session['staff_id']=staff_id
                     session['staff_email']=user[1]
+                    
                     return redirect(url_for('dispatchers'))
                 else:
                     flash('No Role Assigned,Check With Admin','warning')
@@ -387,6 +391,8 @@ def process_route_item():
     print(data)
     trip_id = set_trip_completed('completed', shipment_id)
     truck_and_driver=get_driver_and_truck_by_trip_id(trip_id)
+    update_driver_status(truck_and_driver[0])
+    update_truck_status(truck_and_driver[1])
     print(truck_and_driver)
     return jsonify({'status': 'success', 'message': f'Shipment #{shipment_id} processed.'})
 

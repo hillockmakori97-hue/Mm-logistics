@@ -23,7 +23,6 @@
             <p class="text-muted small mb-0">Operational summary and real-time trip logs</p>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <!-- Dynamic Status Badge Indicator -->
             <span
                 class="badge {% if profile[7] == 'On Trip' %}bg-warning text-dark{% else %}bg-success{% endif %} rounded-pill px-3 py-2 fw-semibold">
                 Status: {{ profile[7] }}
@@ -39,7 +38,6 @@
                 <div class="col-md-6">
                     <div class="card dashboard-card p-4 h-100">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <!-- Initials Profile Placeholder Avatar Circles -->
                             <div class="bg-danger text-white d-flex align-items-center justify-content-center rounded-circle fw-bold"
                                 style="width: 55px; height: 55px; font-size: 20px;">
                                 {{ profile[1][0] }}
@@ -90,7 +88,6 @@
                         <div class="text-primary fs-1 opacity-25"><i class="bi bi-compass-fill"></i></div>
                     </div>
 
-                    <!-- Metric Card 2: Financial Fines Loss Metric -->
                     <div
                         class="card dashboard-card p-4 flex-grow-1 d-flex flex-row justify-content-between align-items-center">
                         <div>
@@ -103,7 +100,6 @@
                 </div>
             </div>
 
-            <!-- Contextual Information Disclaimer Banner -->
             <div class="card dashboard-card p-4">
                 <h6 class="fw-bold text-dark mb-2">Driver Assignment Status Information</h6>
                 <p class="text-muted small mb-0">Statuses correspond directly with active entries in your trips
@@ -111,7 +107,6 @@
                     check-in stations.</p>
             </div>
             <div>
-                <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     Request Prior Fueling
                 </button>
@@ -120,7 +115,6 @@
         </div>
 
 
-        <!-- Right Column: Historical Route Log Table (5/12 layout width) -->
         <div class="col-lg-5">
             <div class="card dashboard-card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -128,7 +122,6 @@
                     <span class="badge bg-light text-dark border rounded-pill px-3">{{ trips|length }} Entries</span>
                 </div>
 
-                <!-- Scrollable Container Box Module -->
                 <div class="d-flex flex-column gap-3 trip-scroll-box pe-1">
                     {% for trip in trips %}
                     <div
