@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer,all_trips,all_shipments,get_dispatcher_info,get_station_assignment,get_shipments_handled,get_weight_handled,get_staff_id,listed_shipments,set_trip_completed
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer,all_trips,all_shipments,get_dispatcher_info,get_station_assignment,get_shipments_handled,get_weight_handled,get_staff_id,listed_shipments,set_trip_completed,update_driver_status,update_truck_status,get_driver_and_truck_by_trip_id
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -270,8 +270,7 @@ def payments():
                 else:
                     listed_driver=[i[0] for i in available_driver]
                     selected_driver=random.choice(listed_driver)
-                    flash('Driver And Truck Assigned Successfully Trip Assignment In Process','success')
-                
+                    flash('Driver,Truck and Trip Assignment In Progress','success')
                 if not selected_driver or not selected_truck:
                     pass
                 else:
@@ -288,13 +287,16 @@ def payments():
                     weight=shipment_details[3]
                     destination_id=shipment_details[4]
                     values=[driver_id,truck_id,origin,destination,odo_start,dispatched_by]
+                    update_driver_status(selected_driver, 'en_route')
+                    update_truck_status(selected_truck, 'en_route')
+                    trip_id=insert_trip(values)  
+                    flash('Driver and Truck Assigned, Trip Created','success')
                     print(odo_start)
                     print(dispatched_by)
                     print(origin)
                     print(destination)
                     print(driver_id)
                     print(truck_id)
-                    trip_id=insert_trip(values)    
                     acc_id=session.get('acc_id')
                     shipment_values=(acc_id,origin,destination,trip_id,cargo_type,weight,origin_id,destination_id)
                     shipment_id=insert_shipment(shipment_values)
@@ -383,7 +385,9 @@ def process_route_item():
     data = request.get_json()
     shipment_id = data.get('shipment_id')
     print(data)
-    set_trip_completed('completed',shipment_id)
+    trip_id = set_trip_completed('completed', shipment_id)
+    truck_and_driver=get_driver_and_truck_by_trip_id(trip_id)
+    print(truck_and_driver)
     return jsonify({'status': 'success', 'message': f'Shipment #{shipment_id} processed.'})
 
 @app.route('/logout')
