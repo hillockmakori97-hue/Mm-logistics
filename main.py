@@ -1,7 +1,7 @@
-from flask import Flask,render_template,request,redirect,url_for,flash,session
+from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer,all_trips,all_shipments,get_dispatcher_info,get_station_assignment,get_shipments_handled,get_weight_handled,get_staff_id,listed_shipments,set_trip_completed
 from helper_functions import calculate_haversine_distance,calculate_cost
 # from flask_bcrypt import bcrypt
 from datetime import datetime
@@ -56,6 +56,11 @@ def login():
                     customer_login=get_customer_details(user[0])
                     session['customer_id']=user[0]
                     return redirect(url_for('customers'))
+                elif user[3]=='dispatcher':
+                    staff_id=get_staff_id(user[0])
+                    session['staff_id']=staff_id
+                    session['staff_email']=user[1]
+                    return redirect(url_for('dispatchers'))
                 else:
                     flash('No Role Assigned,Check With Admin','warning')
 
@@ -356,6 +361,30 @@ def register():
     return render_template('register.html')
 
 
+@app.route('/dispatchers')
+def dispatchers():
+    staff_id=session.get('staff_id')
+    staff_email=session.get('staff_email')
+    dispatcher_info=get_dispatcher_info(staff_id)
+    trips_data=listed_shipments('dispatched',staff_id)
+    station_assignment=get_station_assignment(staff_id)
+    shipments_handled=get_shipments_handled(staff_id)
+    weight_handled=get_weight_handled(staff_id)
+    return render_template('dispatchers.html',trips_data=trips_data,
+                           dispatcher_info=dispatcher_info,
+                           station_assignment=station_assignment,
+                           shipments_handled=shipments_handled,
+                           weight_handled=weight_handled,
+                           staff_email=staff_email
+                           )
+
+@app.route('/api/process-route-item', methods=['POST'])
+def process_route_item():
+    data = request.get_json()
+    shipment_id = data.get('shipment_id')
+    print(data)
+    set_trip_completed('completed',shipment_id)
+    return jsonify({'status': 'success', 'message': f'Shipment #{shipment_id} processed.'})
 
 @app.route('/logout')
 def logout():

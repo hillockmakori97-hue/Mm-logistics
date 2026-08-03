@@ -1,4 +1,4 @@
-from database2 import expense_against_revenue,get_specific_driver,check_user,get_customer_details,get_customer_shipments,all_destinations,get_dest_coords,get_available_driver,get_truck_end_odo,get_dispatcher,get_date
+from database2 import expense_against_revenue,get_specific_driver,check_user,get_customer_details,get_customer_shipments,all_destinations,get_dest_coords,get_available_driver,get_truck_end_odo,get_dispatcher,get_date,dispatcher_info
 from flask import session
 def month_revenue():
     ear=expense_against_revenue()
@@ -61,3 +61,5 @@ print(d)
 p=get_dispatcher(407)
 print(p)
 print(get_date())
+h=dispatcher_info()
+print(h)

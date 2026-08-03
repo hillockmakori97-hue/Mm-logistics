@@ -8,10 +8,8 @@
 <div class="container-fluid bg-dark text-white min-vh-100 p-0" style="background-color: #0b0c10 !important; font-family: system-ui, -apple-system, sans-serif;">
     <div class="row g-0">
         
-        <!-- LEFT SIDEBAR PANEL (Scoped strictly to Account Profile permissions) -->
         <div class="col-xl-2 col-lg-3 d-flex flex-column justify-content-between p-4" style="background-color: #13151a; min-height: 100vh; border-right: 1px solid #1f232b;">
             <div>
-                <!-- Brand Frame Logo -->
                 <div class="d-flex align-items-center gap-2 mb-4 px-2">
                     <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);">
                         <i class="bi bi-box-seam-fill"></i>
@@ -19,7 +17,6 @@
                     <span class="fw-black text-white fs-5 tracking-tight">Logi<span class="text-primary">Client</span></span>
                 </div>
                 
-                <!-- Navigation Sections -->
                 <span class="text-secondary font-monospace d-block mb-3 px-2 text-uppercase fw-bold opacity-50" style="font-size: 10px; letter-spacing: 1px;">My Account</span>
                 
                 <div class="nav flex-column gap-1">
@@ -50,7 +47,6 @@
             </div>
         </div>
 
-        <!-- RIGHT MAIN VIEWPORT PANEL -->
         <div class="col-xl-10 col-lg-9 p-4 p-md-5 overflow-y-auto" style="height: 100vh;">
             
             <!-- Welcome Header Status Band -->
@@ -61,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- PROMOTIONAL ADVOCACY & INFRASTRUCTURE ADVERTISEMENT BANNER -->
             <div class="p-4 rounded-4 mb-5 shadow-sm d-flex flex-wrap justify-content-between align-items-center gap-4 animate-fade-in" style="background: linear-gradient(135deg, #13151a 0%, #1f232b 100%); border-left: 4px solid #0d6efd; border-top: 1px solid #2d323f; border-right: 1px solid #1f232b; border-bottom: 1px solid #1f232b;">
                 <div style="max-width: 650px;">
                     <span class="badge bg-primary bg-opacity-20 text-primary text-uppercase font-monospace mb-2" style="font-size: 10px; letter-spacing: 1px;">Network Capability Advertisement</span>
@@ -75,7 +70,6 @@
                 </div>
             </div>
 
-            <!-- CUSTOMER KEY PERFORMANCE METRICS (Strict User Boundary) -->
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <div class="p-4 rounded-4" style="background-color: #13151a; border: 1px solid #1f232b;">
@@ -97,7 +91,6 @@
                 </div>
             </div>
 
-            <!-- DYNAMIC GRAPH CANVAS PLATFORM CONTAINER -->
             <div class="row g-4 mb-5">
                 <!-- Line Chart Component Box Frame -->
                 <div class="col-lg-6">
@@ -106,7 +99,6 @@
                     </div>
                 </div>
 
-                <!-- Bar Chart Component Box Frame -->
                 <div class="col-lg-6">
                     <div class="p-4 rounded-4 shadow-sm" style="background-color: #13151a; border: 1px solid #1f232b;">
                         <canvas id="bar-chart"></canvas>
@@ -114,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- REGISTRY DATATABLES CONTENT MATRIX -->
             <div class="row">
                 <div class="col-12">
                     <div class="p-4 rounded-4 custom-table-dark shadow-sm" style="background-color: #13151a; border: 1px solid #1f232b;">
@@ -134,7 +125,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Dynamic Context Layer Execution: Displays strictly authenticated user rows -->
                                 {% for item in user_private_records %}
                                 <tr>
                                     <td class="font-monospace text-primary fw-medium">{{ item.tracking_number }}</td>
@@ -162,14 +152,12 @@
     </div>
 </div>
 
-<!-- Scripts Inject Node Matrix Block -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.datatables.net/2.0.0/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-    // 1. Initialize Isolated User Registry DataTables instance
     $(document).ready(function() {
         $('#logisticsTable').DataTable({
             dom: '<"d-flex justify-content-between align-items-center mb-3"fl>t<"d-flex justify-content-between align-items-center mt-3"ip>',
@@ -181,7 +169,6 @@
         });
     });
 
-    // 2. Line Chart: Tracking User-Specific Invoicing History
     new Chart(document.getElementById("line-chart"), {
         type: 'line',
         data: {
@@ -208,7 +195,6 @@
         }
     });
 
-    // 3. Bar Chart Setup: Dynamic Lane Allocation Breakdown
     new Chart(document.getElementById("bar-chart"), {
         type: 'bar',
         data: {

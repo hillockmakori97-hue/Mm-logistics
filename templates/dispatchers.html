@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Include Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+    body {
+        background-color: #f8fafc !important;
+        color: #1e293b !important;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .brand-accent {
+        color: #ef4444 !important;
+        /* Red accent matching top navbar */
+    }
+
+    /* Card Architecture */
+    .panel-card {
+        background-color: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Top Floating Dark Navbar */
+    .dark-nav-pill {
+        background-color: #0f172a;
+        border-radius: 0.75rem;
+        padding: 0.65rem 1.5rem;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+    }
+
+    .dark-nav-pill .nav-link {
+        color: #38bdf8;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        transition: color 0.15s ease;
+    }
+
+    .dark-nav-pill .nav-link:hover {
+        color: #ffffff !important;
+    }
+
+    .avatar-circle-danger {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-color: #dc2626;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.75rem;
+    }
+
+    .icon-badge-blue {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: #e0f2fe;
+        color: #0284c7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .icon-badge-danger {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: #ffe4e6;
+        color: #e11d48;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+
+    .inner-gray-box {
+        background-color: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 0.85rem;
+    }
+
+    .badge-status-pill {
+        background-color: #dcfce7;
+        color: #15803d;
+        font-size: 0.725rem;
+        font-weight: 600;
+        padding: 0.35rem 0.85rem;
+        border-radius: 50rem;
+    }
+
+    .badge-status-top {
+        background-color: #10b981;
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.35rem 0.9rem;
+        border-radius: 50rem;
+    }
+
+    .btn-action-blue {
+        background-color: #0d6efd;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+        padding: 0.6rem 1.25rem;
+        border: none;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    .btn-action-blue:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-1px);
+    }
+
+    .fw-black {
+        font-weight: 900;
+    }
+</style>
+
+<div class="container-fluid px-4 px-md-5 py-4">
+
+
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h1 class="fw-black text-dark h2 mb-1" style="letter-spacing: -0.03em;">
+                Dispatcher Performance Panel
+            </h1>
+            <p class="text-muted small mb-0">
+                Operational summary and real-time trip logs
+            </p>
+        </div>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-7 col-xl-6">
+            <div class="row g-4">
+
+                <div class="col-12">
+                    <div class="panel-card p-4">
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <div class="avatar-circle-danger">
+                                J
+                            </div>
+                            <div>
+                                <h2 class="h4 fw-bold text-dark mb-0">
+                                    {{dispatcher_info[2]}}
+                                </h2>
+                                <p class="text-muted font-monospace small mb-0">
+                                    System ID: #{{dispatcher_info[0]}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="inner-gray-box p-3 text-center mb-4">
+                            <span class="text-muted small d-block mb-2" style="font-size: 0.8rem;">
+                                Active Station Assignment
+                            </span>
+                            <span class="badge bg-dark text-white rounded-pill px-3 py-1.5 fw-semibold"
+                                style="font-size: 0.85rem;">
+                                {{station_assignment}}
+                            </span>
+                        </div>
+
+                        <div class="row pt-2">
+                            <div class="col-6 border-end">
+                                <span class="text-muted font-monospace text-uppercase d-block mb-1"
+                                    style="font-size: 0.675rem;">
+                                    PHONE CONTACT
+                                </span>
+                                <span class="fw-bold text-dark font-monospace" style="font-size: 0.9rem;">
+                                    744556677
+                                </span>
+                            </div>
+                            <div class="col-6 border-end">
+                                <span class="text-muted font-monospace text-uppercase d-block mb-1"
+                                    style="font-size: 0.675rem;">
+                                    EMAIL
+                                </span>
+                                <span class="fw-bold text-dark font-monospace" style="font-size: 0.9rem;">
+                                    {{staff_email}}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <hr class="my-3 text-border opacity-25">
+
+                        <div>
+                            <span class="text-muted font-monospace text-uppercase d-block mb-1"
+                                style="font-size: 0.675rem;">
+                                COMPLIANCE VALIDITY
+                            </span>
+                            <span class="badge-status-pill">
+                                VALID (Exp: 2027-05-22)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-medium d-block mb-2">Total Shipments Pending</span>
+                            <div class="display-6 fw-black text-dark mb-1">
+                                {{ trips_data|length if trips_data else 0 }}
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            <span class="text-success small fw-semibold">
+                                <i class="bi bi-check-circle-fill me-1"></i>
+                            </span>
+                            <div class="icon-badge-blue">
+                                <i class="bi bi-compass"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="panel-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-medium d-block mb-2">Total Shipment Weight Handled</span>
+                            <div class="h3 fw-black brand-accent mb-1">
+                                {{weight_handled}}Kg
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-3">
+                            <span class="text-muted small">
+                            </span>
+                            <div class="icon-badge-danger">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-5 col-xl-6">
+            <div class="panel-card p-4 h-100 d-flex flex-column">
+
+                <!-- Section Title & Counter (Fixed at top) -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h5 fw-bold text-dark mb-0">Historical Route Register</h3>
+                    <span class="badge bg-light text-muted border rounded-pill px-2.5 py-1 font-monospace"
+                        style="font-size: 0.75rem;">
+                        {{ trips_data|length if trips_data else 0 }} Entries
+                    </span>
+                </div>
+                <div class="pe-1 flex-grow-1 overflow-y-auto" style="height: 0;">
+                    {% for i in trips_data %}
+                    <div
+                        class="p-3 bg-light rounded-4 d-flex align-items-center justify-content-between border-start border-4 border-success mb-3">
+                        <div>
+                            <h6 class="mb-1 fw-bold text-dark text-truncate" style="max-width: 220px;">
+                                {{i[2]}} - {{i[3]}}
+                            </h6>
+                            <span class="text-muted d-block font-monospace" style="font-size: 11px;">
+                                Description: {{i[5]}} &nbsp;|&nbsp; {{i[6]}} Kg
+                            </span>
+                            <small class="text-muted d-block mt-1" style="font-size: 11px;">
+                                02 Aug 2026, 14:30
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span
+                                class="badge bg-success-subtle text-success rounded-pill px-2 py-1 small d-block mb-1">
+                                Completed
+                            </span>
+                            <span class="text-dark fw-bold small d-block mb-2" style="font-size: 12px;">
+                                Fines: 0
+                            </span>
+
+                            <!-- SUBMIT BUTTON FORM -->
+                            <form onsubmit="handleRouteSubmit(event)">
+                                <input type="hidden" name="shipment_id" value="{{ i[0] }}">
+                                <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold"
+                                    style="font-size: 11px;">
+                                    <i class="bi bi-send-fill me-1"></i> Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Fallback Element State if Empty List Returned -->
+                    <div class="text-center py-5 text-muted my-auto">
+                        <i class="bi bi-folder-x display-4 d-block mb-2 text-secondary"></i>
+                        No recorded trips logged for this personnel identifier index.
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function handleRouteSubmit(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalContent = submitBtn.innerHTML;
+
+            const formData = new FormData(form);
+            const payload = Object.fromEntries(formData.entries());
+
+            // Show loading state on button
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Processing...`;
+
+            fetch('/api/process-route-item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Show success visual feedback on button
+                    submitBtn.className = "btn btn-sm btn-success rounded-pill px-3 py-1 fw-semibold";
+                    submitBtn.innerHTML = `<i class="bi bi-check-lg me-1"></i> Done`;
+
+                    // Reset back after 2 seconds
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.className = "btn btn-sm btn-primary rounded-pill px-3 py-1 fw-semibold";
+                        submitBtn.innerHTML = originalContent;
+                    }, 2000);
+                });
+        }
+    </script>
+    {% endblock %}
