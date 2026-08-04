@@ -50,7 +50,6 @@
             </div>
         </div>
 
-        <!-- MAIN DASHBOARD CONTENT -->
         <div class="col-xxl-7 col-lg-6">
             <div class="d-flex flex-column gap-4">
 
@@ -81,7 +80,7 @@
                     <div class="col-md-4">
                         <div class="card border-0 rounded-4 shadow-sm p-4 text-dark text-center text-md-start"
                             style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);">
-                            <h2 class="fw-black font-monospace mb-1">12.8K</h2>
+                            <h2 class="fw-black font-monospace mb-1">{{total_weight}}</h2>
                             <span class="opacity-75 small font-monospace text-uppercase" style="font-size: 10px;">Total
                                 Metric Tons</span>
                         </div>
@@ -148,7 +147,7 @@
                                                 <select class="form-select bg-light border-light-subtle"
                                                     name="payment_method" required>
                                                     <option value="mpesa" selected>MPESA</option>
-                                                    <option value="bank">BANK TRANSFER</option>
+                                                    <option value="bank_transfer">BANK TRANSFER</option>
                                                 </select>
                                             </div>
                                             <div class="mb-3">

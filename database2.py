@@ -482,3 +482,6 @@ def update_truck_status(truck_id, new_status):
 def get_driver_and_truck_by_trip_id(trip_id):
     curr.execute('select trip_id,driver_id from trips where trip_id=%s',(trip_id,))
     return curr.fetchone()
+def get_weight(customer_id):
+    curr.execute('select sum(shipments.weight_kg) from shipments where customer_id=%s',(customer_id,))
+    return curr.fetchone()

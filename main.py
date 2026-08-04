@@ -1,15 +1,16 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
 import os
 from livereload import server
-from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer,all_trips,all_shipments,get_dispatcher_info,get_station_assignment,get_shipments_handled,get_weight_handled,get_staff_id,listed_shipments,set_trip_completed,update_driver_status,update_truck_status,get_driver_and_truck_by_trip_id
+from database2 import get_driver_kpis,get_driver_profile,get_driver_trip_history,total_revenue,total_dispatches,active_trips,completed_trips,net_profit,expense_against_revenue,month_revenue,monthly_expense,invoice_table,payments_table,check_user,get_specific_driver,get_customer_details,get_customer_shipments,shipments_per_customer,sidebar_logs,all_destinations,get_dest_coords,get_categories,get_dest_name,get_truck,get_available_driver,get_truck_end_odo,get_dispatcher,insert_trip,insert_shipment,insert_payment,all_trucks,insert_maintenance_log,sum_maintenance_logs,get_maintenence_logs,get_stations,insert_fuel_log,insert_customer,all_trips,all_shipments,get_dispatcher_info,get_station_assignment,get_shipments_handled,get_weight_handled,get_staff_id,listed_shipments,set_trip_completed,update_driver_status,update_truck_status,get_driver_and_truck_by_trip_id,get_weight
 from helper_functions import calculate_haversine_distance,calculate_cost
-# from flask_bcrypt import bcrypt
+from flask_bcrypt import Bcrypt
 from datetime import datetime
 import random
 import string
 from functools import wraps
 from decimal import Decimal
 app=Flask(__name__)
+bcrypt=Bcrypt(app)
 app.secret_key=os.urandom(24)
 
 def admin_protected(function):
@@ -17,6 +18,17 @@ def admin_protected(function):
     def n(*k,**n):
         if 'admin_id' not in session:
             flash('This page is admin protected,PLease Log In As Admin','info')
+            return redirect (url_for('login'))
+        return function(*k,**n)
+    return n
+
+
+
+def dispatcher_protected(function):
+    @wraps(function)
+    def n(*k,**n):
+        if 'staff_id' not in session:
+            flash('This page is for dispatchers,PLease Log In As Dispatcher','info')
             return redirect (url_for('login'))
         return function(*k,**n)
     return n
@@ -44,7 +56,7 @@ def login():
             flash('Non-registered user, Please register','danger')
             return redirect(url_for('login'))
         else:
-            if possible_password==user[2]:
+            if bcrypt.check_password_hash(user[2],possible_password):
                 if user[3]=='admin':
                     session['admin_id']=user[0]
                     session['role']=user[3]
@@ -89,6 +101,7 @@ def customers():
     if not customer_details:
         flash (f"Could not find a customer profile matching User ID {account_id}.",'danger')
     customer_id         = customer_details[0]
+    total_weight=get_weight(customer_id)
     session['acc_id']=customer_details[0]
     user_id             = customer_details[1]
     customer_email      = customer_details[2]
@@ -179,6 +192,7 @@ def drivers():
 
 
 @app.route('/maintenance_logs')
+@admin_protected
 def maintenance_logs():
     maintenance_logs=get_maintenence_logs()
     return render_template('services.html',maintenance_logs=maintenance_logs)
@@ -230,7 +244,9 @@ def analytics():
 
 
 @app.route('/fuel',methods=['POST','GET'])
+@driver_protected
 def fuel():
+
     if request.method=='POST':
         litres=request.form['litres']
         truck_id=request.form['truck_id']
@@ -261,7 +277,8 @@ def payments():
             phone_number=request.form['acc_number']
             flash('Payment Received Successfully','success')
             trucks=get_truck('active')
-            print(trucks)
+            selected_truck=None
+            selected_driver=None
             listed_trucks=[i[0] for i in trucks]
             print(listed_trucks)
             if not trucks:
@@ -361,13 +378,15 @@ def register():
         if possible_user:
             flash('Account Already Registered Please Login','danger')
             return redirect(url_for('login'))
-        x=[email,password,'customer']
+        hashed_password=bcrypt.generate_password_hash(password).decode('utf-8')
+        x=[email,hashed_password,'customer']
         a=[company_name,phone_no,'active']
         insert_customer(x,a)
     return render_template('register.html')
 
 
 @app.route('/dispatchers')
+@dispatcher_protected
 def dispatchers():
     staff_id=session.get('staff_id')
     staff_email=session.get('staff_email')
@@ -388,11 +407,11 @@ def dispatchers():
 def process_route_item():
     data = request.get_json()
     shipment_id = data.get('shipment_id')
-    print(data)
+   
     trip_id = set_trip_completed('completed', shipment_id)
     truck_and_driver=get_driver_and_truck_by_trip_id(trip_id)
-    update_driver_status(truck_and_driver[0])
-    update_truck_status(truck_and_driver[1])
+    update_driver_status(truck_and_driver[0],'completed')
+    update_truck_status(truck_and_driver[1],'active')
     print(truck_and_driver)
     return jsonify({'status': 'success', 'message': f'Shipment #{shipment_id} processed.'})
 
