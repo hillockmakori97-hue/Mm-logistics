@@ -19,6 +19,9 @@ def admin_protected(function):
         if 'admin_id' not in session:
             flash('This page is admin protected,PLease Log In As Admin','info')
             return redirect (url_for('login'))
+        session.pop('customer_id',None)
+        session.pop('driver_id',None)
+        session.pop('staff_id',None)
         return function(*k,**n)
     return n
 
@@ -30,6 +33,9 @@ def dispatcher_protected(function):
         if 'staff_id' not in session:
             flash('This page is for dispatchers,PLease Log In As Dispatcher','info')
             return redirect (url_for('login'))
+        session.pop('customer_id',None)
+        session.pop('admin_id',None)
+        session.pop('driver_id',None)
         return function(*k,**n)
     return n
 
@@ -39,11 +45,16 @@ def driver_protected(driver_access):
         if 'driver_id' not in session:
             flash('This Page Is for Drivers Please Log In As A Driver','info')
             return redirect (url_for('login'))
+        session.pop('customer_id',None)
+        session.pop('admin_id',None)
+        session.pop('staff_id',None)
         return driver_access(*e,**r)
     return t
 @app.route('/')
 def homepage():
     return render_template('index.html')
+
+
     
 @app.route('/login',methods=['POST','GET'])
 def login():
@@ -121,6 +132,7 @@ def customers():
     pick_up_location=None
     drop_off_location=None
     cost=0
+    print(dict(session))
 
     if request.method == 'POST':
         drop_off_location=request.form['drop_off_location']
@@ -178,6 +190,7 @@ def drivers():
     trip_history = get_driver_trip_history(test_driver_id)
     fuel_trucks=all_trucks()
     stations=get_stations()
+    print(dict(session))
     if not driver_profile:
         return f"Driver with ID {test_driver_id} not found in the database. Add a driver first!", 404
     return render_template(
@@ -225,7 +238,7 @@ def analytics():
     table_invoice_data=invoice_table()
     invoice_data=invoice_table()
     payments_data=payments_table()
-
+    print(dict(session))
 
     return render_template(
         'analytics.html',
@@ -395,6 +408,7 @@ def dispatchers():
     station_assignment=get_station_assignment(staff_id)
     shipments_handled=get_shipments_handled(staff_id)
     weight_handled=get_weight_handled(staff_id)
+    print(dict(session))
     return render_template('dispatchers.html',trips_data=trips_data,
                            dispatcher_info=dispatcher_info,
                            station_assignment=station_assignment,

@@ -1,4 +1,5 @@
 import math
+from flask import session
 def calculate_cost(cargo_type, estimated_distance, weight):
     if cargo_type == "1":
         base_rate = 0.40  

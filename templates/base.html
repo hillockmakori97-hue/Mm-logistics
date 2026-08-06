@@ -163,8 +163,12 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg custom-navbar px-3">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"><span>M&M</span> Logistics </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <a class="navbar-brand fw-bold fs-4 d-inline-flex align-items-center" href="/">
+                    <span style="color: #ffffff !important;">M</span><span
+                        style="color: #31b393 !important;">&amp;</span><span
+                        style="color: #ffffff !important;">M</span><span class="ms-2"
+                        style="color: #31b393 !important;">Logistics</span>
+                </a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -172,51 +176,55 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                        {% if session.get('role') %}
+                        {# Check for ANY logged-in session key #}
+                        {% if session.get('role') or session.get('staff_id') %}
+                        {% set role = session.get('role')|trim %}
 
-                        {% if session.get('role')|trim == 'admin' %}
+                        {# ADMIN LANE #}
+                        {% if role == 'admin' %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/analytics">Analytics</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/trucks">Trucks</a>
                         </li>
-                        {% endif %}
 
-                        {% if session.get('role')|trim == 'driver' %}
+                        {# DRIVER LANE #}
+                        {% elif role == 'driver' %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/drivers">Drivers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/maintenance">Maintenance</a>
                         </li>
-                        {% endif %}
 
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/customers">Customers</a>
-                        </li>
+                        {# DISPATCHER LANE #}
+                        {% elif role == 'dispatcher' or session.get('staff_id') %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/dispatchers">Dispatchers</a>
                         </li>
 
+                        {# CUSTOMER LANE #}
+                        {% elif role == 'customer' %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/customers">Customers</a>
+                        </li>
+                        {% endif %}
+
+                        {# LOGOUT (ALL LOGGED-IN USERS) #}
                         <li class="nav-item">
                             <a class="nav-link active text-danger" aria-current="page"
                                 href="{{ url_for('logout') }}">Logout</a>
                         </li>
 
                         {% else %}
+                        {# GUESTS ONLY #}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/login">Login</a>
                         </li>
                         {% endif %}
 
                     </ul>
-                    <li class="nav-item ms-lg-2 d-flex align-items-center">
-                        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="themeToggleBtn"
-                            type="button">
-                            <span id="themeToggleIcon">🌙</span> <span id="themeToggleText" class="ms-1">Dark</span>
-                        </button>
-                    </li>
                 </div>
             </div>
         </nav>
