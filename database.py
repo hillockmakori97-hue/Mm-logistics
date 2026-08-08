@@ -1,10 +1,10 @@
 import psycopg2
 conn=psycopg2.connect(
-    host='localhost',
-    port=5432,
-    user='postgres',
-    dbname='mm_logistics',
-    password='rs3040bt'
+host='aws-0-eu-north-1.pooler.supabase.com',
+    port=6543,
+    user='postgres.laschnsumlcwodhruruf',
+    dbname='postgres',
+    password='rs3040bt123'
 )
                             # Getting all data from all my tables
 
